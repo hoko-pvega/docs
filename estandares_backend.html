@@ -1,800 +1,1410 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Estándares de desarrollo Backend</title><meta name="data-notion-page-icon" content="📔"/><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%94%3C%2Ftext%3E%3C%2Fsvg%3E"/><style>
-/* cspell:disable-file */
-/* webkit printing magic: print all background colors */
-html {
-	-webkit-print-color-adjust: exact;
-}
-* {
-	box-sizing: border-box;
-	-webkit-print-color-adjust: exact;
-}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Estándares de desarrollo Backend</title>
+    <meta name="data-notion-page-icon" content="📔" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%94%3C%2Ftext%3E%3C%2Fsvg%3E"
+    />
+    <style>
+      /* cspell:disable-file */
+      /* webkit printing magic: print all background colors */
+      html {
+        -webkit-print-color-adjust: exact;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+      }
 
-html,
-body {
-	margin: 0;
-	padding: 0;
-}
-@media only screen {
-	body {
-		margin: 2em auto;
-		max-width: 900px;
-		color: rgb(55, 53, 47);
-	}
-}
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      @media only screen {
+        body {
+          margin: 2em auto;
+          max-width: 900px;
+          color: rgb(55, 53, 47);
+        }
+      }
 
-body {
-	line-height: 1.5;
-	white-space: pre-wrap;
-}
+      body {
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
 
-a,
-a.visited {
-	color: inherit;
-	text-decoration: underline;
-}
+      a,
+      a.visited {
+        color: inherit;
+        text-decoration: underline;
+      }
 
-.pdf-relative-link-path {
-	font-size: 80%;
-	color: #444;
-}
+      .pdf-relative-link-path {
+        font-size: 80%;
+        color: #444;
+      }
 
-h1,
-h2,
-h3 {
-	letter-spacing: -0.01em;
-	line-height: 1.2;
-	font-weight: 600;
-	margin-bottom: 0;
-}
+      h1,
+      h2,
+      h3 {
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
 
-/* Override strong tags inside headings to maintain consistent weight */
-h1 strong,
-h2 strong,
-h3 strong {
-	font-weight: 600;
-}
+      /* Override strong tags inside headings to maintain consistent weight */
+      h1 strong,
+      h2 strong,
+      h3 strong {
+        font-weight: 600;
+      }
 
-.page-title {
-	font-size: 2.5rem;
-	font-weight: 700;
-	margin-top: 0;
-	margin-bottom: 0.75em;
-}
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0.75em;
+      }
 
-h1 {
-	font-size: 1.875rem;
-	margin-top: 1.875rem;
-}
+      h1 {
+        font-size: 1.875rem;
+        margin-top: 1.875rem;
+      }
 
-h2 {
-	font-size: 1.5rem;
-	margin-top: 1.5rem;
-}
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+      }
 
-h3 {
-	font-size: 1.25rem;
-	margin-top: 1.25rem;
-}
+      h3 {
+        font-size: 1.25rem;
+        margin-top: 1.25rem;
+      }
 
-.source {
-	border: 1px solid #ddd;
-	border-radius: 3px;
-	padding: 1.5em;
-	word-break: break-all;
-}
+      .source {
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 1.5em;
+        word-break: break-all;
+      }
 
-.callout {
-	border-radius: 10px;
-	padding: 1rem;
-}
+      .callout {
+        border-radius: 10px;
+        padding: 1rem;
+      }
 
-/* For default-background callouts, render the border outline. */
-.callout.block-color-default_background {
-	border: 1px solid rgba(55, 53, 47, 0.09);
-}
+      /* For default-background callouts, render the border outline. */
+      .callout.block-color-default_background {
+        border: 1px solid rgba(55, 53, 47, 0.09);
+      }
 
-figure {
-	margin: 1.25em 0;
-	page-break-inside: avoid;
-}
+      figure {
+        margin: 1.25em 0;
+        page-break-inside: avoid;
+      }
 
-/*
+      /*
  * Toggles and callouts hold arbitrary content, so they can easily be taller
  * than a page. They must stay breakable: avoiding breaks inside them makes
  * Chromium push the whole block onto the next page, which leaves the previous
  * page mostly empty before every long toggle.
  */
-details,
-aside {
-	margin: 1.25em 0;
-}
+      details,
+      aside {
+        margin: 1.25em 0;
+      }
 
-/* Keep a toggle's title on the same page as the start of its content. */
-summary {
-	page-break-after: avoid;
-	break-after: avoid;
-}
+      /* Keep a toggle's title on the same page as the start of its content. */
+      summary {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
 
-/*
+      /*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
  * ::marker (▼), so the triangle and the title appear on separate lines.
  */
-summary h1,
-summary h2,
-summary h3,
-summary h4 {
-	margin-top: 0;
-}
+      summary h1,
+      summary h2,
+      summary h3,
+      summary h4 {
+        margin-top: 0;
+      }
 
-figcaption {
-	opacity: 0.5;
-	font-size: 85%;
-	margin-top: 0.5em;
-}
+      figcaption {
+        opacity: 0.5;
+        font-size: 85%;
+        margin-top: 0.5em;
+      }
 
-mark {
-	background-color: transparent;
-}
+      mark {
+        background-color: transparent;
+      }
 
-.indented {
-	padding-left: 1.5em;
-}
+      .indented {
+        padding-left: 1.5em;
+      }
 
-hr {
-	background: transparent;
-	display: block;
-	width: 100%;
-	height: 1px;
-	visibility: visible;
-	border: none;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-}
+      hr {
+        background: transparent;
+        display: block;
+        width: 100%;
+        height: 1px;
+        visibility: visible;
+        border: none;
+        border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+      }
 
-img {
-	max-width: 100%;
-}
+      img {
+        max-width: 100%;
+      }
 
-@media only print {
-	img {
-		max-height: 100vh;
-		object-fit: contain;
-	}
+      @media only print {
+        img {
+          max-height: 100vh;
+          object-fit: contain;
+        }
 
-	table.collection-content {
-		width: 100%;
-		table-layout: fixed;
-	}
+        table.collection-content {
+          width: 100%;
+          table-layout: fixed;
+        }
 
-	table.collection-content th,
-	table.collection-content td {
-		overflow-wrap: anywhere;
-	}
+        table.collection-content th,
+        table.collection-content td {
+          overflow-wrap: anywhere;
+        }
 
-	table.collection-content td > .user,
-	table.collection-content td > time {
-		white-space: pre-wrap;
-	}
-}
+        table.collection-content td > .user,
+        table.collection-content td > time {
+          white-space: pre-wrap;
+        }
+      }
 
-@page {
-	margin: 1in;
-}
+      @page {
+        margin: 1in;
+      }
 
-.collection-content-wrapper {
-	overflow-x: auto;
-}
+      .collection-content-wrapper {
+        overflow-x: auto;
+      }
 
-@media only print {
-	.collection-content-wrapper {
-		overflow-x: visible;
-	}
-}
+      @media only print {
+        .collection-content-wrapper {
+          overflow-x: visible;
+        }
+      }
 
-.collection-content {
-	font-size: 0.875rem;
-}
+      .collection-content {
+        font-size: 0.875rem;
+      }
 
-.collection-content td {
-	white-space: pre-wrap;
-	word-break: break-word;
-}
+      .collection-content td {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
 
-.column-list {
-	display: flex;
-	gap: 46px;
-}
+      .column-list {
+        display: flex;
+        gap: 46px;
+      }
 
-.column {
-	min-width: 0;
-	overflow: hidden;
-}
+      .column {
+        min-width: 0;
+        overflow: hidden;
+      }
 
-.column > *:first-child {
-	margin-top: 0;
-}
+      .column > *:first-child {
+        margin-top: 0;
+      }
 
-.table_of_contents-item {
-	display: block;
-	font-size: 0.875rem;
-	line-height: 1.3;
-	padding-inline: 0.125rem;
-	padding-block: 0.375rem;
-}
+      .table_of_contents-item {
+        display: block;
+        font-size: 0.875rem;
+        line-height: 1.3;
+        padding-inline: 0.125rem;
+        padding-block: 0.375rem;
+      }
 
-.table_of_contents-indent-1 {
-	margin-left: 1.5rem;
-}
+      .table_of_contents-indent-1 {
+        margin-left: 1.5rem;
+      }
 
-.table_of_contents-indent-2 {
-	margin-left: 3rem;
-}
+      .table_of_contents-indent-2 {
+        margin-left: 3rem;
+      }
 
-.table_of_contents-indent-3 {
-	margin-left: 4.5rem;
-}
+      .table_of_contents-indent-3 {
+        margin-left: 4.5rem;
+      }
 
-.table_of_contents-link {
-	text-decoration: none;
-	opacity: 0.7;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-}
+      .table_of_contents-link {
+        text-decoration: none;
+        opacity: 0.7;
+        border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+      }
 
-table,
-th,
-td {
-	border: 1px solid rgba(55, 53, 47, 0.09);
-}
+      table,
+      th,
+      td {
+        border: 1px solid rgba(55, 53, 47, 0.09);
+      }
 
-table {
-	border-collapse: collapse;
-	border-left: none;
-	border-right: none;
-}
+      table {
+        border-collapse: collapse;
+        border-left: none;
+        border-right: none;
+      }
 
-th,
-td {
-	font-weight: normal;
-	padding: 0.25em 0.5em;
-	line-height: 1.5;
-	min-height: 1.5em;
-	text-align: left;
-}
+      th,
+      td {
+        font-weight: normal;
+        padding: 0.25em 0.5em;
+        line-height: 1.5;
+        min-height: 1.5em;
+        text-align: left;
+      }
 
-th {
-	color: rgba(55, 53, 47, 0.6);
-}
+      th {
+        color: rgba(55, 53, 47, 0.6);
+      }
 
-ol,
-ul {
-	margin: 0;
-	margin-block-start: 0.6em;
-	margin-block-end: 0.6em;
-}
+      ol,
+      ul {
+        margin: 0;
+        margin-block-start: 0.6em;
+        margin-block-end: 0.6em;
+      }
 
-li > ol:first-child,
-li > ul:first-child {
-	margin-block-start: 0.6em;
-}
+      li > ol:first-child,
+      li > ul:first-child {
+        margin-block-start: 0.6em;
+      }
 
-ul > li {
-	list-style: disc;
-}
+      ul > li {
+        list-style: disc;
+      }
 
-ul.to-do-list {
-	padding-inline-start: 0;
-}
+      ul.to-do-list {
+        padding-inline-start: 0;
+      }
 
-ul.to-do-list > li {
-	list-style: none;
-}
+      ul.to-do-list > li {
+        list-style: none;
+      }
 
-.to-do-children-checked {
-	text-decoration: line-through;
-	opacity: 0.375;
-}
+      .to-do-children-checked {
+        text-decoration: line-through;
+        opacity: 0.375;
+      }
 
-ul.toggle > li {
-	list-style: none;
-}
+      ul.toggle > li {
+        list-style: none;
+      }
 
-ul {
-	padding-inline-start: 1.7em;
-}
+      ul {
+        padding-inline-start: 1.7em;
+      }
 
-ul > li {
-	padding-left: 0.1em;
-}
+      ul > li {
+        padding-left: 0.1em;
+      }
 
-ol {
-	padding-inline-start: 1.6em;
-}
+      ol {
+        padding-inline-start: 1.6em;
+      }
 
-ol.numbered-list.numbered-list-digits-2 {
-	padding-inline-start: 2em;
-}
+      ol.numbered-list.numbered-list-digits-2 {
+        padding-inline-start: 2em;
+      }
 
-ol.numbered-list.numbered-list-digits-3plus {
-	padding-inline-start: 2.4em;
-}
+      ol.numbered-list.numbered-list-digits-3plus {
+        padding-inline-start: 2.4em;
+      }
 
-ol > li {
-	padding-left: 0.2em;
-}
+      ol > li {
+        padding-left: 0.2em;
+      }
 
-.mono ol {
-	padding-inline-start: 2em;
-}
+      .mono ol {
+        padding-inline-start: 2em;
+      }
 
-.mono ol > li {
-	text-indent: -0.4em;
-}
+      .mono ol > li {
+        text-indent: -0.4em;
+      }
 
-.toggle {
-	padding-inline-start: 0em;
-	list-style-type: none;
-}
+      .toggle {
+        padding-inline-start: 0em;
+        list-style-type: none;
+      }
 
-/* Indent toggle children */
-.toggle > li > details {
-	padding-left: 1.7em;
-}
+      /* Indent toggle children */
+      .toggle > li > details {
+        padding-left: 1.7em;
+      }
 
-.toggle > li > details > summary {
-	margin-left: -1.1em;
-}
+      .toggle > li > details > summary {
+        margin-left: -1.1em;
+      }
 
-.selected-value {
-	display: inline-block;
-	padding: 0 0.5em;
-	background: rgba(206, 205, 202, 0.5);
-	border-radius: 3px;
-	margin-right: 0.5em;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-	white-space: nowrap;
-}
+      .selected-value {
+        display: inline-block;
+        padding: 0 0.5em;
+        background: rgba(206, 205, 202, 0.5);
+        border-radius: 3px;
+        margin-right: 0.5em;
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+        white-space: nowrap;
+      }
 
-.collection-title {
-	display: inline-block;
-	margin-right: 1em;
-}
+      .collection-title {
+        display: inline-block;
+        margin-right: 1em;
+      }
 
-.page-description {
-	margin-bottom: 2em;
-}
+      .page-description {
+        margin-bottom: 2em;
+      }
 
-.simple-table {
-	margin-top: 1em;
-	font-size: 0.875rem;
-	empty-cells: show;
-}
-.simple-table td {
-	height: 29px;
-	min-width: 120px;
-}
+      .simple-table {
+        margin-top: 1em;
+        font-size: 0.875rem;
+        empty-cells: show;
+      }
+      .simple-table td {
+        height: 29px;
+        min-width: 120px;
+      }
 
-.simple-table th {
-	height: 29px;
-	min-width: 120px;
-}
+      .simple-table th {
+        height: 29px;
+        min-width: 120px;
+      }
 
-.simple-table-header-color {
-	background: rgb(247, 246, 243);
-	color: black;
-}
-.simple-table-header {
-	font-weight: 500;
-}
+      .simple-table-header-color {
+        background: rgb(247, 246, 243);
+        color: black;
+      }
+      .simple-table-header {
+        font-weight: 500;
+      }
 
-time {
-	opacity: 0.5;
-}
+      time {
+        opacity: 0.5;
+      }
 
-.icon {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	max-width: 1.2em;
-	max-height: 1.2em;
-	text-decoration: none;
-	vertical-align: text-bottom;
-	margin-right: 0.5em;
-}
+      .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 1.2em;
+        max-height: 1.2em;
+        text-decoration: none;
+        vertical-align: text-bottom;
+        margin-right: 0.5em;
+      }
 
-/*
+      /*
  * Render emoji icons using a ::before pseudo-element to keep the glyph
  * out of the DOM textContent traversal. This avoids double-rendering icons
  * in callouts and page titles.
  * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
  * flag as a duplicate tag after codegen.
  */
-.icon[data-emoji]::before {
-	content: attr(data-emoji);
-}
+      .icon[data-emoji]::before {
+        content: attr(data-emoji);
+      }
 
-img.icon {
-	border-radius: 3px;
-}
+      img.icon {
+        border-radius: 3px;
+      }
 
-.callout img.notion-static-icon {
-	width: 1em;
-	height: 1em;
-}
+      .callout img.notion-static-icon {
+        width: 1em;
+        height: 1em;
+      }
 
-.callout p {
-	margin: 0;
-}
+      .callout p {
+        margin: 0;
+      }
 
-.callout h1,
-.callout h2,
-.callout h3 {
-	margin: 0 0 0.6rem;
-}
+      .callout h1,
+      .callout h2,
+      .callout h3 {
+        margin: 0 0 0.6rem;
+      }
 
-.user-icon {
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 100%;
-	margin-right: 0.5rem;
-}
+      .user-icon {
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 100%;
+        margin-right: 0.5rem;
+      }
 
-.user-icon-inner {
-	font-size: 0.8em;
-}
+      .user-icon-inner {
+        font-size: 0.8em;
+      }
 
-.text-icon {
-	border: 1px solid #000;
-	text-align: center;
-}
+      .text-icon {
+        border: 1px solid #000;
+        text-align: center;
+      }
 
-.page-cover-image {
-	display: block;
-	object-fit: cover;
-	width: 100%;
-	max-height: 30vh;
-}
+      .page-cover-image {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        max-height: 30vh;
+      }
 
-.page-header-icon {
-	font-size: 3rem;
-	margin-bottom: 1rem;
-}
+      .page-header-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
 
-.page-header-icon-with-cover {
-	margin-top: -0.72em;
-	margin-left: 0.07em;
-}
+      .page-header-icon-with-cover {
+        margin-top: -0.72em;
+        margin-left: 0.07em;
+      }
 
-.page-header-icon img {
-	border-radius: 3px;
-}
+      .page-header-icon img {
+        border-radius: 3px;
+      }
 
-.link-to-page {
-	margin: 1em 0;
-	padding: 0;
-	border: none;
-	font-weight: 500;
-}
+      .link-to-page {
+        margin: 1em 0;
+        padding: 0;
+        border: none;
+        font-weight: 500;
+      }
 
-p > .user {
-	opacity: 0.5;
-}
+      p > .user {
+        opacity: 0.5;
+      }
 
-td > .user,
-td > time {
-	white-space: nowrap;
-}
+      td > .user,
+      td > time {
+        white-space: nowrap;
+      }
 
-input[type="checkbox"] {
-	margin-right: 0.4em;
-	vertical-align: middle;
-}
+      input[type="checkbox"] {
+        margin-right: 0.4em;
+        vertical-align: middle;
+      }
 
-p {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-}
+      p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
 
-.image {
-	border: none;
-	margin: 1.5em 0;
-	padding: 0;
-	border-radius: 0;
-	text-align: center;
-}
+      .image {
+        border: none;
+        margin: 1.5em 0;
+        padding: 0;
+        border-radius: 0;
+        text-align: center;
+      }
 
-.code,
-code {
-	background: rgba(135, 131, 120, 0.15);
-	border-radius: 3px;
-	padding: 0.2em 0.4em;
-	border-radius: 3px;
-	font-size: 85%;
-	tab-size: 2;
-}
+      .code,
+      code {
+        background: rgba(135, 131, 120, 0.15);
+        border-radius: 3px;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 85%;
+        tab-size: 2;
+      }
 
-code {
-	color: #eb5757;
-}
+      code {
+        color: #eb5757;
+      }
 
-.code {
-	padding: 1.5em 1em;
-}
+      .code {
+        padding: 1.5em 1em;
+      }
 
-.code-wrap {
-	white-space: pre-wrap;
-	word-break: break-all;
-}
+      .code-wrap {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
 
-.code > code {
-	background: none;
-	padding: 0;
-	font-size: 100%;
-	color: inherit;
-}
+      .code > code {
+        background: none;
+        padding: 0;
+        font-size: 100%;
+        color: inherit;
+      }
 
-blockquote {
-	font-size: 1em;
-	margin: 1em 0;
-	padding-left: 1em;
-	border-left: 3px solid rgb(55, 53, 47);
-}
+      blockquote {
+        font-size: 1em;
+        margin: 1em 0;
+        padding-left: 1em;
+        border-left: 3px solid rgb(55, 53, 47);
+      }
 
-blockquote.quote-large {
-	font-size: 1.25em;
-}
+      blockquote.quote-large {
+        font-size: 1.25em;
+      }
 
-.bookmark {
-	text-decoration: none;
-	max-height: 8em;
-	padding: 0;
-	display: flex;
-	width: 100%;
-	align-items: stretch;
-}
+      .bookmark {
+        text-decoration: none;
+        max-height: 8em;
+        padding: 0;
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+      }
 
-.bookmark-title {
-	font-size: 0.85em;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	height: 1.75em;
-	white-space: nowrap;
-}
+      .bookmark-title {
+        font-size: 0.85em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 1.75em;
+        white-space: nowrap;
+      }
 
-.bookmark-text {
-	display: flex;
-	flex-direction: column;
-}
+      .bookmark-text {
+        display: flex;
+        flex-direction: column;
+      }
 
-.bookmark-info {
-	flex: 4 1 180px;
-	padding: 12px 14px 14px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
+      .bookmark-info {
+        flex: 4 1 180px;
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
 
-.bookmark-image {
-	width: 33%;
-	flex: 1 1 180px;
-	display: block;
-	position: relative;
-	object-fit: cover;
-	border-radius: 1px;
-}
+      .bookmark-image {
+        width: 33%;
+        flex: 1 1 180px;
+        display: block;
+        position: relative;
+        object-fit: cover;
+        border-radius: 1px;
+      }
 
-.bookmark-description {
-	color: rgba(55, 53, 47, 0.6);
-	font-size: 0.75em;
-	overflow: hidden;
-	max-height: 4.5em;
-	word-break: break-word;
-}
+      .bookmark-description {
+        color: rgba(55, 53, 47, 0.6);
+        font-size: 0.75em;
+        overflow: hidden;
+        max-height: 4.5em;
+        word-break: break-word;
+      }
 
-.bookmark-href {
-	font-size: 0.75em;
-	margin-top: 0.25em;
-}
+      .bookmark-href {
+        font-size: 0.75em;
+        margin-top: 0.25em;
+      }
 
-.tab {
-	margin: 1.25em 0;
-	padding-inline: 1rem;
-	border: 1px solid rgba(55, 53, 47, 0.09);
-}
+      .tab {
+        margin: 1.25em 0;
+        padding-inline: 1rem;
+        border: 1px solid rgba(55, 53, 47, 0.09);
+      }
 
-.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
-.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
-.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
-.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
-.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
-.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
-.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
-.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
-.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
-.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
-.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
-.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
-.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.highlight-default {
-	color: rgba(44, 44, 43, 1);
-}
-.highlight-gray {
-	color: rgba(125, 122, 117, 1);
-	fill: rgba(125, 122, 117, 1);
-}
-.highlight-brown {
-	color: rgba(159, 118, 90, 1);
-	fill: rgba(159, 118, 90, 1);
-}
-.highlight-orange {
-	color: rgba(210, 123, 45, 1);
-	fill: rgba(210, 123, 45, 1);
-}
-.highlight-yellow {
-	color: rgba(203, 148, 52, 1);
-	fill: rgba(203, 148, 52, 1);
-}
-.highlight-teal {
-	color: rgba(80, 148, 110, 1);
-	fill: rgba(80, 148, 110, 1);
-}
-.highlight-blue {
-	color: rgba(56, 125, 201, 1);
-	fill: rgba(56, 125, 201, 1);
-}
-.highlight-purple {
-	color: rgba(154, 107, 180, 1);
-	fill: rgba(154, 107, 180, 1);
-}
-.highlight-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.highlight-red {
-	color: rgba(207, 81, 72, 1);
-	fill: rgba(207, 81, 72, 1);
-}
-.highlight-default_background {
-	color: rgba(44, 44, 43, 1);
-}
-.highlight-gray_background {
-	background: rgba(42, 28, 0, 0.07);
-}
-.highlight-brown_background {
-	background: rgba(139, 46, 0, 0.086);
-}
-.highlight-orange_background {
-	background: rgba(224, 101, 1, 0.129);
-}
-.highlight-yellow_background {
-	background: rgba(211, 168, 0, 0.137);
-}
-.highlight-teal_background {
-	background: rgba(0, 100, 45, 0.09);
-}
-.highlight-blue_background {
-	background: rgba(0, 124, 215, 0.094);
-}
-.highlight-purple_background {
-	background: rgba(102, 0, 178, 0.078);
-}
-.highlight-pink_background {
-	background: rgba(197, 0, 93, 0.086);
-}
-.highlight-red_background {
-	background: rgba(223, 22, 0, 0.094);
-}
-.block-color-default {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray {
-	color: rgba(125, 122, 117, 1);
-	fill: rgba(125, 122, 117, 1);
-}
-.block-color-brown {
-	color: rgba(159, 118, 90, 1);
-	fill: rgba(159, 118, 90, 1);
-}
-.block-color-orange {
-	color: rgba(210, 123, 45, 1);
-	fill: rgba(210, 123, 45, 1);
-}
-.block-color-yellow {
-	color: rgba(203, 148, 52, 1);
-	fill: rgba(203, 148, 52, 1);
-}
-.block-color-teal {
-	color: rgba(80, 148, 110, 1);
-	fill: rgba(80, 148, 110, 1);
-}
-.block-color-blue {
-	color: rgba(56, 125, 201, 1);
-	fill: rgba(56, 125, 201, 1);
-}
-.block-color-purple {
-	color: rgba(154, 107, 180, 1);
-	fill: rgba(154, 107, 180, 1);
-}
-.block-color-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.block-color-red {
-	color: rgba(207, 81, 72, 1);
-	fill: rgba(207, 81, 72, 1);
-}
-.block-color-default_background {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray_background {
-	background: rgba(240, 239, 237, 1);
-}
-.block-color-brown_background {
-	background: rgba(245, 237, 233, 1);
-}
-.block-color-orange_background {
-	background: rgba(251, 235, 222, 1);
-}
-.block-color-yellow_background {
-	background: rgba(249, 243, 220, 1);
-}
-.block-color-teal_background {
-	background: rgba(232, 241, 236, 1);
-}
-.block-color-blue_background {
-	background: rgba(229, 242, 252, 1);
-}
-.block-color-purple_background {
-	background: rgba(243, 235, 249, 1);
-}
-.block-color-pink_background {
-	background: rgba(250, 233, 241, 1);
-}
-.block-color-red_background {
-	background: rgba(252, 233, 231, 1);
-}
-.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
-.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
-.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
-.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
-.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
-.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
-.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
-.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
-.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
-.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+      .sans {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol";
+      }
+      .code {
+        font-family:
+          "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono",
+          Courier, monospace;
+      }
+      .serif {
+        font-family: Lyon-Text, Georgia, ui-serif, serif;
+      }
+      .mono {
+        font-family: iawriter-mono, Nitti, Menlo, Courier, monospace;
+      }
+      .pdf .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK JP";
+      }
+      .pdf:lang(zh-CN) .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK SC";
+      }
+      .pdf:lang(zh-TW) .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK TC";
+      }
+      .pdf:lang(ko-KR) .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK KR";
+      }
+      .pdf .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK JP";
+      }
+      .pdf:lang(zh-CN) .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK SC";
+      }
+      .pdf:lang(zh-TW) .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK TC";
+      }
+      .pdf:lang(ko-KR) .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK KR";
+      }
+      .pdf .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK JP";
+      }
+      .pdf:lang(zh-CN) .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK SC";
+      }
+      .pdf:lang(zh-TW) .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK TC";
+      }
+      .pdf:lang(ko-KR) .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK KR";
+      }
+      .pdf .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK JP";
+      }
+      .pdf:lang(zh-CN) .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK SC";
+      }
+      .pdf:lang(zh-TW) .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK TC";
+      }
+      .pdf:lang(ko-KR) .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK KR";
+      }
+      .highlight-default {
+        color: rgba(44, 44, 43, 1);
+      }
+      .highlight-gray {
+        color: rgba(125, 122, 117, 1);
+        fill: rgba(125, 122, 117, 1);
+      }
+      .highlight-brown {
+        color: rgba(159, 118, 90, 1);
+        fill: rgba(159, 118, 90, 1);
+      }
+      .highlight-orange {
+        color: rgba(210, 123, 45, 1);
+        fill: rgba(210, 123, 45, 1);
+      }
+      .highlight-yellow {
+        color: rgba(203, 148, 52, 1);
+        fill: rgba(203, 148, 52, 1);
+      }
+      .highlight-teal {
+        color: rgba(80, 148, 110, 1);
+        fill: rgba(80, 148, 110, 1);
+      }
+      .highlight-blue {
+        color: rgba(56, 125, 201, 1);
+        fill: rgba(56, 125, 201, 1);
+      }
+      .highlight-purple {
+        color: rgba(154, 107, 180, 1);
+        fill: rgba(154, 107, 180, 1);
+      }
+      .highlight-pink {
+        color: rgba(193, 76, 138, 1);
+        fill: rgba(193, 76, 138, 1);
+      }
+      .highlight-red {
+        color: rgba(207, 81, 72, 1);
+        fill: rgba(207, 81, 72, 1);
+      }
+      .highlight-default_background {
+        color: rgba(44, 44, 43, 1);
+      }
+      .highlight-gray_background {
+        background: rgba(42, 28, 0, 0.07);
+      }
+      .highlight-brown_background {
+        background: rgba(139, 46, 0, 0.086);
+      }
+      .highlight-orange_background {
+        background: rgba(224, 101, 1, 0.129);
+      }
+      .highlight-yellow_background {
+        background: rgba(211, 168, 0, 0.137);
+      }
+      .highlight-teal_background {
+        background: rgba(0, 100, 45, 0.09);
+      }
+      .highlight-blue_background {
+        background: rgba(0, 124, 215, 0.094);
+      }
+      .highlight-purple_background {
+        background: rgba(102, 0, 178, 0.078);
+      }
+      .highlight-pink_background {
+        background: rgba(197, 0, 93, 0.086);
+      }
+      .highlight-red_background {
+        background: rgba(223, 22, 0, 0.094);
+      }
+      .block-color-default {
+        color: inherit;
+        fill: inherit;
+      }
+      .block-color-gray {
+        color: rgba(125, 122, 117, 1);
+        fill: rgba(125, 122, 117, 1);
+      }
+      .block-color-brown {
+        color: rgba(159, 118, 90, 1);
+        fill: rgba(159, 118, 90, 1);
+      }
+      .block-color-orange {
+        color: rgba(210, 123, 45, 1);
+        fill: rgba(210, 123, 45, 1);
+      }
+      .block-color-yellow {
+        color: rgba(203, 148, 52, 1);
+        fill: rgba(203, 148, 52, 1);
+      }
+      .block-color-teal {
+        color: rgba(80, 148, 110, 1);
+        fill: rgba(80, 148, 110, 1);
+      }
+      .block-color-blue {
+        color: rgba(56, 125, 201, 1);
+        fill: rgba(56, 125, 201, 1);
+      }
+      .block-color-purple {
+        color: rgba(154, 107, 180, 1);
+        fill: rgba(154, 107, 180, 1);
+      }
+      .block-color-pink {
+        color: rgba(193, 76, 138, 1);
+        fill: rgba(193, 76, 138, 1);
+      }
+      .block-color-red {
+        color: rgba(207, 81, 72, 1);
+        fill: rgba(207, 81, 72, 1);
+      }
+      .block-color-default_background {
+        color: inherit;
+        fill: inherit;
+      }
+      .block-color-gray_background {
+        background: rgba(240, 239, 237, 1);
+      }
+      .block-color-brown_background {
+        background: rgba(245, 237, 233, 1);
+      }
+      .block-color-orange_background {
+        background: rgba(251, 235, 222, 1);
+      }
+      .block-color-yellow_background {
+        background: rgba(249, 243, 220, 1);
+      }
+      .block-color-teal_background {
+        background: rgba(232, 241, 236, 1);
+      }
+      .block-color-blue_background {
+        background: rgba(229, 242, 252, 1);
+      }
+      .block-color-purple_background {
+        background: rgba(243, 235, 249, 1);
+      }
+      .block-color-pink_background {
+        background: rgba(250, 233, 241, 1);
+      }
+      .block-color-red_background {
+        background: rgba(252, 233, 231, 1);
+      }
+      .select-value-color-default {
+        background-color: rgba(42, 28, 0, 0.07);
+      }
+      .select-value-color-gray {
+        background-color: rgba(28, 19, 1, 0.11);
+      }
+      .select-value-color-brown {
+        background-color: rgba(127, 51, 0, 0.156);
+      }
+      .select-value-color-orange {
+        background-color: rgba(196, 88, 0, 0.203);
+      }
+      .select-value-color-yellow {
+        background-color: rgba(209, 156, 0, 0.282);
+      }
+      .select-value-color-green {
+        background-color: rgba(0, 96, 38, 0.156);
+      }
+      .select-value-color-blue {
+        background-color: rgba(0, 118, 217, 0.203);
+      }
+      .select-value-color-purple {
+        background-color: rgba(92, 0, 163, 0.141);
+      }
+      .select-value-color-pink {
+        background-color: rgba(183, 0, 78, 0.152);
+      }
+      .select-value-color-red {
+        background-color: rgba(206, 24, 0, 0.164);
+      }
 
-.checkbox {
-	display: inline-flex;
-	vertical-align: text-bottom;
-	width: 16;
-	height: 16;
-	background-size: 16px;
-	margin-left: 2px;
-	margin-right: 5px;
-}
+      .checkbox {
+        display: inline-flex;
+        vertical-align: text-bottom;
+        width: 16;
+        height: 16;
+        background-size: 16px;
+        margin-left: 2px;
+        margin-right: 5px;
+      }
 
-.checkbox-on {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-}
+      .checkbox-on {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+      }
 
-.checkbox-off {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-	
-</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="3a52663e-2414-8052-a217-f3bf3305be4d" class="page sans" data-notion-page-icon="📔"><header><div class="page-header-icon undefined"><span class="icon" data-emoji="📔"></span></div><h1 class="page-title" dir="auto">Estándares de desarrollo Backend</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><nav id="3a52663e-2414-803f-9b14-c982763ec80b" class="block-color-gray table_of_contents" data-notion-highlight="gray" data-notion-toc="" dir="ltr"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a52663e-2414-809f-a71a-d539e697ac18">1 Principios generales</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a52663e-2414-803b-bd9b-d52b4f8b18a4">2 Estándares de Documentación de Código</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a52663e-2414-8025-8f76-d964122e4b02">3 Tipado</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a62663e-2414-8096-b5d9-d0b4fac0c10a">4 Endpoints</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a62663e-2414-80f0-bff1-de52375e324a">4.1 Estructura de archivos</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a62663e-2414-80da-8350-dc4f7aa7f381">4.2 Data transfer objects (<code>&lt;entidad&gt;_dto.py</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a62663e-2414-807f-a9f0-d14a48bdd93e">Ejemplo: </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a62663e-2414-8044-b096-e1a7f55784c2">4.3 Filtros (<code>&lt;entidad&gt;_filters.py</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a62663e-2414-8083-86ba-c0b84937917b">4.4 Repositorios (<code>{entidad}_repo.py</code>)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a62663e-2414-80f1-9b7c-c034c37fc982">4.5 Servicios</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a62663e-2414-80a9-89a6-fd84a49fe1ff">4.6 Enrutadores</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3dd2663e-2414-80db-a19b-f5460a031d16">Aplicación de estandares</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3dd2663e-2414-8075-b0a6-f2523a7716d8">Mejoras que fáltan</a></div></nav><details open="" class="" dir="auto"><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0"><h1 id="3a52663e-2414-809f-a71a-d539e697ac18" style="display:inline-block">1 Principios generales</h1></summary><div class="indented"><ul id="3a52663e-2414-8090-a08a-f4ce94545dd3" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Explícito antes que implícito.</strong> El nombre de una variable, función o clase debe decir qué hace, sin necesidad de leer su implementación.</li></ul><ul id="3a52663e-2414-80a5-9085-d6be416c61bc" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Consistencia sobre preferencia personal.</strong> Si el manual dice cómo se hace, se hace así, aunque exista otra forma &quot;igual de válida&quot;.</li></ul><ul id="3a52663e-2414-80a7-ad45-deaa7ee85265" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Nombre de clases, funciones y variables:</strong> Para el nombramiento se siguen las siguientes reglas:<ul id="3a52663e-2414-801e-827c-cb7ec9146f97" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><strong>Clases:</strong> Utilizar UpperCamelCase. Se define <code>Usuario</code>, <code>CategoriaPermiso</code>.</li></ul><ul id="3a52663e-2414-806b-bed1-c88b956eb4bb" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><strong>Variables y funciones:</strong> Utilizar SnakeCase. Por ejemplo <code>id</code>, <code>user_name</code>, <code>get_fecha_cambio</code>.</li></ul><ul id="3a52663e-2414-80f2-9541-d164e2938568" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><strong>Constantes:</strong> Utilizar SnakeCase pero todo con mayúsculas. Por ejemplo <code>CONSTANTE</code>, <code>VALOR_DEFECTO</code>.</li></ul></li></ul><ul id="3a52663e-2414-80d2-8e97-d769221bd68a" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Todo el código nuevo se tipa.</strong> No se permite <code>Any</code> salvo excepción justificada y comentada.</li></ul><ul id="3a52663e-2414-8074-a978-cb85cb7914e1" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Idioma:</strong> Los nombres se definen en dependencia de qué se está creando:<ul id="3a52663e-2414-80ca-bc3e-c3c0d0001195" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Variables y funciones: <strong>Inglés,</strong> salvo nombres de entidades/atributos que mantienen. (load_data, get_usuario, show_nombre).</li></ul><ul id="3a52663e-2414-802e-a445-fb3aa789849f" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Clases e interfaces: <strong>Español</strong>, respetando el nombre de tabla/columna que definida en base de datos. Se pueden utilizar palabras en Ingles en determinados casos específicos.</li></ul><ul id="3a52663e-2414-8011-8490-ff8e4adb3e85" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Comentarios y documentación: <strong>Español.</strong></li></ul></li></ul><ul id="3a62663e-2414-8012-bf36-d559fd565e50" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Imports</strong>: siempre absolutos desde <code>app...</code>, nunca relativos.</li></ul><ul id="3a62663e-2414-809a-9532-fa633f8e8b9c" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>No lógica de negocio fuera del service</strong>: ni en router, ni en repo, ni en DTO.</li></ul></div></details><details open="" class="" dir="auto"><summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0"><h1 id="3a52663e-2414-803b-bd9b-d52b4f8b18a4" style="display:inline-block">2 Estándares de Documentación de Código</h1></summary><div class="indented"><p id="3a52663e-2414-8082-8eae-ecdb0a318c34" class="" dir="auto">El objetivo de la documentación de código no es explicar qué hace cada línea, sino comunicar la <strong>intención y el propósito</strong>.</p><p id="3a52663e-2414-802b-85fe-f14e61372463" class="" dir="auto">Para mantener una documentación útil y sostenible en el tiempo sin generar mantenimiento innecesario, la regla rectora del proyecto es la documentación basada en la reutilización<strong>. </strong>Es <strong>estrictamente obligatorio</strong> documentar toda clase, función o interfaz que esté diseñada para ser <strong>compartida y utilizada en múltiples partes del sistema</strong>.</p><h2 id="3a52663e-2414-80f0-b420-cda2b407ccfc" class="" dir="auto">2.1 Clases</h2><p id="3a52663e-2414-805d-b623-de8801e5ca85" class="" dir="auto">Se describe la responsabilidad general de la clase.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" integrity="sha512-AKaNmg8COK0zEbjTdMHJAPJ0z6VeNqvRvH4/d5M4sHJbQQUToMBtodq4HaV4fa+WV2UTfoperElm66c9/8cKmQ==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><pre id="3a52663e-2414-8092-b0ce-f6acc285a948" class="code code-wrap" data-notion-code-syntax="python"><code class="language-python" style="white-space:pre-wrap;word-break:break-all">class MiClase:
+      .checkbox-off {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+      }
+    </style>
+    <style>
+      @import url("https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css");
+    </style>
+  </head>
+  <body>
+    <article
+      id="3a52663e-2414-8052-a217-f3bf3305be4d"
+      class="page sans"
+      data-notion-page-icon="📔"
+    >
+      <header>
+        <div class="page-header-icon undefined">
+          <span class="icon" data-emoji="📔"></span>
+        </div>
+        <h1 class="page-title" dir="auto">Estándares de desarrollo Backend</h1>
+        <p class="page-description" dir="auto"></p>
+      </header>
+      <div class="page-body">
+        <nav
+          id="3a52663e-2414-803f-9b14-c982763ec80b"
+          class="block-color-gray table_of_contents"
+          data-notion-highlight="gray"
+          data-notion-toc=""
+          dir="ltr"
+        >
+          <div class="table_of_contents-item table_of_contents-indent-0">
+            <a
+              class="table_of_contents-link"
+              href="#3a52663e-2414-809f-a71a-d539e697ac18"
+              >1 Principios generales</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-0">
+            <a
+              class="table_of_contents-link"
+              href="#3a52663e-2414-803b-bd9b-d52b4f8b18a4"
+              >2 Estándares de Documentación de Código</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-0">
+            <a
+              class="table_of_contents-link"
+              href="#3a52663e-2414-8025-8f76-d964122e4b02"
+              >3 Tipado</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-0">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-8096-b5d9-d0b4fac0c10a"
+              >4 Endpoints</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-1">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-80f0-bff1-de52375e324a"
+              >4.1 Estructura de archivos</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-1">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-80da-8350-dc4f7aa7f381"
+              >4.2 Data transfer objects
+              (<code>&lt;entidad&gt;_dto.py</code>)</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-2">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-807f-a9f0-d14a48bdd93e"
+              >Ejemplo:
+            </a>
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-1">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-8044-b096-e1a7f55784c2"
+              >4.3 Filtros (<code>&lt;entidad&gt;_filters.py</code>)</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-1">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-8083-86ba-c0b84937917b"
+              >4.4 Repositorios (<code>{entidad}_repo.py</code>)</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-1">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-80f1-9b7c-c034c37fc982"
+              >4.5 Servicios</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-1">
+            <a
+              class="table_of_contents-link"
+              href="#3a62663e-2414-80a9-89a6-fd84a49fe1ff"
+              >4.6 Enrutadores</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-0">
+            <a
+              class="table_of_contents-link"
+              href="#3dd2663e-2414-80db-a19b-f5460a031d16"
+              >Aplicación de estandares</a
+            >
+          </div>
+          <div class="table_of_contents-item table_of_contents-indent-0">
+            <a
+              class="table_of_contents-link"
+              href="#3dd2663e-2414-8075-b0a6-f2523a7716d8"
+              >Mejoras que fáltan</a
+            >
+          </div>
+        </nav>
+        <details open="" class="" dir="auto">
+          <summary
+            style="
+              font-weight: 600;
+              font-size: 1.875em;
+              line-height: 1.3;
+              margin: 0;
+            "
+          >
+            <h1
+              id="3a52663e-2414-809f-a71a-d539e697ac18"
+              style="display: inline-block"
+            >
+              1 Principios generales
+            </h1>
+          </summary>
+          <div class="indented">
+            <ul
+              id="3a52663e-2414-8090-a08a-f4ce94545dd3"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>Explícito antes que implícito.</strong> El nombre de una
+                variable, función o clase debe decir qué hace, sin necesidad de
+                leer su implementación.
+              </li>
+            </ul>
+            <ul
+              id="3a52663e-2414-80a5-9085-d6be416c61bc"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>Consistencia sobre preferencia personal.</strong> Si el
+                manual dice cómo se hace, se hace así, aunque exista otra forma
+                &quot;igual de válida&quot;.
+              </li>
+            </ul>
+            <ul
+              id="3a52663e-2414-80a7-ad45-deaa7ee85265"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>Nombre de clases, funciones y variables:</strong> Para
+                el nombramiento se siguen las siguientes reglas:
+                <ul
+                  id="3a52663e-2414-801e-827c-cb7ec9146f97"
+                  class="bulleted-list"
+                  dir="auto"
+                >
+                  <li style="list-style-type: circle">
+                    <strong>Clases:</strong> Utilizar UpperCamelCase. Se define
+                    <code>Usuario</code>, <code>CategoriaPermiso</code>.
+                  </li>
+                </ul>
+                <ul
+                  id="3a52663e-2414-806b-bed1-c88b956eb4bb"
+                  class="bulleted-list"
+                  dir="auto"
+                >
+                  <li style="list-style-type: circle">
+                    <strong>Variables y funciones:</strong> Utilizar SnakeCase.
+                    Por ejemplo <code>id</code>, <code>user_name</code>,
+                    <code>get_fecha_cambio</code>.
+                  </li>
+                </ul>
+                <ul
+                  id="3a52663e-2414-80f2-9541-d164e2938568"
+                  class="bulleted-list"
+                  dir="auto"
+                >
+                  <li style="list-style-type: circle">
+                    <strong>Constantes:</strong> Utilizar SnakeCase pero todo
+                    con mayúsculas. Por ejemplo <code>CONSTANTE</code>,
+                    <code>VALOR_DEFECTO</code>.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <ul
+              id="3a52663e-2414-80d2-8e97-d769221bd68a"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>Todo el código nuevo se tipa.</strong> No se permite
+                <code>Any</code> salvo excepción justificada y comentada.
+              </li>
+            </ul>
+            <ul
+              id="3a52663e-2414-8074-a978-cb85cb7914e1"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>Idioma:</strong> Los nombres se definen en dependencia
+                de qué se está creando:
+                <ul
+                  id="3a52663e-2414-80ca-bc3e-c3c0d0001195"
+                  class="bulleted-list"
+                  dir="auto"
+                >
+                  <li style="list-style-type: circle">
+                    Variables y funciones: <strong>Inglés,</strong> salvo
+                    nombres de entidades/atributos que mantienen. (load_data,
+                    get_usuario, show_nombre).
+                  </li>
+                </ul>
+                <ul
+                  id="3a52663e-2414-802e-a445-fb3aa789849f"
+                  class="bulleted-list"
+                  dir="auto"
+                >
+                  <li style="list-style-type: circle">
+                    Clases e interfaces: <strong>Español</strong>, respetando el
+                    nombre de tabla/columna que definida en base de datos. Se
+                    pueden utilizar palabras en Ingles en determinados casos
+                    específicos.
+                  </li>
+                </ul>
+                <ul
+                  id="3a52663e-2414-8011-8490-ff8e4adb3e85"
+                  class="bulleted-list"
+                  dir="auto"
+                >
+                  <li style="list-style-type: circle">
+                    Comentarios y documentación: <strong>Español.</strong>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <ul
+              id="3a62663e-2414-8012-bf36-d559fd565e50"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>Imports</strong>: siempre absolutos desde
+                <code>app...</code>, nunca relativos.
+              </li>
+            </ul>
+            <ul
+              id="3a62663e-2414-809a-9532-fa633f8e8b9c"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: disc">
+                <strong>No lógica de negocio fuera del service</strong>: ni en
+                router, ni en repo, ni en DTO.
+              </li>
+            </ul>
+          </div>
+        </details>
+        <details open="" class="" dir="auto">
+          <summary
+            style="
+              font-weight: 600;
+              font-size: 1.875em;
+              line-height: 1.3;
+              margin: 0;
+            "
+          >
+            <h1
+              id="3a52663e-2414-803b-bd9b-d52b4f8b18a4"
+              style="display: inline-block"
+            >
+              2 Estándares de Documentación de Código
+            </h1>
+          </summary>
+          <div class="indented">
+            <p id="3a52663e-2414-8082-8eae-ecdb0a318c34" class="" dir="auto">
+              El objetivo de la documentación de código no es explicar qué hace
+              cada línea, sino comunicar la
+              <strong>intención y el propósito</strong>.
+            </p>
+            <p id="3a52663e-2414-802b-85fe-f14e61372463" class="" dir="auto">
+              Para mantener una documentación útil y sostenible en el tiempo sin
+              generar mantenimiento innecesario, la regla rectora del proyecto
+              es la documentación basada en la reutilización<strong>. </strong
+              >Es <strong>estrictamente obligatorio</strong> documentar toda
+              clase, función o interfaz que esté diseñada para ser
+              <strong
+                >compartida y utilizada en múltiples partes del sistema</strong
+              >.
+            </p>
+            <h2 id="3a52663e-2414-80f0-b420-cda2b407ccfc" class="" dir="auto">
+              2.1 Clases
+            </h2>
+            <p id="3a52663e-2414-805d-b623-de8801e5ca85" class="" dir="auto">
+              Se describe la responsabilidad general de la clase.
+            </p>
+            <script
+              src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
+              integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer"
+            ></script>
+            <link
+              rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+              integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer"
+            />
+            <script
+              src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"
+              integrity="sha512-AKaNmg8COK0zEbjTdMHJAPJ0z6VeNqvRvH4/d5M4sHJbQQUToMBtodq4HaV4fa+WV2UTfoperElm66c9/8cKmQ=="
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer"
+            ></script>
+            <pre
+              id="3a52663e-2414-8092-b0ce-f6acc285a948"
+              class="code code-wrap"
+              data-notion-code-syntax="python"
+            ><code class="language-python" style="white-space:pre-wrap;word-break:break-all">class MiClase:
 	&quot;&quot;&quot;
 	Clase de ejemplo para escribir documentación.
-	&quot;&quot;&quot;</code></pre><h2 id="3a52663e-2414-807a-9a12-d8255d50508f" class="" dir="auto">2.2 Funciones</h2><p id="3a52663e-2414-8013-b637-d49de2770829" class="" dir="auto">Se indican principalmente los parámetros que recibe y lo que retorna.</p><pre id="3a52663e-2414-802b-9c54-ef54cc44c29a" class="code code-wrap" data-notion-code-syntax="python"><code class="language-python" style="white-space:pre-wrap;word-break:break-all">def get_comentarios_usuario(usuario_id: int, size: int=10) -&gt; list[str]:
+	&quot;&quot;&quot;</code></pre>
+            <h2 id="3a52663e-2414-807a-9a12-d8255d50508f" class="" dir="auto">
+              2.2 Funciones
+            </h2>
+            <p id="3a52663e-2414-8013-b637-d49de2770829" class="" dir="auto">
+              Se indican principalmente los parámetros que recibe y lo que
+              retorna.
+            </p>
+            <pre
+              id="3a52663e-2414-802b-9c54-ef54cc44c29a"
+              class="code code-wrap"
+              data-notion-code-syntax="python"
+            ><code class="language-python" style="white-space:pre-wrap;word-break:break-all">def get_comentarios_usuario(usuario_id: int, size: int=10) -&gt; list[str]:
     &quot;&quot;&quot;
     Retorna el listado de comentarios que ha hecho el usuario
 
@@ -805,7 +1415,339 @@ blockquote.quote-large {
     Returns:
         Listado de comentarios.
     &quot;&quot;&quot;
-    return []</code></pre></div></details><h1 id="3a52663e-2414-8025-8f76-d964122e4b02" class="" dir="auto">3 Tipado</h1><ul id="3a52663e-2414-8087-9bd3-e46fbbf0c84b" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Obligatorio tipar:</strong><ul id="3a52663e-2414-8090-80ec-c265efde3912" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Parámetros de funciones.</li></ul><ul id="3a52663e-2414-80f8-869c-efa906799fd6" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Valores de retorno de funciones (no depender solo de inferencia en funciones públicas/exportadas).</li></ul><ul id="3a52663e-2414-8050-bc29-ccdef0eea32a" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Propiedades de clases e interfaces.</li></ul></li></ul><ul id="3a52663e-2414-8040-87d9-c0d2067205a7" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Prohibido:</strong><ul id="3a52663e-2414-80b6-8f25-e766a219a2fe" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Usar <code>Any</code> como salida fácil.</li></ul><ul id="3a52663e-2414-80f0-b0f8-d64e5c5453db" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Tipos implícitos en funciones exportadas (aunque se infiera, se declaran explícitamente para que el tipado sea visible sin ir a la implementación).</li></ul></li></ul><h1 id="3a62663e-2414-8096-b5d9-d0b4fac0c10a" class="" dir="auto">4 Endpoints</h1><h2 id="3a62663e-2414-80f0-bff1-de52375e324a" class="" dir="auto">4.1 Estructura de archivos</h2><p id="3a62663e-2414-80f0-8023-cd2b9d283eab" class="" dir="auto">Cada endpoint vive en <code>app/api/&lt;entidad&gt;/</code> con 5 archivos fijos:</p><table id="3a62663e-2414-804a-8787-d9621931f8a6" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="3a62663e-2414-8002-ab24-f43e0cc6f949" dir="ltr"><th id="sojt" class="simple-table-header-color simple-table-header" style="width:184.48959350585938px">Nombre</th><th id="WqgL" class="simple-table-header-color simple-table-header" style="width:445.79168701171875px">Función</th></tr></thead><tbody><tr id="3a62663e-2414-8073-9654-cb1f9bd3df47" dir="ltr"><td id="sojt" class="" style="width:184.48959350585938px"><code>&lt;entidad&gt;_dto.py</code></td><td id="WqgL" class="" style="width:445.79168701171875px">Define los data transfer objects para la comunicación con cliente.</td></tr><tr id="3a62663e-2414-80ea-b4f1-c26903a4d737" dir="ltr"><td id="sojt" class="" style="width:184.48959350585938px"><code>&lt;entidad&gt;_filters.py</code></td><td id="WqgL" class="" style="width:445.79168701171875px">Modelos para definición de filtros en endpoints de listado y paginado.</td></tr><tr id="3a62663e-2414-8084-8cd2-f7826ccd2aa2" dir="ltr"><td id="sojt" class="" style="width:184.48959350585938px"><code>&lt;entidad&gt;_repo.py</code></td><td id="WqgL" class="" style="width:445.79168701171875px">Repositorio de la entidad para comunicación con base de datos.</td></tr><tr id="3a62663e-2414-80bc-9891-e8c82499ea23" dir="ltr"><td id="sojt" class="" style="width:184.48959350585938px"><code>&lt;entidad&gt;_svc.py</code></td><td id="WqgL" class="" style="width:445.79168701171875px">Servicio de la entidad para enlace entre router y repositorio.</td></tr><tr id="3a62663e-2414-8072-8f82-f3fc18912fc7" dir="ltr"><td id="sojt" class="" style="width:184.48959350585938px"><code>&lt;entidad&gt;_router.py</code></td><td id="WqgL" class="" style="width:445.79168701171875px">Definición de endpoints.</td></tr></tbody></table><p id="3a62663e-2414-80be-bc8d-e3f668f52967" class="" dir="auto">No se debe mezclar responsabilidades entre archivos (p. ej. lógica de negocio dentro del router, o queries SQL dentro del service).</p><h2 id="3a62663e-2414-80da-8350-dc4f7aa7f381" class="" dir="auto">4.2 Data transfer objects (<code>&lt;entidad&gt;_dto.py</code>)</h2><p id="3a62663e-2414-80cd-9171-c25de624b053" class="" dir="auto">Importa siempre de <code>app.shared.base_dto</code>.</p><table id="3a62663e-2414-80a6-8c10-fd9c7a0b2dce" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="3a62663e-2414-800d-ab9a-e9665d830cb6" dir="ltr"><th id="gBhT" class="simple-table-header-color simple-table-header" style="width:399.65972900390625px">Uso</th><th id="np_&lt;" class="simple-table-header-color simple-table-header" style="width:168.65972900390625px">Nombre</th><th id="TvCW" class="simple-table-header-color simple-table-header" style="width:144.22222900390625px">Extiende</th></tr></thead><tbody><tr id="3a62663e-2414-80a8-ae3a-d0ea7c5e5123" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Campos propios de la entidad (fuente única de verdad de los atributos)</td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;Base</code></td><td id="TvCW" class="" style="width:144.22222900390625px"><code>BaseDTO</code></td></tr><tr id="3a62663e-2414-80bb-9321-f0349d3cee2e" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Respuesta genérica (incluye campos <code>id</code> y <code>activo</code>)</td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;DTO</code></td><td id="TvCW" class="" style="width:144.22222900390625px"><code>&lt;Entidad&gt;Base</code>, <code>BaseResponseDTO</code></td></tr><tr id="3a62663e-2414-8082-87b4-c04e430b2aea" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Detalle completo (respuesta de <code>GET /{id}</code></td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;SingleDTO</code></td><td id="TvCW" class="" style="width:144.22222900390625px"><code>&lt;Entidad&gt;DTO</code></td></tr><tr id="3a62663e-2414-80b3-9905-e3fab710b8fd" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Respuesta de listados (<code>GET &quot;&quot;</code>, <code>GET /pg</code>)</td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;ListDTO</code></td><td id="TvCW" class="" style="width:144.22222900390625px"><code>&lt;Entidad&gt;DTO</code></td></tr><tr id="3a62663e-2414-8083-bf58-dcf9b751d599" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Payload de <code>POST</code></td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;CreateDTO</code></td><td id="TvCW" class="" style="width:144.22222900390625px"><code>&lt;Entidad&gt;Base</code></td></tr><tr id="3a62663e-2414-800a-a351-cc3978f88be6" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Payload de <code>PUT</code> (reemplazo total)</td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;UpdateDTO</code></td><td id="TvCW" class="" style="width:144.22222900390625px"><code>&lt;Entidad&gt;Base</code></td></tr><tr id="3a62663e-2414-8016-898f-ea057a3c31c7" dir="ltr"><td id="gBhT" class="" style="width:399.65972900390625px">Payload de <code>PATCH</code>, <strong>todos los campos opcionales</strong></td><td id="np_&lt;" class="" style="width:168.65972900390625px"><code>&lt;Entidad&gt;PatchDTO</code></td><td id="TvCW" class="" style="width:144.22222900390625px"></td></tr></tbody></table><p id="3a62663e-2414-80b3-aa14-c10679abd750" class="" dir="auto"><strong>Reglas:</strong></p><ul id="3a62663e-2414-8095-86e1-dd3146e93ca2" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Los campos reales de la entidad se declaran <strong>una sola vez</strong> en <code>{Entidad}Base</code>. Las demás clases heredan, no redeclaran.</li></ul><ul id="3a62663e-2414-8064-8d99-db7ec694641e" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>{Entidad}SingleDTO</code> y <code>{Entidad}ListDTO</code> pueden estar vacías (<code>...</code>) si no agregan campos extra; existen para poder diferenciar el <code>response_model</code> de cada endpoint sin acoplar el schema de detalle al de listado.</li></ul><ul id="3a62663e-2414-8013-b121-d6e4a718da54" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>PatchDTO</code> nunca hereda de <code>Base</code>: se redeclara cada campo como opcional para evitar que un <code>PUT</code>/<code>POST</code> acepte campos parciales por accidente.</li></ul><ul id="3a62663e-2414-80ac-968e-d239c58eb340" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Tipos simples y explícitos (<code>str</code>, <code>int</code>, <code>str | None</code>), sin <code>Any</code>.</li></ul><h3 id="3a62663e-2414-807f-a9f0-d14a48bdd93e" class="" dir="auto">Ejemplo: </h3><p id="3a62663e-2414-8054-a348-e56fb6cebd4e" class="" dir="auto"><strong>Entidad:</strong> <code>sucursal</code> <br/><strong>Archivo:</strong> <code>sucursal_dto.py</code></p><pre id="3a62663e-2414-809c-9e1c-d767b1862fb3" class="code code-wrap" data-notion-code-syntax="python"><code class="language-python" style="white-space:pre-wrap;word-break:break-all">from app.shared.base_dto import BaseDTO, BaseResponseDTO
+    return []</code></pre>
+          </div>
+        </details>
+        <h1 id="3a52663e-2414-8025-8f76-d964122e4b02" class="" dir="auto">
+          3 Tipado
+        </h1>
+        <ul
+          id="3a52663e-2414-8087-9bd3-e46fbbf0c84b"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <strong>Obligatorio tipar:</strong>
+            <ul
+              id="3a52663e-2414-8090-80ec-c265efde3912"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">Parámetros de funciones.</li>
+            </ul>
+            <ul
+              id="3a52663e-2414-80f8-869c-efa906799fd6"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                Valores de retorno de funciones (no depender solo de inferencia
+                en funciones públicas/exportadas).
+              </li>
+            </ul>
+            <ul
+              id="3a52663e-2414-8050-bc29-ccdef0eea32a"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                Propiedades de clases e interfaces.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul
+          id="3a52663e-2414-8040-87d9-c0d2067205a7"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <strong>Prohibido:</strong>
+            <ul
+              id="3a52663e-2414-80b6-8f25-e766a219a2fe"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                Usar <code>Any</code> como salida fácil.
+              </li>
+            </ul>
+            <ul
+              id="3a52663e-2414-80f0-b0f8-d64e5c5453db"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                Tipos implícitos en funciones exportadas (aunque se infiera, se
+                declaran explícitamente para que el tipado sea visible sin ir a
+                la implementación).
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h1 id="3a62663e-2414-8096-b5d9-d0b4fac0c10a" class="" dir="auto">
+          4 Endpoints
+        </h1>
+        <h2 id="3a62663e-2414-80f0-bff1-de52375e324a" class="" dir="auto">
+          4.1 Estructura de archivos
+        </h2>
+        <p id="3a62663e-2414-80f0-8023-cd2b9d283eab" class="" dir="auto">
+          Cada endpoint vive en <code>app/api/&lt;entidad&gt;/</code> con 5
+          archivos fijos:
+        </p>
+        <table
+          id="3a62663e-2414-804a-8787-d9621931f8a6"
+          class="simple-table"
+          dir="ltr"
+        >
+          <thead class="simple-table-header">
+            <tr id="3a62663e-2414-8002-ab24-f43e0cc6f949" dir="ltr">
+              <th
+                id="sojt"
+                class="simple-table-header-color simple-table-header"
+                style="width: 184.48959350585938px"
+              >
+                Nombre
+              </th>
+              <th
+                id="WqgL"
+                class="simple-table-header-color simple-table-header"
+                style="width: 445.79168701171875px"
+              >
+                Función
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="3a62663e-2414-8073-9654-cb1f9bd3df47" dir="ltr">
+              <td id="sojt" class="" style="width: 184.48959350585938px">
+                <code>&lt;entidad&gt;_dto.py</code>
+              </td>
+              <td id="WqgL" class="" style="width: 445.79168701171875px">
+                Define los data transfer objects para la comunicación con
+                cliente.
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-80ea-b4f1-c26903a4d737" dir="ltr">
+              <td id="sojt" class="" style="width: 184.48959350585938px">
+                <code>&lt;entidad&gt;_filters.py</code>
+              </td>
+              <td id="WqgL" class="" style="width: 445.79168701171875px">
+                Modelos para definición de filtros en endpoints de listado y
+                paginado.
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8084-8cd2-f7826ccd2aa2" dir="ltr">
+              <td id="sojt" class="" style="width: 184.48959350585938px">
+                <code>&lt;entidad&gt;_repo.py</code>
+              </td>
+              <td id="WqgL" class="" style="width: 445.79168701171875px">
+                Repositorio de la entidad para comunicación con base de datos.
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-80bc-9891-e8c82499ea23" dir="ltr">
+              <td id="sojt" class="" style="width: 184.48959350585938px">
+                <code>&lt;entidad&gt;_svc.py</code>
+              </td>
+              <td id="WqgL" class="" style="width: 445.79168701171875px">
+                Servicio de la entidad para enlace entre router y repositorio.
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8072-8f82-f3fc18912fc7" dir="ltr">
+              <td id="sojt" class="" style="width: 184.48959350585938px">
+                <code>&lt;entidad&gt;_router.py</code>
+              </td>
+              <td id="WqgL" class="" style="width: 445.79168701171875px">
+                Definición de endpoints.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p id="3a62663e-2414-80be-bc8d-e3f668f52967" class="" dir="auto">
+          No se debe mezclar responsabilidades entre archivos (p. ej. lógica de
+          negocio dentro del router, o queries SQL dentro del service).
+        </p>
+        <h2 id="3a62663e-2414-80da-8350-dc4f7aa7f381" class="" dir="auto">
+          4.2 Data transfer objects (<code>&lt;entidad&gt;_dto.py</code>)
+        </h2>
+        <p id="3a62663e-2414-80cd-9171-c25de624b053" class="" dir="auto">
+          Importa siempre de <code>app.shared.base_dto</code>.
+        </p>
+        <table
+          id="3a62663e-2414-80a6-8c10-fd9c7a0b2dce"
+          class="simple-table"
+          dir="ltr"
+        >
+          <thead class="simple-table-header">
+            <tr id="3a62663e-2414-800d-ab9a-e9665d830cb6" dir="ltr">
+              <th
+                id="gBhT"
+                class="simple-table-header-color simple-table-header"
+                style="width: 399.65972900390625px"
+              >
+                Uso
+              </th>
+              <th
+                id="np_&lt;"
+                class="simple-table-header-color simple-table-header"
+                style="width: 168.65972900390625px"
+              >
+                Nombre
+              </th>
+              <th
+                id="TvCW"
+                class="simple-table-header-color simple-table-header"
+                style="width: 144.22222900390625px"
+              >
+                Extiende
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="3a62663e-2414-80a8-ae3a-d0ea7c5e5123" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Campos propios de la entidad (fuente única de verdad de los
+                atributos)
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;Base</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px">
+                <code>BaseDTO</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-80bb-9321-f0349d3cee2e" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Respuesta genérica (incluye campos <code>id</code> y
+                <code>activo</code>)
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;DTO</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px">
+                <code>&lt;Entidad&gt;Base</code>, <code>BaseResponseDTO</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8082-87b4-c04e430b2aea" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Detalle completo (respuesta de <code>GET /{id}</code>
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;SingleDTO</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px">
+                <code>&lt;Entidad&gt;DTO</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-80b3-9905-e3fab710b8fd" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Respuesta de listados (<code>GET &quot;&quot;</code>,
+                <code>GET /pg</code>)
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;ListDTO</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px">
+                <code>&lt;Entidad&gt;DTO</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8083-bf58-dcf9b751d599" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Payload de <code>POST</code>
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;CreateDTO</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px">
+                <code>&lt;Entidad&gt;Base</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-800a-a351-cc3978f88be6" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Payload de <code>PUT</code> (reemplazo total)
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;UpdateDTO</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px">
+                <code>&lt;Entidad&gt;Base</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8016-898f-ea057a3c31c7" dir="ltr">
+              <td id="gBhT" class="" style="width: 399.65972900390625px">
+                Payload de <code>PATCH</code>,
+                <strong>todos los campos opcionales</strong>
+              </td>
+              <td id="np_&lt;" class="" style="width: 168.65972900390625px">
+                <code>&lt;Entidad&gt;PatchDTO</code>
+              </td>
+              <td id="TvCW" class="" style="width: 144.22222900390625px"></td>
+            </tr>
+          </tbody>
+        </table>
+        <p id="3a62663e-2414-80b3-aa14-c10679abd750" class="" dir="auto">
+          <strong>Reglas:</strong>
+        </p>
+        <ul
+          id="3a62663e-2414-8095-86e1-dd3146e93ca2"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Los campos reales de la entidad se declaran
+            <strong>una sola vez</strong> en <code>{Entidad}Base</code>. Las
+            demás clases heredan, no redeclaran.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-8064-8d99-db7ec694641e"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code>{Entidad}SingleDTO</code> y
+            <code>{Entidad}ListDTO</code> pueden estar vacías (<code>...</code>)
+            si no agregan campos extra; existen para poder diferenciar el
+            <code>response_model</code> de cada endpoint sin acoplar el schema
+            de detalle al de listado.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-8013-b121-d6e4a718da54"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code>PatchDTO</code> nunca hereda de <code>Base</code>: se
+            redeclara cada campo como opcional para evitar que un
+            <code>PUT</code>/<code>POST</code> acepte campos parciales por
+            accidente.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-80ac-968e-d239c58eb340"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Tipos simples y explícitos (<code>str</code>, <code>int</code>,
+            <code>str | None</code>), sin <code>Any</code>.
+          </li>
+        </ul>
+        <h3 id="3a62663e-2414-807f-a9f0-d14a48bdd93e" class="" dir="auto">
+          Ejemplo:
+        </h3>
+        <p id="3a62663e-2414-8054-a348-e56fb6cebd4e" class="" dir="auto">
+          <strong>Entidad:</strong> <code>sucursal</code> <br /><strong
+            >Archivo:</strong
+          >
+          <code>sucursal_dto.py</code>
+        </p>
+        <pre
+          id="3a62663e-2414-809c-9e1c-d767b1862fb3"
+          class="code code-wrap"
+          data-notion-code-syntax="python"
+        ><code class="language-python" style="white-space:pre-wrap;word-break:break-all">from app.shared.base_dto import BaseDTO, BaseResponseDTO
 
 class SucursalBase(BaseDTO):
     nombre: str
@@ -836,7 +1778,21 @@ class SucursalPatchDTO(BaseDTO):
     descripcion: str | None
     usuario_id: str | None
     cambio_estado: bool | None
-    actualizar_datos: bool | None</code></pre><h2 id="3a62663e-2414-8044-b096-e1a7f55784c2" class="" dir="auto">4.3 Filtros (<code>&lt;entidad&gt;_filters.py</code>)</h2><p id="3a62663e-2414-80f2-a42b-cdacc4a1e816" class="" dir="auto"><br/>Importa de <code>app.shared.base_dto</code> (<code>BaseFilters</code>, <code>BasePgFilters</code>), <code>fastapi.Query</code> y <code>typing.Annotated</code>.</p><pre id="3a62663e-2414-8007-a75f-fdf035a9dad5" class="code code-wrap" data-notion-code-syntax="python"><code class="language-python" style="white-space:pre-wrap;word-break:break-all">from typing import Annotated
+    actualizar_datos: bool | None</code></pre>
+        <h2 id="3a62663e-2414-8044-b096-e1a7f55784c2" class="" dir="auto">
+          4.3 Filtros (<code>&lt;entidad&gt;_filters.py</code>)
+        </h2>
+        <p id="3a62663e-2414-80f2-a42b-cdacc4a1e816" class="" dir="auto">
+          <br />Importa de
+          <code>app.shared.base_dto</code> (<code>BaseFilters</code>,
+          <code>BasePgFilters</code>), <code>fastapi.Query</code> y
+          <code>typing.Annotated</code>.
+        </p>
+        <pre
+          id="3a62663e-2414-8007-a75f-fdf035a9dad5"
+          class="code code-wrap"
+          data-notion-code-syntax="python"
+        ><code class="language-python" style="white-space:pre-wrap;word-break:break-all">from typing import Annotated
 
 from fastapi import Query
 
@@ -852,13 +1808,105 @@ class {Entidad}PgFilters({Entidad}Filters, BasePgFilters): ...
 
 
 ListFilters = Annotated[{Entidad}Filters, Query()]
-PaginatedFilters = Annotated[{Entidad}PgFilters, Query()]</code></pre><p id="3a62663e-2414-80fb-9ba3-d924ee3af043" class="" dir="auto"><strong>Reglas:</strong></p><ul id="3a62663e-2414-8090-af65-ffae4253e827" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>{Entidad}PgFilters</code> no agrega campos propios: solo compone <code>{Entidad}Filters</code> + <code>BasePgFilters</code> (paginación).</li></ul><ul id="3a62663e-2414-806c-9f0e-f227617e83ff" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Los alias <code>ListFilters</code> / <code>PaginatedFilters</code> son obligatorios y se usan tal cual en el router (no se referencia <code>{Entidad}Filters</code> directamente en las firmas de los endpoints).</li></ul><h2 id="3a62663e-2414-8083-86ba-c0b84937917b" class="" dir="auto">4.4 Repositorios (<code>{entidad}_repo.py</code>)</h2><p id="3a62663e-2414-80c8-a0f4-fc856d69d421" class="" dir="auto">Se pueden sobrescribir los métodos de <code>base_repo</code> (<code>get</code>, <code>list_all</code>, <code>page_list</code>, <code>create</code>, <code>update</code>, <code>delete</code>) cuando se necesita lógica adicional.</p><pre id="3a62663e-2414-8029-acac-c4ed649abdc0" class="code code-wrap" data-notion-code-syntax="python"><code class="language-python" style="white-space:pre-wrap;word-break:break-all">class {Entidad}Repository(BaseRepository[{Entidad}DB]):
+PaginatedFilters = Annotated[{Entidad}PgFilters, Query()]</code></pre>
+        <p id="3a62663e-2414-80fb-9ba3-d924ee3af043" class="" dir="auto">
+          <strong>Reglas:</strong>
+        </p>
+        <ul
+          id="3a62663e-2414-8090-af65-ffae4253e827"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code>{Entidad}PgFilters</code> no agrega campos propios: solo
+            compone <code>{Entidad}Filters</code> +
+            <code>BasePgFilters</code> (paginación).
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-806c-9f0e-f227617e83ff"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Los alias <code>ListFilters</code> /
+            <code>PaginatedFilters</code> son obligatorios y se usan tal cual en
+            el router (no se referencia
+            <code>{Entidad}Filters</code> directamente en las firmas de los
+            endpoints).
+          </li>
+        </ul>
+        <h2 id="3a62663e-2414-8083-86ba-c0b84937917b" class="" dir="auto">
+          4.4 Repositorios (<code>{entidad}_repo.py</code>)
+        </h2>
+        <p id="3a62663e-2414-80c8-a0f4-fc856d69d421" class="" dir="auto">
+          Se pueden sobrescribir los métodos de
+          <code>base_repo</code> (<code>get</code>, <code>list_all</code>,
+          <code>page_list</code>, <code>create</code>, <code>update</code>,
+          <code>delete</code>) cuando se necesita lógica adicional.
+        </p>
+        <pre
+          id="3a62663e-2414-8029-acac-c4ed649abdc0"
+          class="code code-wrap"
+          data-notion-code-syntax="python"
+        ><code class="language-python" style="white-space:pre-wrap;word-break:break-all">class {Entidad}Repository(BaseRepository[{Entidad}DB]):
     def __init__(self, session: Session):
         super().__init__({Entidad}DB, session)
 
 
 def get_repository(session: DBSession) -&gt; {Entidad}Repository:
-    return {Entidad}Repository(session)</code></pre><p id="3a62663e-2414-8012-8775-ea1e51da4517" class="" dir="auto"><strong>Reglas:</strong></p><ul id="3a62663e-2414-8027-8222-df2bd3bf3452" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El repositorio <strong>no</strong> contiene lógica de negocio ni validaciones; solo acceso a datos. Si el CRUD estándar de <code>BaseRepository</code> no alcanza, se agregan métodos específicos aquí (no en el service).</li></ul><ul id="3a62663e-2414-80cd-9167-f306b5475b85" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>{Entidad}DB</code> (el modelo SQLModel) vive en <code>app.core.models.{entidad}_db</code> — nunca se define dentro del módulo <code>api</code>.</li></ul><ul id="3a62663e-2414-8045-a218-de4d932478a3" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El factory <code>get_repository</code> es la única forma de instanciar el repo (para inyección de dependencias).</li></ul><h2 id="3a62663e-2414-80f1-9b7c-c034c37fc982" class="" dir="auto">4.5 Servicios</h2><p id="3a62663e-2414-801c-b665-c27b604887a9" class="" dir="auto">Se pueden sobrescribir los métodos de <code>base_service</code> (<code>get_by_id</code>, <code>list_all</code>, <code>page_list</code>, <code>create</code>, <code>update</code>, <code>patch</code>, <code>delete</code>) cuando se necesita lógica adicional.</p><pre id="3a62663e-2414-8077-9f7b-d708dc464275" class="code code-wrap" data-notion-code-syntax="python"><code class="language-python" style="white-space:pre-wrap;word-break:break-all">class {Entidad}Service(BaseService[{Entidad}DB, {Entidad}DTO, {Entidad}SingleDTO, {Entidad}ListDTO, {Entidad}Filters, {Entidad}PgFilters]):
+    return {Entidad}Repository(session)</code></pre>
+        <p id="3a62663e-2414-8012-8775-ea1e51da4517" class="" dir="auto">
+          <strong>Reglas:</strong>
+        </p>
+        <ul
+          id="3a62663e-2414-8027-8222-df2bd3bf3452"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El repositorio <strong>no</strong> contiene lógica de negocio ni
+            validaciones; solo acceso a datos. Si el CRUD estándar de
+            <code>BaseRepository</code> no alcanza, se agregan métodos
+            específicos aquí (no en el service).
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-80cd-9167-f306b5475b85"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code>{Entidad}DB</code> (el modelo SQLModel) vive en
+            <code>app.core.models.{entidad}_db</code> — nunca se define dentro
+            del módulo <code>api</code>.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-8045-a218-de4d932478a3"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El factory <code>get_repository</code> es la única forma de
+            instanciar el repo (para inyección de dependencias).
+          </li>
+        </ul>
+        <h2 id="3a62663e-2414-80f1-9b7c-c034c37fc982" class="" dir="auto">
+          4.5 Servicios
+        </h2>
+        <p id="3a62663e-2414-801c-b665-c27b604887a9" class="" dir="auto">
+          Se pueden sobrescribir los métodos de
+          <code>base_service</code> (<code>get_by_id</code>,
+          <code>list_all</code>, <code>page_list</code>, <code>create</code>,
+          <code>update</code>, <code>patch</code>, <code>delete</code>) cuando
+          se necesita lógica adicional.
+        </p>
+        <pre
+          id="3a62663e-2414-8077-9f7b-d708dc464275"
+          class="code code-wrap"
+          data-notion-code-syntax="python"
+        ><code class="language-python" style="white-space:pre-wrap;word-break:break-all">class {Entidad}Service(BaseService[{Entidad}DB, {Entidad}DTO, {Entidad}SingleDTO, {Entidad}ListDTO, {Entidad}Filters, {Entidad}PgFilters]):
     def __init__(self, repo: {Entidad}Repository):
         super().__init__(repo=repo, model={Entidad}DB, base_model={Entidad}DTO, single_model={Entidad}SingleDTO, list_model={Entidad}ListDTO)
 
@@ -867,7 +1915,680 @@ def get_service(repo: Annotated[{Entidad}Repository, Depends(get_repository)]) -
     return {Entidad}Service(repo)
 
 
-{Entidad}ServiceDependency = Annotated[{Entidad}Service, Depends(get_service)]</code></pre><p id="3a62663e-2414-80eb-8c39-d17757774c81" class="" dir="auto"><strong>Reglas:</strong></p><ul id="3a62663e-2414-80c1-9126-c1e02a314817" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Aquí vive toda la lógica de negocio: validaciones, reglas de dominio y cambios necesarios al payload.</li></ul><ul id="3a62663e-2414-8084-a036-faba73082801" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Los genéricos de <code>BaseService</code> deben pasarse en el mismo orden siempre: <code>[DB, Base, DTO, ListDTO, Filters, PgFilters]</code>.</li></ul><ul id="3a62663e-2414-80e8-9c9b-c195df72f585" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>{Entidad}ServiceDependency</code> es el único tipo que debe usarse en el router para inyectar el service (nunca <code>Depends(get_service)</code> inline en la firma).</li></ul><h2 id="3a62663e-2414-80a9-89a6-fd84a49fe1ff" class="" dir="auto">4.6 Enrutadores</h2><p id="3a62663e-2414-803a-8d15-ecdf24eb53d2" class="" dir="auto">Endpoints estándar, en este orden y con esta forma exacta:</p><table id="3a62663e-2414-8076-a903-d8e767152e68" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="3a62663e-2414-802b-9881-fdba31792344" dir="ltr"><th id="\Whd" class="simple-table-header-color simple-table-header" style="width:69.62847900390625px">Método</th><th id="c_Gn" class="simple-table-header-color simple-table-header" style="width:80.25347900390625px">Path</th><th id="WVPE" class="simple-table-header-color simple-table-header" style="width:80.80902862548828px">Función</th><th id="`vTO" class="simple-table-header-color simple-table-header" style="width:281.8923645019531px">Response model</th><th id="x[W?" class="simple-table-header-color simple-table-header" style="width:191.15972900390625px">Notas</th></tr></thead><tbody><tr id="3a62663e-2414-8098-aa96-f3645cb8ebfc" dir="ltr"><td id="\Whd" class="" style="width:69.62847900390625px">GET</td><td id="c_Gn" class="" style="width:80.25347900390625px"><code>&quot;&quot;</code></td><td id="WVPE" class="" style="width:80.80902862548828px"><code>list_all</code></td><td id="`vTO" class="" style="width:281.8923645019531px"><code>list[{Entidad}ListDTO]</code></td><td id="x[W?" class="" style="width:191.15972900390625px">recibe <code>ListFilters</code></td></tr><tr id="3a62663e-2414-80f4-bf7a-ed7af3adcb0c" dir="ltr"><td id="\Whd" class="" style="width:69.62847900390625px">GET</td><td id="c_Gn" class="" style="width:80.25347900390625px"><code>&quot;/pg&quot;</code></td><td id="WVPE" class="" style="width:80.80902862548828px"><code>list_pg</code></td><td id="`vTO" class="" style="width:281.8923645019531px"><code>PaginatedResponseDTO[{Entidad}ListDTO]</code></td><td id="x[W?" class="" style="width:191.15972900390625px">recibe <code>PaginatedFilters</code></td></tr><tr id="3a62663e-2414-8053-8a67-d4ff53e68462" dir="ltr"><td id="\Whd" class="" style="width:69.62847900390625px">GET</td><td id="c_Gn" class="" style="width:80.25347900390625px"><code>&quot;/{id}”</code></td><td id="WVPE" class="" style="width:80.80902862548828px"><code>get</code></td><td id="`vTO" class="" style="width:281.8923645019531px"><code>{Entidad}SingleDTO</code></td><td id="x[W?" class="" style="width:191.15972900390625px"></td></tr><tr id="3a62663e-2414-8076-b2d3-d29d58e8009f" dir="ltr"><td id="\Whd" class="" style="width:69.62847900390625px">POST</td><td id="c_Gn" class="" style="width:80.25347900390625px"><code>&quot;&quot;</code></td><td id="WVPE" class="" style="width:80.80902862548828px"><code>create</code></td><td id="`vTO" class="" style="width:281.8923645019531px"><code>{Entidad}DTO</code></td><td id="x[W?" class="" style="width:191.15972900390625px"><code>status_code=201</code>, pasa <code>headers.user_id</code></td></tr><tr id="3a62663e-2414-806a-b3b2-dfee0b02db8c" dir="ltr"><td id="\Whd" class="" style="width:69.62847900390625px">PUT</td><td id="c_Gn" class="" style="width:80.25347900390625px"><code>&quot;/{id}”</code></td><td id="WVPE" class="" style="width:80.80902862548828px"><code>update</code></td><td id="`vTO" class="" style="width:281.8923645019531px"><code>{Entidad}DTO</code> </td><td id="x[W?" class="" style="width:191.15972900390625px">reemplazo total, pasa <code>headers.user_id</code></td></tr><tr id="3a62663e-2414-8057-9afe-e54ac776e8f0" dir="ltr"><td id="\Whd" class="" style="width:69.62847900390625px">PATCH</td><td id="c_Gn" class="" style="width:80.25347900390625px"><code>&quot;/{id}”</code></td><td id="WVPE" class="" style="width:80.80902862548828px"><code>patch</code></td><td id="`vTO" class="" style="width:281.8923645019531px"><code>{Entidad}DTO</code> </td><td id="x[W?" class="" style="width:191.15972900390625px">actualización parcial, pasa <code>headers.user_id</code></td></tr></tbody></table><p id="3a62663e-2414-80d0-9fb9-f1b0305ef902" class="" dir="auto"><strong>Reglas:</strong></p><ul id="3a62663e-2414-8063-9a02-d453d03b7ae8" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Todo endpoint recibe <code>service: {Entidad}ServiceDependency</code> y <code>headers: BaseHeadersDependency</code>, en ese orden, como últimos parámetros después del payload/filtros propios del endpoint.</li></ul><ul id="3a62663e-2414-80b6-a2d3-c9210a557536" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El router no contiene lógica: cada función es una línea que delega al service (<code>return service.metodo(...)</code>).</li></ul><ul id="3a62663e-2414-8036-b630-d75508476245" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Los endpoints que mutan datos (<code>create</code>, <code>update</code>, <code>patch</code>) siempre propagan <code>headers.user_id</code> para trazabilidad de auditoría.</li></ul><ul id="3a62663e-2414-80d3-b237-c13603b0af6e" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El nombre de la variable de ruta es siempre <code>id</code> (no <code>puesto_id</code>, no <code>pk</code>).</li></ul><ul id="3a62663e-2414-8021-b49e-db909fff7c01" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><code>router = APIRouter(prefix=&quot;/...&quot;, tags=[&quot;...&quot;])</code> con el prefijo y los tags especificados para no tener que definirlos en el archivo principal de importación de routers.</li></ul><p id="3dd2663e-2414-80eb-b1cf-df68ee681989" class="" dir="auto">
-</p><p id="3dd2663e-2414-8072-aa39-ec47437df901" class="" dir="auto">
-</p><h1 id="3dd2663e-2414-80db-a19b-f5460a031d16" class="" dir="auto">Aplicación de estandares</h1><ul id="3dd2663e-2414-8053-a5e1-d0ccc0206ce1" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">Los rauters están definiendo prefix y tags en el mismo archivo (ya se cambio a eso en estándares)</span><div class="indented"></div></li></ul><ul id="3dd2663e-2414-8049-a826-e72545f0c377" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">Menus</span><div class="indented"><ul id="3dd2663e-2414-8083-8fca-eb2e38ed5468" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El archivo lista_ids_menu están en snake_case. <code>Enrique</code></li></ul><ul id="3dd2663e-2414-8037-b20b-cad824b305f9" class="bulleted-list" dir="auto"><li style="list-style-type:disc">En <strong>menu_svc</strong> se aplica un “as HOME_MENU_ID”. <code>Enrique</code></li></ul><ul id="3dd2663e-2414-802f-a2bd-d590e39486ca" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Se deberían de eliminar los DTOs que no se utilizan? en menu_dto solo se usa el ListDTO. <code>Se van a borrar</code>, <code>Enrique</code></li></ul><ul id="3dd2663e-2414-80aa-a087-de5a424fccf6" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El router <strong>menu_router</strong> tiene algo de lógica dentro de si mismo en vez de delegar completamente al servicio. <code>Enrique</code></li></ul><ul id="3dd2663e-2414-8030-936f-e845b1060c21" class="bulleted-list" dir="auto"><li style="list-style-type:disc">En menu_router utilizan <code>menu_id</code> en vez de <code>id</code>. <code>Enrique</code></li></ul></div></li></ul><ul id="3dd2663e-2414-809d-a78c-eec4786593dd" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked"><strong>permisos_usuario</strong></span><div class="indented"><ul id="3dd2663e-2414-8026-9957-c0f2161335b4" class="bulleted-list" dir="auto"><li style="list-style-type:disc">no debería de ser <strong>permiso_usuario</strong> para mantener singular? <code>Pablo</code></li></ul><ul id="3dd2663e-2414-8013-ad61-cd3cf347e235" class="bulleted-list" dir="auto"><li style="list-style-type:disc">No tiene filtros (si no son necesarios deberían de existir???) <code>No tienen que existir</code></li></ul><ul id="3dd2663e-2414-8028-a7dc-f59b6af7a7e3" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Solo exíste un DTO sin jerarquía (que se hace si solo se necesita uno DTO?) <code>Pablo</code></li></ul></div></li></ul><ul id="3dd2663e-2414-808b-9fd3-ff037bb952d7" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">Agregar al estandar qué pasa o que se hace con endpoints que no necesitan CRUD completo</span><div class="indented"></div></li></ul><ul id="3dd2663e-2414-80f5-8aa3-ce35ef1ef294" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">puesto, rol y usuario tienen endpoints que usan servicios de otras entidades, ¿Si es correcto o solo pueden tener un servicio que implemente más funcionalidad? <code>Se usan servicio separados y varios en un mismo router siempre y cuando tengan relación por llaves foraneas</code></span><div class="indented"></div></li></ul><ul id="3dd2663e-2414-806a-aadd-ee7a5270c9eb" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">logout no tiene tipo de retorno explícito (usa # noqa pero es lo correcto?) <code>Evitar usar # noqa a menos que sea muy necesario</code></span><div class="indented"></div></li></ul><ul id="3dd2663e-2414-800b-b30a-edf5d819b1d1" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">registro_conexiones, las funciones podrían estar en ingles <code>Pablo</code></span><div class="indented"></div></li></ul><ul id="3dd2663e-2414-80be-be6c-d5b0a1ac1d32" class="to-do-list" dir="auto"><li><input type="checkbox" class="checkbox checkbox-off" disabled=""/> <span class="to-do-children-unchecked">en LDAP, buscar_usuario debería llamarse search_usuario/find_usuario (el verbo va en inglés, solo el sustantivo de entidad se mantiene). <code>Pablo</code></span><div class="indented"></div></li></ul><p id="3dd2663e-2414-80fb-80a9-ceacc804ffc1" class="" dir="auto">
-</p><h1 id="3dd2663e-2414-8075-b0a6-f2523a7716d8" class="" dir="auto">Mejoras que fáltan</h1><p id="3dd2663e-2414-809a-8a18-eaa70d81b3f6" class="" dir="auto">Basado en el estándar completo que extraje del PDF (6 páginas, secciones 1 a 4.6) y en los patrones reales que encontré en el código durante la revisión anterior, esto es lo que el documento no cubre y debería agregar:</p><p id="3dd2663e-2414-80c5-8173-c8b511be34cb" class="" dir="auto">Carencias del documento</p><ol type="1" id="3dd2663e-2414-803b-bb83-f18efb24d2d8" class="numbered-list" start="1" dir="auto"><li>Endpoints anidados/compuestos entre entidades<br/>El estándar solo define el CRUD de 6 endpoints de una sola entidad. No dice nada sobre endpoints como PUT /puesto/{id}/roles o PUT /rol/{id}/permisos, que viven en el router de una entidad pero delegan al service de otra. Sin esta regla, cada desarrollador decide distinto si eso es válido, en qué router va, o si el service propio debe envolver la llamada en vez de inyectar el service ajeno directamente.<br/>Dónde insertarlo: nueva subsección 4.7 Endpoints relacionales/compuestos, justo después de 4.6.</li></ol><ol type="1" id="3dd2663e-2414-8061-b33e-d94a5e903ac7" class="numbered-list" start="2" dir="auto"><li>Módulos que no siguen el patrón CRUD (casos especiales)<br/>No hay ninguna sección que contemple módulos como autenticación, SSE/eventos en tiempo real, o integraciones externas (LDAP) que legítimamente no necesitan los 5 archivos fijos. Hoy cada uno decide qué omitir sin criterio documentado, lo que genera módulos inconsistentes entre sí (permisos_usuario es un caso ambiguo: no está claro si su desviación es válida o no).<br/>Dónde insertarlo: nueva subsección 4.0 Excepciones a la estructura estándar, al inicio de la sección 4, antes de 4.1.</li></ol><ol type="1" id="3dd2663e-2414-80f4-a986-eb6f4924bdd6" class="numbered-list" start="3" dir="auto"><li>Manejo de errores y excepciones de negocio<br/>El documento nunca menciona cómo debe lanzar errores un service (qué tipo de excepción usar, quién la captura, que el router nunca debe hacer try/except). Es una omisión grande para un estándar de backend, sobre todo porque la práctica actual sugiere que existe una jerarquía de excepciones.<br/>Dónde insertarlo: nueva subsección 4.5.1 Manejo de errores, dentro de &quot;4.5 Servicios&quot;.</li></ol><ol type="1" id="3dd2663e-2414-80ca-bbc1-ffb4684d69c9" class="numbered-list" start="4" dir="auto"><li>Autorización por endpoint (permisos)<br/>No se explica cómo un endpoint declara qué permiso requiere, ni dónde se valida (dependency de FastAPI, decorador, chequeo manual en el service). Dado que el sistema tiene un registro de permisos, esta es una carencia crítica de seguridad, no solo de estilo.<br/>Dónde insertarlo: nueva sección 5. Autorización de endpoints, después de la sección 4 completa.</li></ol><ol type="1" id="3dd2663e-2414-80b9-953f-f23ae8b50516" class="numbered-list" start="5" dir="auto"><li>Soft-delete (campo activo)<br/>El repositorio genérico hace soft-delete automático si el modelo tiene activo, pero el estándar no menciona este comportamiento en ningún lado, ni cuándo un modelo debe/no debe tener ese campo.<br/>Dónde insertarlo: dentro de 4.4 Repositorios, como regla adicional después de la ya existente sobre get_repository.</li></ol><ol type="1" id="3dd2663e-2414-8011-8d8c-feaeaa42843d" class="numbered-list" start="6" dir="auto"><li>Campos de auditoría (usuario_creacion_id, fechas, etc.)<br/>El estándar dice que create/update/patch &quot;pasan headers.user_id&quot; pero nunca explica el contrato completo: qué campos se estampan, en qué evento, y quién es responsable de hacerlo (¿service o repo?).<br/>Dónde insertarlo: dentro de 4.5 Servicios, junto a la regla de headers.user_id.</li></ol><ol type="1" id="3dd2663e-2414-8068-bb73-cf8ff34f8166" class="numbered-list" start="7" dir="auto"><li>Campos derivados/calculados en SingleDTO/ListDTO<br/>El ejemplo de SucursalSingleDTO muestra campos como area, usuario_nombre, usuario_apellido que no están en el modelo ORM base, pero no se explica de dónde deben salir (¿join en el repo? ¿cálculo en el service?). Sin esta regla, cada entidad resuelve esos campos de forma distinta.<br/>Dónde insertarlo: dentro de 4.2 Data transfer objects, como regla nueva después de las ya listadas.</li></ol><ol type="1" id="3dd2663e-2414-80dc-afb0-cb52152bd690" class="numbered-list" start="8" dir="auto"><li>Validación de formato vs. reglas de negocio<br/>No queda claro si validaciones de formato (email, longitud, regex) deben ir como field_validator de Pydantic en el DTO, o si toda validación —formato incluido— va al service. Es una zona gris entre &quot;4.2 DTOs&quot; y &quot;el service tiene toda la lógica de negocio&quot; (regla 1).<br/>Dónde insertarlo: aclaración dentro de 1. Principios generales, junto a la regla &quot;no lógica de negocio fuera del service&quot;.</li></ol><ol type="1" id="3dd2663e-2414-806b-98be-c2b6fa7754c7" class="numbered-list" start="9" dir="auto"><li>Constantes y catálogos compartidos (registries)<br/>El documento dice &quot;constantes SNAKE_CASE mayúsculas&quot; a nivel general, pero no dice nada sobre módulos tipo registry compartidos entre archivos (como listados de IDs o de permisos): dónde deben vivir, si son append-only, si se permite renumerar. Esto explica el bug real que encontré en lista_ids_menu.py (constantes en minúscula).<br/>Dónde insertarlo: nueva subsección al final de 1. Principios generales.</li></ol><ol type="1" id="3dd2663e-2414-805a-8c53-fe935586eb8d" class="numbered-list numbered-list-digits-2" start="10" dir="auto"><li>Convención async/sync<br/>No se especifica si los métodos de repo/service/router deben ser async def o síncronos, ni el criterio para elegir uno u otro (por ejemplo, en generadores para SSE).<br/>Dónde insertarlo: dentro de 3. Tipado, o como nueva regla en &quot;1. Principios generales&quot;.</li></ol><ol type="1" id="3dd2663e-2414-8077-bb18-fee185e26b25" class="numbered-list numbered-list-digits-2" start="11" dir="auto"><li>Testing<br/>No existe ninguna mención a pruebas: ubicación, naming, qué se debe cubrir por capa. Para un documento de &quot;estándares de desarrollo Backend&quot; es una ausencia notable, más aún porque el proyecto ya tiene pytest/pytest-asyncio instalados sin usar.<br/>Dónde insertarlo: nueva sección 6. Testing, al final del documento.</li></ol><ol type="1" id="3dd2663e-2414-80af-8ed7-d06a0d150899" class="numbered-list numbered-list-digits-2" start="12" dir="auto"><li>Archivos auxiliares dentro de un módulo de entidad<br/>La sección 4.1 fija 5 archivos por entidad, pero no dice cuándo es válido agregar un archivo extra dentro de ese mismo módulo (como pasa hoy con menu_tree.py, lista_ids_menu.py, registro_conexiones.py) ni cómo debe nombrarse.<br/>Dónde insertarlo: como regla adicional dentro de 4.1 Estructura de archivos.</li></ol><hr id="3dd2663e-2414-80da-aa0a-d62fc6599340" dir="auto"/><p id="3dd2663e-2414-80f6-a279-c53104e854fc" class="" dir="auto">Nota aparte (no es una carencia, es una contradicción): el documento exige router = APIRouter() sin prefix/tags en 4.6, pero el código completo del proyecto hace lo contrario de forma consistente y deliberada. Esto no falta en el documento — está escrito, pero no coincide con la realidad. Conviene resolverlo junto con las carencias de arriba (actualizando el punto 4.6 o migrando el código), no agregarlo como si fuera nuevo.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+{Entidad}ServiceDependency = Annotated[{Entidad}Service, Depends(get_service)]</code></pre>
+        <p id="3a62663e-2414-80eb-8c39-d17757774c81" class="" dir="auto">
+          <strong>Reglas:</strong>
+        </p>
+        <ul
+          id="3a62663e-2414-80c1-9126-c1e02a314817"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Aquí vive toda la lógica de negocio: validaciones, reglas de dominio
+            y cambios necesarios al payload.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-8084-a036-faba73082801"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Los genéricos de <code>BaseService</code> deben pasarse en el mismo
+            orden siempre:
+            <code>[DB, Base, DTO, ListDTO, Filters, PgFilters]</code>.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-80e8-9c9b-c195df72f585"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code>{Entidad}ServiceDependency</code> es el único tipo que debe
+            usarse en el router para inyectar el service (nunca
+            <code>Depends(get_service)</code> inline en la firma).
+          </li>
+        </ul>
+        <h2 id="3a62663e-2414-80a9-89a6-fd84a49fe1ff" class="" dir="auto">
+          4.6 Enrutadores
+        </h2>
+        <p id="3a62663e-2414-803a-8d15-ecdf24eb53d2" class="" dir="auto">
+          Endpoints estándar, en este orden y con esta forma exacta:
+        </p>
+        <table
+          id="3a62663e-2414-8076-a903-d8e767152e68"
+          class="simple-table"
+          dir="ltr"
+        >
+          <thead class="simple-table-header">
+            <tr id="3a62663e-2414-802b-9881-fdba31792344" dir="ltr">
+              <th
+                id="\Whd"
+                class="simple-table-header-color simple-table-header"
+                style="width: 69.62847900390625px"
+              >
+                Método
+              </th>
+              <th
+                id="c_Gn"
+                class="simple-table-header-color simple-table-header"
+                style="width: 80.25347900390625px"
+              >
+                Path
+              </th>
+              <th
+                id="WVPE"
+                class="simple-table-header-color simple-table-header"
+                style="width: 80.80902862548828px"
+              >
+                Función
+              </th>
+              <th
+                id="`vTO"
+                class="simple-table-header-color simple-table-header"
+                style="width: 281.8923645019531px"
+              >
+                Response model
+              </th>
+              <th
+                id="x[W?"
+                class="simple-table-header-color simple-table-header"
+                style="width: 191.15972900390625px"
+              >
+                Notas
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="3a62663e-2414-8098-aa96-f3645cb8ebfc" dir="ltr">
+              <td id="\Whd" class="" style="width: 69.62847900390625px">GET</td>
+              <td id="c_Gn" class="" style="width: 80.25347900390625px">
+                <code>&quot;&quot;</code>
+              </td>
+              <td id="WVPE" class="" style="width: 80.80902862548828px">
+                <code>list_all</code>
+              </td>
+              <td id="`vTO" class="" style="width: 281.8923645019531px">
+                <code>list[{Entidad}ListDTO]</code>
+              </td>
+              <td id="x[W?" class="" style="width: 191.15972900390625px">
+                recibe <code>ListFilters</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-80f4-bf7a-ed7af3adcb0c" dir="ltr">
+              <td id="\Whd" class="" style="width: 69.62847900390625px">GET</td>
+              <td id="c_Gn" class="" style="width: 80.25347900390625px">
+                <code>&quot;/pg&quot;</code>
+              </td>
+              <td id="WVPE" class="" style="width: 80.80902862548828px">
+                <code>list_pg</code>
+              </td>
+              <td id="`vTO" class="" style="width: 281.8923645019531px">
+                <code>PaginatedResponseDTO[{Entidad}ListDTO]</code>
+              </td>
+              <td id="x[W?" class="" style="width: 191.15972900390625px">
+                recibe <code>PaginatedFilters</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8053-8a67-d4ff53e68462" dir="ltr">
+              <td id="\Whd" class="" style="width: 69.62847900390625px">GET</td>
+              <td id="c_Gn" class="" style="width: 80.25347900390625px">
+                <code>&quot;/{id}”</code>
+              </td>
+              <td id="WVPE" class="" style="width: 80.80902862548828px">
+                <code>get</code>
+              </td>
+              <td id="`vTO" class="" style="width: 281.8923645019531px">
+                <code>{Entidad}SingleDTO</code>
+              </td>
+              <td id="x[W?" class="" style="width: 191.15972900390625px"></td>
+            </tr>
+            <tr id="3a62663e-2414-8076-b2d3-d29d58e8009f" dir="ltr">
+              <td id="\Whd" class="" style="width: 69.62847900390625px">
+                POST
+              </td>
+              <td id="c_Gn" class="" style="width: 80.25347900390625px">
+                <code>&quot;&quot;</code>
+              </td>
+              <td id="WVPE" class="" style="width: 80.80902862548828px">
+                <code>create</code>
+              </td>
+              <td id="`vTO" class="" style="width: 281.8923645019531px">
+                <code>{Entidad}DTO</code>
+              </td>
+              <td id="x[W?" class="" style="width: 191.15972900390625px">
+                <code>status_code=201</code>, pasa <code>headers.user_id</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-806a-b3b2-dfee0b02db8c" dir="ltr">
+              <td id="\Whd" class="" style="width: 69.62847900390625px">PUT</td>
+              <td id="c_Gn" class="" style="width: 80.25347900390625px">
+                <code>&quot;/{id}”</code>
+              </td>
+              <td id="WVPE" class="" style="width: 80.80902862548828px">
+                <code>update</code>
+              </td>
+              <td id="`vTO" class="" style="width: 281.8923645019531px">
+                <code>{Entidad}DTO</code>
+              </td>
+              <td id="x[W?" class="" style="width: 191.15972900390625px">
+                reemplazo total, pasa <code>headers.user_id</code>
+              </td>
+            </tr>
+            <tr id="3a62663e-2414-8057-9afe-e54ac776e8f0" dir="ltr">
+              <td id="\Whd" class="" style="width: 69.62847900390625px">
+                PATCH
+              </td>
+              <td id="c_Gn" class="" style="width: 80.25347900390625px">
+                <code>&quot;/{id}”</code>
+              </td>
+              <td id="WVPE" class="" style="width: 80.80902862548828px">
+                <code>patch</code>
+              </td>
+              <td id="`vTO" class="" style="width: 281.8923645019531px">
+                <code>{Entidad}DTO</code>
+              </td>
+              <td id="x[W?" class="" style="width: 191.15972900390625px">
+                actualización parcial, pasa <code>headers.user_id</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p id="3a62663e-2414-80d0-9fb9-f1b0305ef902" class="" dir="auto">
+          <strong>Reglas:</strong>
+        </p>
+        <ul
+          id="3a62663e-2414-8063-9a02-d453d03b7ae8"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Todo endpoint recibe
+            <code>service: {Entidad}ServiceDependency</code> y
+            <code>headers: BaseHeadersDependency</code>, en ese orden, como
+            últimos parámetros después del payload/filtros propios del endpoint.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-80b6-a2d3-c9210a557536"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El router no contiene lógica: cada función es una línea que delega
+            al service (<code>return service.metodo(...)</code>).
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-8036-b630-d75508476245"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Los endpoints que mutan datos (<code>create</code>,
+            <code>update</code>, <code>patch</code>) siempre propagan
+            <code>headers.user_id</code> para trazabilidad de auditoría.
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-80d3-b237-c13603b0af6e"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El nombre de la variable de ruta es siempre <code>id</code> (no
+            <code>puesto_id</code>, no <code>pk</code>).
+          </li>
+        </ul>
+        <ul
+          id="3a62663e-2414-8021-b49e-db909fff7c01"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code
+              >router = APIRouter(prefix=&quot;/...&quot;,
+              tags=[&quot;...&quot;])</code
+            >
+            con el prefijo y los tags especificados para no tener que definirlos
+            en el archivo principal de importación de routers.
+          </li>
+        </ul>
+        <p id="3dd2663e-2414-80eb-b1cf-df68ee681989" class="" dir="auto"></p>
+        <p id="3dd2663e-2414-8072-aa39-ec47437df901" class="" dir="auto"></p>
+        <h1 id="3dd2663e-2414-80db-a19b-f5460a031d16" class="" dir="auto">
+          Aplicación de estandares
+        </h1>
+        <ul
+          id="3dd2663e-2414-8053-a5e1-d0ccc0206ce1"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Los rauters están definiendo prefix y tags en el mismo archivo
+              (ya se cambio a eso en estándares)</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-8049-a826-e72545f0c377"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked">Menus</span>
+            <div class="indented">
+              <ul
+                id="3dd2663e-2414-8083-8fca-eb2e38ed5468"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  El archivo lista_ids_menu están en snake_case.
+                  <code>Enrique</code>
+                </li>
+              </ul>
+              <ul
+                id="3dd2663e-2414-8037-b20b-cad824b305f9"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  En <strong>menu_svc</strong> se aplica un “as HOME_MENU_ID”.
+                  <code>Enrique</code>
+                </li>
+              </ul>
+              <ul
+                id="3dd2663e-2414-802f-a2bd-d590e39486ca"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  Se deberían de eliminar los DTOs que no se utilizan? en
+                  menu_dto solo se usa el ListDTO. <code>Se van a borrar</code>,
+                  <code>Enrique</code>
+                </li>
+              </ul>
+              <ul
+                id="3dd2663e-2414-80aa-a087-de5a424fccf6"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  El router <strong>menu_router</strong> tiene algo de lógica
+                  dentro de si mismo en vez de delegar completamente al
+                  servicio. <code>Enrique</code>
+                </li>
+              </ul>
+              <ul
+                id="3dd2663e-2414-8030-936f-e845b1060c21"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  En menu_router utilizan <code>menu_id</code> en vez de
+                  <code>id</code>. <code>Enrique</code>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-809d-a78c-eec4786593dd"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              ><strong>permisos_usuario</strong></span
+            >
+            <div class="indented">
+              <ul
+                id="3dd2663e-2414-8026-9957-c0f2161335b4"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  no debería de ser <strong>permiso_usuario</strong> para
+                  mantener singular? <code>Pablo</code>
+                </li>
+              </ul>
+              <ul
+                id="3dd2663e-2414-8013-ad61-cd3cf347e235"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  No tiene filtros (si no son necesarios deberían de existir???)
+                  <code>No tienen que existir</code>
+                </li>
+              </ul>
+              <ul
+                id="3dd2663e-2414-8028-a7dc-f59b6af7a7e3"
+                class="bulleted-list"
+                dir="auto"
+              >
+                <li style="list-style-type: disc">
+                  Solo exíste un DTO sin jerarquía (que se hace si solo se
+                  necesita uno DTO?) <code>Pablo</code>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-808b-9fd3-ff037bb952d7"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Agregar al estandar qué pasa o que se hace con endpoints que no
+              necesitan CRUD completo</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-80f5-8aa3-ce35ef1ef294"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >puesto, rol y usuario tienen endpoints que usan servicios de
+              otras entidades, ¿Si es correcto o solo pueden tener un servicio
+              que implemente más funcionalidad?
+              <code
+                >Se usan servicio separados y varios en un mismo router siempre
+                y cuando tengan relación por llaves foraneas</code
+              ></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-806a-aadd-ee7a5270c9eb"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >logout no tiene tipo de retorno explícito (usa # noqa pero es lo
+              correcto?)
+              <code
+                >Evitar usar # noqa a menos que sea muy necesario</code
+              ></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-800b-b30a-edf5d819b1d1"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >registro_conexiones, las funciones podrían estar en ingles
+              <code>Pablo</code></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3dd2663e-2414-80be-be6c-d5b0a1ac1d32"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >en LDAP, buscar_usuario debería llamarse
+              search_usuario/find_usuario (el verbo va en inglés, solo el
+              sustantivo de entidad se mantiene). <code>Pablo</code></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <p id="3dd2663e-2414-80fb-80a9-ceacc804ffc1" class="" dir="auto"></p>
+        <h1 id="3dd2663e-2414-8075-b0a6-f2523a7716d8" class="" dir="auto">
+          Mejoras que fáltan
+        </h1>
+        <p id="3dd2663e-2414-809a-8a18-eaa70d81b3f6" class="" dir="auto">
+          Basado en el estándar completo que extraje del PDF (6 páginas,
+          secciones 1 a 4.6) y en los patrones reales que encontré en el código
+          durante la revisión anterior, esto es lo que el documento no cubre y
+          debería agregar:
+        </p>
+        <p id="3dd2663e-2414-80c5-8173-c8b511be34cb" class="" dir="auto">
+          Carencias del documento
+        </p>
+        <ol
+          type="1"
+          id="3dd2663e-2414-803b-bb83-f18efb24d2d8"
+          class="numbered-list"
+          start="1"
+          dir="auto"
+        >
+          <li>
+            Endpoints anidados/compuestos entre entidades<br />El estándar solo
+            define el CRUD de 6 endpoints de una sola entidad. No dice nada
+            sobre endpoints como PUT /puesto/{id}/roles o PUT
+            /rol/{id}/permisos, que viven en el router de una entidad pero
+            delegan al service de otra. Sin esta regla, cada desarrollador
+            decide distinto si eso es válido, en qué router va, o si el service
+            propio debe envolver la llamada en vez de inyectar el service ajeno
+            directamente.<br />Dónde insertarlo: nueva subsección 4.7 Endpoints
+            relacionales/compuestos, justo después de 4.6.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-8061-b33e-d94a5e903ac7"
+          class="numbered-list"
+          start="2"
+          dir="auto"
+        >
+          <li>
+            Módulos que no siguen el patrón CRUD (casos especiales)<br />No hay
+            ninguna sección que contemple módulos como autenticación,
+            SSE/eventos en tiempo real, o integraciones externas (LDAP) que
+            legítimamente no necesitan los 5 archivos fijos. Hoy cada uno decide
+            qué omitir sin criterio documentado, lo que genera módulos
+            inconsistentes entre sí (permisos_usuario es un caso ambiguo: no
+            está claro si su desviación es válida o no).<br />Dónde insertarlo:
+            nueva subsección 4.0 Excepciones a la estructura estándar, al inicio
+            de la sección 4, antes de 4.1.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-80f4-a986-eb6f4924bdd6"
+          class="numbered-list"
+          start="3"
+          dir="auto"
+        >
+          <li>
+            Manejo de errores y excepciones de negocio<br />El documento nunca
+            menciona cómo debe lanzar errores un service (qué tipo de excepción
+            usar, quién la captura, que el router nunca debe hacer try/except).
+            Es una omisión grande para un estándar de backend, sobre todo porque
+            la práctica actual sugiere que existe una jerarquía de
+            excepciones.<br />Dónde insertarlo: nueva subsección 4.5.1 Manejo de
+            errores, dentro de &quot;4.5 Servicios&quot;.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-80ca-bbc1-ffb4684d69c9"
+          class="numbered-list"
+          start="4"
+          dir="auto"
+        >
+          <li>
+            Autorización por endpoint (permisos)<br />No se explica cómo un
+            endpoint declara qué permiso requiere, ni dónde se valida
+            (dependency de FastAPI, decorador, chequeo manual en el service).
+            Dado que el sistema tiene un registro de permisos, esta es una
+            carencia crítica de seguridad, no solo de estilo.<br />Dónde
+            insertarlo: nueva sección 5. Autorización de endpoints, después de
+            la sección 4 completa.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-80b9-953f-f23ae8b50516"
+          class="numbered-list"
+          start="5"
+          dir="auto"
+        >
+          <li>
+            Soft-delete (campo activo)<br />El repositorio genérico hace
+            soft-delete automático si el modelo tiene activo, pero el estándar
+            no menciona este comportamiento en ningún lado, ni cuándo un modelo
+            debe/no debe tener ese campo.<br />Dónde insertarlo: dentro de 4.4
+            Repositorios, como regla adicional después de la ya existente sobre
+            get_repository.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-8011-8d8c-feaeaa42843d"
+          class="numbered-list"
+          start="6"
+          dir="auto"
+        >
+          <li>
+            Campos de auditoría (usuario_creacion_id, fechas, etc.)<br />El
+            estándar dice que create/update/patch &quot;pasan
+            headers.user_id&quot; pero nunca explica el contrato completo: qué
+            campos se estampan, en qué evento, y quién es responsable de hacerlo
+            (¿service o repo?).<br />Dónde insertarlo: dentro de 4.5 Servicios,
+            junto a la regla de headers.user_id.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-8068-bb73-cf8ff34f8166"
+          class="numbered-list"
+          start="7"
+          dir="auto"
+        >
+          <li>
+            Campos derivados/calculados en SingleDTO/ListDTO<br />El ejemplo de
+            SucursalSingleDTO muestra campos como area, usuario_nombre,
+            usuario_apellido que no están en el modelo ORM base, pero no se
+            explica de dónde deben salir (¿join en el repo? ¿cálculo en el
+            service?). Sin esta regla, cada entidad resuelve esos campos de
+            forma distinta.<br />Dónde insertarlo: dentro de 4.2 Data transfer
+            objects, como regla nueva después de las ya listadas.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-80dc-afb0-cb52152bd690"
+          class="numbered-list"
+          start="8"
+          dir="auto"
+        >
+          <li>
+            Validación de formato vs. reglas de negocio<br />No queda claro si
+            validaciones de formato (email, longitud, regex) deben ir como
+            field_validator de Pydantic en el DTO, o si toda validación —formato
+            incluido— va al service. Es una zona gris entre &quot;4.2 DTOs&quot;
+            y &quot;el service tiene toda la lógica de negocio&quot; (regla
+            1).<br />Dónde insertarlo: aclaración dentro de 1. Principios
+            generales, junto a la regla &quot;no lógica de negocio fuera del
+            service&quot;.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-806b-98be-c2b6fa7754c7"
+          class="numbered-list"
+          start="9"
+          dir="auto"
+        >
+          <li>
+            Constantes y catálogos compartidos (registries)<br />El documento
+            dice &quot;constantes SNAKE_CASE mayúsculas&quot; a nivel general,
+            pero no dice nada sobre módulos tipo registry compartidos entre
+            archivos (como listados de IDs o de permisos): dónde deben vivir, si
+            son append-only, si se permite renumerar. Esto explica el bug real
+            que encontré en lista_ids_menu.py (constantes en minúscula).<br />Dónde
+            insertarlo: nueva subsección al final de 1. Principios generales.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-805a-8c53-fe935586eb8d"
+          class="numbered-list numbered-list-digits-2"
+          start="10"
+          dir="auto"
+        >
+          <li>
+            Convención async/sync<br />No se especifica si los métodos de
+            repo/service/router deben ser async def o síncronos, ni el criterio
+            para elegir uno u otro (por ejemplo, en generadores para SSE).<br />Dónde
+            insertarlo: dentro de 3. Tipado, o como nueva regla en &quot;1.
+            Principios generales&quot;.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-8077-bb18-fee185e26b25"
+          class="numbered-list numbered-list-digits-2"
+          start="11"
+          dir="auto"
+        >
+          <li>
+            Testing<br />No existe ninguna mención a pruebas: ubicación, naming,
+            qué se debe cubrir por capa. Para un documento de &quot;estándares
+            de desarrollo Backend&quot; es una ausencia notable, más aún porque
+            el proyecto ya tiene pytest/pytest-asyncio instalados sin usar.<br />Dónde
+            insertarlo: nueva sección 6. Testing, al final del documento.
+          </li>
+        </ol>
+        <ol
+          type="1"
+          id="3dd2663e-2414-80af-8ed7-d06a0d150899"
+          class="numbered-list numbered-list-digits-2"
+          start="12"
+          dir="auto"
+        >
+          <li>
+            Archivos auxiliares dentro de un módulo de entidad<br />La sección
+            4.1 fija 5 archivos por entidad, pero no dice cuándo es válido
+            agregar un archivo extra dentro de ese mismo módulo (como pasa hoy
+            con menu_tree.py, lista_ids_menu.py, registro_conexiones.py) ni cómo
+            debe nombrarse.<br />Dónde insertarlo: como regla adicional dentro
+            de 4.1 Estructura de archivos.
+          </li>
+        </ol>
+        <hr id="3dd2663e-2414-80da-aa0a-d62fc6599340" dir="auto" />
+        <p id="3dd2663e-2414-80f6-a279-c53104e854fc" class="" dir="auto">
+          Nota aparte (no es una carencia, es una contradicción): el documento
+          exige router = APIRouter() sin prefix/tags en 4.6, pero el código
+          completo del proyecto hace lo contrario de forma consistente y
+          deliberada. Esto no falta en el documento — está escrito, pero no
+          coincide con la realidad. Conviene resolverlo junto con las carencias
+          de arriba (actualizando el punto 4.6 o migrando el código), no
+          agregarlo como si fuera nuevo.
+        </p>
+      </div>
+    </article>
+    <span class="sans" style="font-size: 14px; padding-top: 2em"></span>
+  </body>
+</html>

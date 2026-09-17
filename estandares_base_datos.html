@@ -1,0 +1,1713 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Estándares de diseño de base de datos</title>
+    <meta name="data-notion-page-icon" content="🐘" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%90%98%3C%2Ftext%3E%3C%2Fsvg%3E"
+    />
+    <style>
+      /* cspell:disable-file */
+      /* webkit printing magic: print all background colors */
+      html {
+        -webkit-print-color-adjust: exact;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      @media only screen {
+        body {
+          margin: 2em auto;
+          max-width: 900px;
+          color: rgb(55, 53, 47);
+        }
+      }
+
+      body {
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+
+      a,
+      a.visited {
+        color: inherit;
+        text-decoration: underline;
+      }
+
+      .pdf-relative-link-path {
+        font-size: 80%;
+        color: #444;
+      }
+
+      h1,
+      h2,
+      h3 {
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+
+      /* Override strong tags inside headings to maintain consistent weight */
+      h1 strong,
+      h2 strong,
+      h3 strong {
+        font-weight: 600;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0.75em;
+      }
+
+      h1 {
+        font-size: 1.875rem;
+        margin-top: 1.875rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+        margin-top: 1.25rem;
+      }
+
+      .source {
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 1.5em;
+        word-break: break-all;
+      }
+
+      .callout {
+        border-radius: 10px;
+        padding: 1rem;
+      }
+
+      /* For default-background callouts, render the border outline. */
+      .callout.block-color-default_background {
+        border: 1px solid rgba(55, 53, 47, 0.09);
+      }
+
+      figure {
+        margin: 1.25em 0;
+        page-break-inside: avoid;
+      }
+
+      /*
+ * Toggles and callouts hold arbitrary content, so they can easily be taller
+ * than a page. They must stay breakable: avoiding breaks inside them makes
+ * Chromium push the whole block onto the next page, which leaves the previous
+ * page mostly empty before every long toggle.
+ */
+      details,
+      aside {
+        margin: 1.25em 0;
+      }
+
+      /* Keep a toggle's title on the same page as the start of its content. */
+      summary {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      /*
+ * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
+ * <summary>. Without this reset, the heading's margin-top pushes it below the
+ * ::marker (▼), so the triangle and the title appear on separate lines.
+ */
+      summary h1,
+      summary h2,
+      summary h3,
+      summary h4 {
+        margin-top: 0;
+      }
+
+      figcaption {
+        opacity: 0.5;
+        font-size: 85%;
+        margin-top: 0.5em;
+      }
+
+      mark {
+        background-color: transparent;
+      }
+
+      .indented {
+        padding-left: 1.5em;
+      }
+
+      hr {
+        background: transparent;
+        display: block;
+        width: 100%;
+        height: 1px;
+        visibility: visible;
+        border: none;
+        border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      @media only print {
+        img {
+          max-height: 100vh;
+          object-fit: contain;
+        }
+
+        table.collection-content {
+          width: 100%;
+          table-layout: fixed;
+        }
+
+        table.collection-content th,
+        table.collection-content td {
+          overflow-wrap: anywhere;
+        }
+
+        table.collection-content td > .user,
+        table.collection-content td > time {
+          white-space: pre-wrap;
+        }
+      }
+
+      @page {
+        margin: 1in;
+      }
+
+      .collection-content-wrapper {
+        overflow-x: auto;
+      }
+
+      @media only print {
+        .collection-content-wrapper {
+          overflow-x: visible;
+        }
+      }
+
+      .collection-content {
+        font-size: 0.875rem;
+      }
+
+      .collection-content td {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .column-list {
+        display: flex;
+        gap: 46px;
+      }
+
+      .column {
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      .column > *:first-child {
+        margin-top: 0;
+      }
+
+      .table_of_contents-item {
+        display: block;
+        font-size: 0.875rem;
+        line-height: 1.3;
+        padding-inline: 0.125rem;
+        padding-block: 0.375rem;
+      }
+
+      .table_of_contents-indent-1 {
+        margin-left: 1.5rem;
+      }
+
+      .table_of_contents-indent-2 {
+        margin-left: 3rem;
+      }
+
+      .table_of_contents-indent-3 {
+        margin-left: 4.5rem;
+      }
+
+      .table_of_contents-link {
+        text-decoration: none;
+        opacity: 0.7;
+        border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid rgba(55, 53, 47, 0.09);
+      }
+
+      table {
+        border-collapse: collapse;
+        border-left: none;
+        border-right: none;
+      }
+
+      th,
+      td {
+        font-weight: normal;
+        padding: 0.25em 0.5em;
+        line-height: 1.5;
+        min-height: 1.5em;
+        text-align: left;
+      }
+
+      th {
+        color: rgba(55, 53, 47, 0.6);
+      }
+
+      ol,
+      ul {
+        margin: 0;
+        margin-block-start: 0.6em;
+        margin-block-end: 0.6em;
+      }
+
+      li > ol:first-child,
+      li > ul:first-child {
+        margin-block-start: 0.6em;
+      }
+
+      ul > li {
+        list-style: disc;
+      }
+
+      ul.to-do-list {
+        padding-inline-start: 0;
+      }
+
+      ul.to-do-list > li {
+        list-style: none;
+      }
+
+      .to-do-children-checked {
+        text-decoration: line-through;
+        opacity: 0.375;
+      }
+
+      ul.toggle > li {
+        list-style: none;
+      }
+
+      ul {
+        padding-inline-start: 1.7em;
+      }
+
+      ul > li {
+        padding-left: 0.1em;
+      }
+
+      ol {
+        padding-inline-start: 1.6em;
+      }
+
+      ol.numbered-list.numbered-list-digits-2 {
+        padding-inline-start: 2em;
+      }
+
+      ol.numbered-list.numbered-list-digits-3plus {
+        padding-inline-start: 2.4em;
+      }
+
+      ol > li {
+        padding-left: 0.2em;
+      }
+
+      .mono ol {
+        padding-inline-start: 2em;
+      }
+
+      .mono ol > li {
+        text-indent: -0.4em;
+      }
+
+      .toggle {
+        padding-inline-start: 0em;
+        list-style-type: none;
+      }
+
+      /* Indent toggle children */
+      .toggle > li > details {
+        padding-left: 1.7em;
+      }
+
+      .toggle > li > details > summary {
+        margin-left: -1.1em;
+      }
+
+      .selected-value {
+        display: inline-block;
+        padding: 0 0.5em;
+        background: rgba(206, 205, 202, 0.5);
+        border-radius: 3px;
+        margin-right: 0.5em;
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+        white-space: nowrap;
+      }
+
+      .collection-title {
+        display: inline-block;
+        margin-right: 1em;
+      }
+
+      .page-description {
+        margin-bottom: 2em;
+      }
+
+      .simple-table {
+        margin-top: 1em;
+        font-size: 0.875rem;
+        empty-cells: show;
+      }
+      .simple-table td {
+        height: 29px;
+        min-width: 120px;
+      }
+
+      .simple-table th {
+        height: 29px;
+        min-width: 120px;
+      }
+
+      .simple-table-header-color {
+        background: rgb(247, 246, 243);
+        color: black;
+      }
+      .simple-table-header {
+        font-weight: 500;
+      }
+
+      time {
+        opacity: 0.5;
+      }
+
+      .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 1.2em;
+        max-height: 1.2em;
+        text-decoration: none;
+        vertical-align: text-bottom;
+        margin-right: 0.5em;
+      }
+
+      /*
+ * Render emoji icons using a ::before pseudo-element to keep the glyph
+ * out of the DOM textContent traversal. This avoids double-rendering icons
+ * in callouts and page titles.
+ * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
+ * flag as a duplicate tag after codegen.
+ */
+      .icon[data-emoji]::before {
+        content: attr(data-emoji);
+      }
+
+      img.icon {
+        border-radius: 3px;
+      }
+
+      .callout img.notion-static-icon {
+        width: 1em;
+        height: 1em;
+      }
+
+      .callout p {
+        margin: 0;
+      }
+
+      .callout h1,
+      .callout h2,
+      .callout h3 {
+        margin: 0 0 0.6rem;
+      }
+
+      .user-icon {
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 100%;
+        margin-right: 0.5rem;
+      }
+
+      .user-icon-inner {
+        font-size: 0.8em;
+      }
+
+      .text-icon {
+        border: 1px solid #000;
+        text-align: center;
+      }
+
+      .page-cover-image {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        max-height: 30vh;
+      }
+
+      .page-header-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .page-header-icon-with-cover {
+        margin-top: -0.72em;
+        margin-left: 0.07em;
+      }
+
+      .page-header-icon img {
+        border-radius: 3px;
+      }
+
+      .link-to-page {
+        margin: 1em 0;
+        padding: 0;
+        border: none;
+        font-weight: 500;
+      }
+
+      p > .user {
+        opacity: 0.5;
+      }
+
+      td > .user,
+      td > time {
+        white-space: nowrap;
+      }
+
+      input[type="checkbox"] {
+        margin-right: 0.4em;
+        vertical-align: middle;
+      }
+
+      p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+
+      .image {
+        border: none;
+        margin: 1.5em 0;
+        padding: 0;
+        border-radius: 0;
+        text-align: center;
+      }
+
+      .code,
+      code {
+        background: rgba(135, 131, 120, 0.15);
+        border-radius: 3px;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 85%;
+        tab-size: 2;
+      }
+
+      code {
+        color: #eb5757;
+      }
+
+      .code {
+        padding: 1.5em 1em;
+      }
+
+      .code-wrap {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      .code > code {
+        background: none;
+        padding: 0;
+        font-size: 100%;
+        color: inherit;
+      }
+
+      blockquote {
+        font-size: 1em;
+        margin: 1em 0;
+        padding-left: 1em;
+        border-left: 3px solid rgb(55, 53, 47);
+      }
+
+      blockquote.quote-large {
+        font-size: 1.25em;
+      }
+
+      .bookmark {
+        text-decoration: none;
+        max-height: 8em;
+        padding: 0;
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+      }
+
+      .bookmark-title {
+        font-size: 0.85em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 1.75em;
+        white-space: nowrap;
+      }
+
+      .bookmark-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bookmark-info {
+        flex: 4 1 180px;
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .bookmark-image {
+        width: 33%;
+        flex: 1 1 180px;
+        display: block;
+        position: relative;
+        object-fit: cover;
+        border-radius: 1px;
+      }
+
+      .bookmark-description {
+        color: rgba(55, 53, 47, 0.6);
+        font-size: 0.75em;
+        overflow: hidden;
+        max-height: 4.5em;
+        word-break: break-word;
+      }
+
+      .bookmark-href {
+        font-size: 0.75em;
+        margin-top: 0.25em;
+      }
+
+      .tab {
+        margin: 1.25em 0;
+        padding-inline: 1rem;
+        border: 1px solid rgba(55, 53, 47, 0.09);
+      }
+
+      .sans {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol";
+      }
+      .code {
+        font-family:
+          "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono",
+          Courier, monospace;
+      }
+      .serif {
+        font-family: Lyon-Text, Georgia, ui-serif, serif;
+      }
+      .mono {
+        font-family: iawriter-mono, Nitti, Menlo, Courier, monospace;
+      }
+      .pdf .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK JP";
+      }
+      .pdf:lang(zh-CN) .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK SC";
+      }
+      .pdf:lang(zh-TW) .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK TC";
+      }
+      .pdf:lang(ko-KR) .sans {
+        font-family:
+          Inter,
+          ui-sans-serif,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          Helvetica,
+          "Apple Color Emoji",
+          "Noto Sans Arabic",
+          "Noto Sans Hebrew",
+          Arial,
+          sans-serif,
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans CJK KR";
+      }
+      .pdf .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK JP";
+      }
+      .pdf:lang(zh-CN) .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK SC";
+      }
+      .pdf:lang(zh-TW) .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK TC";
+      }
+      .pdf:lang(ko-KR) .code {
+        font-family:
+          Source Code Pro,
+          "SFMono-Regular",
+          Menlo,
+          Consolas,
+          "PT Mono",
+          "Liberation Mono",
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK KR";
+      }
+      .pdf .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK JP";
+      }
+      .pdf:lang(zh-CN) .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK SC";
+      }
+      .pdf:lang(zh-TW) .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK TC";
+      }
+      .pdf:lang(ko-KR) .serif {
+        font-family:
+          PT Serif,
+          Lyon-Text,
+          Georgia,
+          ui-serif,
+          serif,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Serif CJK KR";
+      }
+      .pdf .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK JP";
+      }
+      .pdf:lang(zh-CN) .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK SC";
+      }
+      .pdf:lang(zh-TW) .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK TC";
+      }
+      .pdf:lang(ko-KR) .mono {
+        font-family:
+          PT Mono,
+          iawriter-mono,
+          Nitti,
+          Menlo,
+          Courier,
+          monospace,
+          "Twemoji",
+          "Noto Color Emoji",
+          "Noto Sans Mono CJK KR";
+      }
+      .highlight-default {
+        color: rgba(44, 44, 43, 1);
+      }
+      .highlight-gray {
+        color: rgba(125, 122, 117, 1);
+        fill: rgba(125, 122, 117, 1);
+      }
+      .highlight-brown {
+        color: rgba(159, 118, 90, 1);
+        fill: rgba(159, 118, 90, 1);
+      }
+      .highlight-orange {
+        color: rgba(210, 123, 45, 1);
+        fill: rgba(210, 123, 45, 1);
+      }
+      .highlight-yellow {
+        color: rgba(203, 148, 52, 1);
+        fill: rgba(203, 148, 52, 1);
+      }
+      .highlight-teal {
+        color: rgba(80, 148, 110, 1);
+        fill: rgba(80, 148, 110, 1);
+      }
+      .highlight-blue {
+        color: rgba(56, 125, 201, 1);
+        fill: rgba(56, 125, 201, 1);
+      }
+      .highlight-purple {
+        color: rgba(154, 107, 180, 1);
+        fill: rgba(154, 107, 180, 1);
+      }
+      .highlight-pink {
+        color: rgba(193, 76, 138, 1);
+        fill: rgba(193, 76, 138, 1);
+      }
+      .highlight-red {
+        color: rgba(207, 81, 72, 1);
+        fill: rgba(207, 81, 72, 1);
+      }
+      .highlight-default_background {
+        color: rgba(44, 44, 43, 1);
+      }
+      .highlight-gray_background {
+        background: rgba(42, 28, 0, 0.07);
+      }
+      .highlight-brown_background {
+        background: rgba(139, 46, 0, 0.086);
+      }
+      .highlight-orange_background {
+        background: rgba(224, 101, 1, 0.129);
+      }
+      .highlight-yellow_background {
+        background: rgba(211, 168, 0, 0.137);
+      }
+      .highlight-teal_background {
+        background: rgba(0, 100, 45, 0.09);
+      }
+      .highlight-blue_background {
+        background: rgba(0, 124, 215, 0.094);
+      }
+      .highlight-purple_background {
+        background: rgba(102, 0, 178, 0.078);
+      }
+      .highlight-pink_background {
+        background: rgba(197, 0, 93, 0.086);
+      }
+      .highlight-red_background {
+        background: rgba(223, 22, 0, 0.094);
+      }
+      .block-color-default {
+        color: inherit;
+        fill: inherit;
+      }
+      .block-color-gray {
+        color: rgba(125, 122, 117, 1);
+        fill: rgba(125, 122, 117, 1);
+      }
+      .block-color-brown {
+        color: rgba(159, 118, 90, 1);
+        fill: rgba(159, 118, 90, 1);
+      }
+      .block-color-orange {
+        color: rgba(210, 123, 45, 1);
+        fill: rgba(210, 123, 45, 1);
+      }
+      .block-color-yellow {
+        color: rgba(203, 148, 52, 1);
+        fill: rgba(203, 148, 52, 1);
+      }
+      .block-color-teal {
+        color: rgba(80, 148, 110, 1);
+        fill: rgba(80, 148, 110, 1);
+      }
+      .block-color-blue {
+        color: rgba(56, 125, 201, 1);
+        fill: rgba(56, 125, 201, 1);
+      }
+      .block-color-purple {
+        color: rgba(154, 107, 180, 1);
+        fill: rgba(154, 107, 180, 1);
+      }
+      .block-color-pink {
+        color: rgba(193, 76, 138, 1);
+        fill: rgba(193, 76, 138, 1);
+      }
+      .block-color-red {
+        color: rgba(207, 81, 72, 1);
+        fill: rgba(207, 81, 72, 1);
+      }
+      .block-color-default_background {
+        color: inherit;
+        fill: inherit;
+      }
+      .block-color-gray_background {
+        background: rgba(240, 239, 237, 1);
+      }
+      .block-color-brown_background {
+        background: rgba(245, 237, 233, 1);
+      }
+      .block-color-orange_background {
+        background: rgba(251, 235, 222, 1);
+      }
+      .block-color-yellow_background {
+        background: rgba(249, 243, 220, 1);
+      }
+      .block-color-teal_background {
+        background: rgba(232, 241, 236, 1);
+      }
+      .block-color-blue_background {
+        background: rgba(229, 242, 252, 1);
+      }
+      .block-color-purple_background {
+        background: rgba(243, 235, 249, 1);
+      }
+      .block-color-pink_background {
+        background: rgba(250, 233, 241, 1);
+      }
+      .block-color-red_background {
+        background: rgba(252, 233, 231, 1);
+      }
+      .select-value-color-default {
+        background-color: rgba(42, 28, 0, 0.07);
+      }
+      .select-value-color-gray {
+        background-color: rgba(28, 19, 1, 0.11);
+      }
+      .select-value-color-brown {
+        background-color: rgba(127, 51, 0, 0.156);
+      }
+      .select-value-color-orange {
+        background-color: rgba(196, 88, 0, 0.203);
+      }
+      .select-value-color-yellow {
+        background-color: rgba(209, 156, 0, 0.282);
+      }
+      .select-value-color-green {
+        background-color: rgba(0, 96, 38, 0.156);
+      }
+      .select-value-color-blue {
+        background-color: rgba(0, 118, 217, 0.203);
+      }
+      .select-value-color-purple {
+        background-color: rgba(92, 0, 163, 0.141);
+      }
+      .select-value-color-pink {
+        background-color: rgba(183, 0, 78, 0.152);
+      }
+      .select-value-color-red {
+        background-color: rgba(206, 24, 0, 0.164);
+      }
+
+      .checkbox {
+        display: inline-flex;
+        vertical-align: text-bottom;
+        width: 16;
+        height: 16;
+        background-size: 16px;
+        margin-left: 2px;
+        margin-right: 5px;
+      }
+
+      .checkbox-on {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+      }
+
+      .checkbox-off {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+      }
+    </style>
+    <style>
+      @import url("https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css");
+    </style>
+  </head>
+  <body>
+    <article
+      id="3c12663e-2414-8039-a875-d482c9ac682a"
+      class="page sans"
+      data-notion-page-icon="🐘"
+    >
+      <header>
+        <div class="page-header-icon undefined">
+          <span class="icon" data-emoji="🐘"></span>
+        </div>
+        <h1 class="page-title" dir="auto">
+          Estándares de diseño de base de datos
+        </h1>
+        <p class="page-description" dir="auto"></p>
+      </header>
+      <div class="page-body">
+        <h2 id="3c12663e-2414-801b-b167-fa6b3c35c58c" class="" dir="auto">
+          1. Objetivo
+        </h2>
+        <p id="3c12663e-2414-808b-86c6-fda9ed7ad09f" class="" dir="auto">
+          Definir una convención única para nombrar tablas, columnas, llaves
+          primarias y foráneas, y estandarizar tipos de datos, con base en los
+          modelos ER ya construidos (Configuraciones, Contactos, Inventarios).
+        </p>
+        <hr id="3c12663e-2414-8083-8bcd-e1429d3c5263" dir="auto" />
+        <h2 id="3c12663e-2414-8062-8735-edbdf7ab70c2" class="" dir="auto">
+          2. Convenciones generales de nombres
+        </h2>
+        <ul
+          id="3c12663e-2414-801c-9017-dd92a766ed6f"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Todo en <strong>snake_case</strong> (minúsculas, palabras separadas
+            por guion bajo). Nada de camelCase ni PascalCase.
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-8032-bed7-ec2ea09ebc6e"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Nombres de tabla en <strong>singular</strong>: <code>usuario</code>,
+            <code>articulo</code>, <code>rol</code> (no <code>usuarios</code>,
+            <code>articulos</code>).
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80fb-aed0-ca7bc83bded1"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Sin tildes ni caracteres especiales en nombres de tabla o columna
+            (<code>descripcion</code>, no <code>descripción</code>).
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80be-9e29-f878a8bd82e5"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Nombres descriptivos y en español, consistentes con el resto del
+            modelo.
+          </li>
+        </ul>
+        <hr id="3c12663e-2414-80cd-b77c-fea7d19dae84" dir="auto" />
+        <h2 id="3c12663e-2414-809e-8321-ddf1244f197c" class="" dir="auto">
+          3. Tablas catálogo
+        </h2>
+        <p id="3c12663e-2414-80b7-a05d-d620d2946523" class="" dir="auto">
+          Tablas simples de referencia (listas de valores), estructura mínima:
+        </p>
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
+          integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        ></script>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+          integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        />
+        <pre
+          id="3c12663e-2414-804e-a1f2-f5d599aa244a"
+          class="code code-wrap"
+        ><code style="white-space:pre-wrap;word-break:break-all">id            PK
+nombre        varchar
+descripcion   varchar   (opcional, según si el catálogo lo requiere)</code></pre>
+        <p id="3c12663e-2414-80de-b290-d5ab42d34f89" class="" dir="auto">
+          Ejemplos ya existentes: <code>area</code>, <code>puesto</code>,
+          <code>categoria</code>, <code>familia</code>, <code>tipo</code>,
+          <code>unidad_medida</code>, <code>tipo_calculo</code>,
+          <code>categoria_permiso</code>.
+        </p>
+        <hr id="3c12663e-2414-8027-a867-c7cec41c518d" dir="auto" />
+        <h2 id="3c12663e-2414-809d-a034-e2c9c0d47f05" class="" dir="auto">
+          4. Llaves primarias (PK)
+        </h2>
+        <ul
+          id="3c12663e-2414-8099-b87f-c9e080aee47c"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El nombre de la PK <strong>siempre es </strong
+            ><code><strong>id</strong></code
+            >, sin excepciones.
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80e1-b7a8-c0413f32f9cc"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El tipo de dato se define
+            <strong>según el volumen esperado de registros</strong>:
+          </li>
+        </ul>
+        <table
+          id="3c12663e-2414-80db-aab5-d4e3fb7140bf"
+          class="simple-table"
+          dir="ltr"
+        >
+          <thead class="simple-table-header">
+            <tr id="3c12663e-2414-80b7-87a2-cbfd3ace9f0e" dir="ltr">
+              <th
+                id="FINo"
+                class="simple-table-header-color simple-table-header"
+              >
+                Tipo de tabla
+              </th>
+              <th
+                id="in`g"
+                class="simple-table-header-color simple-table-header"
+              >
+                Tipo de dato recomendado
+              </th>
+              <th
+                id="Yg_u"
+                class="simple-table-header-color simple-table-header"
+              >
+                Ejemplos
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="3c12663e-2414-804d-ac4a-f39d10ec26c6" dir="ltr">
+              <td id="FINo" class="">Catálogos / tablas maestras pequeñas</td>
+              <td id="in`g" class=""><code>smallint</code></td>
+              <td id="Yg_u" class="">
+                <code>area</code>, <code>rol</code>, <code>permiso</code>,
+                <code>categoria</code>, <code>tipo_calculo</code>
+              </td>
+            </tr>
+            <tr id="3c12663e-2414-80a1-8af4-f1c68270f0ac" dir="ltr">
+              <td id="FINo" class="">
+                Tablas transaccionales de volumen medio
+              </td>
+              <td id="in`g" class=""><code>int</code></td>
+              <td id="Yg_u" class="">
+                <code>articulo</code>, <code>contacto</code>
+              </td>
+            </tr>
+            <tr id="3c12663e-2414-80d0-b688-e58eb7ddad91" dir="ltr">
+              <td id="FINo" class="">
+                Tablas de alto volumen / detalle histórico
+              </td>
+              <td id="in`g" class=""><code>bigint</code></td>
+              <td id="Yg_u" class="">
+                <code>direccion</code>, <code>datos_entrega</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <blockquote
+          id="3c12663e-2414-803f-bfb9-c814903dab5a"
+          class=""
+          dir="auto"
+        >
+          Si hay duda sobre el volumen futuro de una tabla, es preferible ir un
+          nivel arriba (usar <code>int</code> en vez de <code>smallint</code>)
+          para evitar migraciones costosas más adelante.
+        </blockquote>
+        <hr id="3c12663e-2414-809b-9e56-f61b9ca2894b" dir="auto" />
+        <h2 id="3c12663e-2414-8075-8261-dbe42b0eb43f" class="" dir="auto">
+          5. Llaves foráneas (FK)
+        </h2>
+        <ul
+          id="3c12663e-2414-801a-9d67-c4436f43b5af"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Convención:
+            <code><strong>{tabla_referenciada_singular}_id</strong></code
+            >.
+            <ul
+              id="3c12663e-2414-80f9-b9a6-e3bc05c4d995"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                Ejemplos: <code>rol_id</code>, <code>usuario_id</code>,
+                <code>sucursal_id</code>, <code>articulo_id</code>,
+                <code>direccion_id</code>.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80df-af58-c6adba456bcd"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            El tipo de dato de la FK debe
+            <strong>coincidir exactamente</strong> con el tipo de la PK que
+            referencia.
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-809d-aa40-ca2d8009f318"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Cuando una tabla tiene
+            <strong>más de una FK hacia la misma tabla</strong> (roles distintos
+            del mismo dato), se agrega un calificador descriptivo antes de
+            <code>_id</code>:
+            <ul
+              id="3c12663e-2414-80ea-b50b-cc01d7699b32"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                <code>usuario_id_creacion</code>,
+                <code>usuario_id_actualizacion</code>,
+                <code>usuario_id_eliminacion</code>
+              </li>
+            </ul>
+            <ul
+              id="3c12663e-2414-80fb-822d-de7233fd64f4"
+              class="bulleted-list"
+              dir="auto"
+            >
+              <li style="list-style-type: circle">
+                <code>pais_telefono_contacto_id</code>,
+                <code>pais_telefono_contacto_secundario_id</code>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-802f-a7eb-e260e5d65ead"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Toda FK debe marcarse explícitamente como <code>FK</code> en el
+            diagrama, incluso si conceptualmente apunta a un catálogo pequeño
+            (por ejemplo, país/código telefónico).
+          </li>
+        </ul>
+        <hr id="3c12663e-2414-8015-9470-dd851d2a150f" dir="auto" />
+        <h2 id="3c12663e-2414-803b-ad47-ec3eb725047b" class="" dir="auto">
+          6. Tablas de relación N:M (pivote)
+        </h2>
+        <ul
+          id="3c12663e-2414-8099-b52c-e36c7baaf484"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Nombre: concatenación de las dos tablas relacionadas, en el orden
+            que tenga más sentido de lectura: <code>usuario_sucursal</code>,
+            <code>rol_usuario</code>, <code>permiso_rol</code>,
+            <code>rol_puesto</code>.
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80f2-acc9-f75d0a78d3df"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">Estructura mínima:</li>
+        </ul>
+        <pre
+          id="3c12663e-2414-80e7-85d0-daeefd8cbc06"
+          class="code code-wrap"
+        ><code style="white-space:pre-wrap;word-break:break-all">id            PK
+{tabla1}_id   FK  NN
+{tabla2}_id   FK  NN</code></pre>
+        <ul
+          id="3c12663e-2414-8042-8ab0-ca3eb639a102"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Si la relación necesita atributos propios (fecha de asignación,
+            estado, etc.), se agregan como columnas adicionales en la misma
+            tabla pivote.
+          </li>
+        </ul>
+        <hr id="3c12663e-2414-80a8-85eb-fab302a06e86" dir="auto" />
+        <h2 id="3c12663e-2414-80c3-9017-fda96cdcabda" class="" dir="auto">
+          7. Columnas comunes y tipos de datos recomendados
+        </h2>
+        <table
+          id="3c12663e-2414-80fa-bb31-fd3346af2d42"
+          class="simple-table"
+          dir="ltr"
+        >
+          <thead class="simple-table-header">
+            <tr id="3c12663e-2414-8049-9df9-f897cafa8209" dir="ltr">
+              <th
+                id="jgv&gt;"
+                class="simple-table-header-color simple-table-header"
+              >
+                Columna
+              </th>
+              <th
+                id="UbiU"
+                class="simple-table-header-color simple-table-header"
+              >
+                Tipo recomendado
+              </th>
+              <th
+                id="HWO?"
+                class="simple-table-header-color simple-table-header"
+              >
+                Notas
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="3c12663e-2414-80b4-8fc0-fd0fd651df2b" dir="ltr">
+              <td id="jgv&gt;" class=""><code>nombre</code></td>
+              <td id="UbiU" class=""><code>varchar(50)</code></td>
+              <td id="HWO?" class="">Casi siempre <code>NOT NULL</code></td>
+            </tr>
+            <tr id="3c12663e-2414-80d8-a5c3-d1de5bac0532" dir="ltr">
+              <td id="jgv&gt;" class=""><code>descripcion</code></td>
+              <td id="UbiU" class="">
+                <code>varchar</code> (tamaño según contexto)
+              </td>
+              <td id="HWO?" class="">
+                No hay un tamaño único obligatorio; se define según el uso real
+                del campo (catálogo corto vs. texto más libre)
+              </td>
+            </tr>
+            <tr id="3c12663e-2414-80cf-9bd4-d212f7fe8a09" dir="ltr">
+              <td id="jgv&gt;" class=""><code>telefono</code></td>
+              <td id="UbiU" class=""><code>varchar(15)</code></td>
+              <td id="HWO?" class="">
+                Incluye espacio para formato internacional
+              </td>
+            </tr>
+            <tr id="3c12663e-2414-80a1-9885-f76b710a07da" dir="ltr">
+              <td id="jgv&gt;" class=""><code>email</code></td>
+              <td id="UbiU" class=""><code>varchar(100)</code></td>
+              <td id="HWO?" class=""></td>
+            </tr>
+            <tr id="3c12663e-2414-805f-9a12-d1c1f1bd97ad" dir="ltr">
+              <td id="jgv&gt;" class="">
+                <code>codigo</code> / <code>codigo_barras</code>
+              </td>
+              <td id="UbiU" class="">
+                <code>varchar(10–20)</code> según el caso
+              </td>
+              <td id="HWO?" class=""></td>
+            </tr>
+            <tr id="3c12663e-2414-801e-95e7-edc5dd291530" dir="ltr">
+              <td id="jgv&gt;" class="">Montos / precios</td>
+              <td id="UbiU" class=""><code>decimal(p,e)</code></td>
+              <td id="HWO?" class="">
+                Nunca <code>float</code>/<code>double</code> para dinero
+              </td>
+            </tr>
+            <tr id="3c12663e-2414-8079-9bcd-d6bf473992fb" dir="ltr">
+              <td id="jgv&gt;" class="">Porcentajes</td>
+              <td id="UbiU" class=""><code>decimal(5,2)</code></td>
+              <td id="HWO?" class=""></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr id="3c12663e-2414-8022-af5a-d3fbc5534200" dir="auto" />
+        <h2 id="3c12663e-2414-8066-b155-d3c6dbd7d532" class="" dir="auto">
+          8. Columnas booleanas
+        </h2>
+        <ul
+          id="3c12663e-2414-80a9-9941-c3851db34950"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Prefijo obligatorio <code><strong>es_</strong></code
+            >: <code>es_cliente</code>, <code>es_proveedor</code>,
+            <code>es_facturacion</code>, <code>es_envio</code>,
+            <code>es_principal</code>, <code>es_base</code>.
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80d3-bdab-f9acc4a749a0"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Tipo de dato: <code><strong>bool</strong></code> (evitar
+            <code>boolean</code> para mantener consistencia en todo el modelo).
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80a5-8094-d71aeea7d626"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Siempre <code>NOT NULL</code>, con valor por defecto explícito
+            (<code>true</code>/<code>false</code>) cuando aplique.
+          </li>
+        </ul>
+        <hr id="3c12663e-2414-8071-8e2b-e1ced72b32f0" dir="auto" />
+        <h2 id="3c12663e-2414-80e3-8b6d-d7f93c306621" class="" dir="auto">
+          9. Auditoría y control (columnas base)
+        </h2>
+        <p id="3c12663e-2414-801d-ab50-cd00ab335478" class="" dir="auto">
+          Todas las tablas transaccionales/maestras deben incluir el siguiente
+          set de columnas base, en <strong>snake_case</strong>:
+        </p>
+        <pre
+          id="3c12663e-2414-80d5-a164-e6bc79ce5e93"
+          class="code code-wrap"
+        ><code style="white-space:pre-wrap;word-break:break-all">activo                    bool       NN
+fecha_creacion             datetime   NN
+fecha_actualizacion        datetime   NN
+fecha_eliminacion          datetime
+usuario_id_creacion        FK  NN
+usuario_id_actualizacion   FK  NN
+usuario_id_eliminacion     FK</code></pre>
+        <ul
+          id="3c12663e-2414-80cb-883b-c2fbc7ec9c37"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            <code>activo</code> controla el soft delete (no se elimina
+            físicamente el registro).
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-8036-87b2-d5778e58006f"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Las columnas <code>fecha_eliminacion</code> y
+            <code>usuario_id_eliminacion</code> solo se llenan cuando
+            <code>activo = false</code>.
+          </li>
+        </ul>
+        <hr id="3c12663e-2414-80e5-81ad-c4901cc59de6" dir="auto" />
+        <h2 id="3c12663e-2414-8031-b134-c170224e73c5" class="" dir="auto">
+          10. Buenas prácticas adicionales
+        </h2>
+        <ul
+          id="3c12663e-2414-80c3-8b66-f5f4b0af6331"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Marcar explícitamente <code><strong>NN</strong></code
+            ><strong> (NOT NULL)</strong> en cada columna que sea obligatoria;
+            no dejarlo implícito.
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80ae-bcd8-d70f79c36040"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            No abreviar nombres de columnas de forma ambigua (evitar cosas como
+            <code>articulo_cod</code>; usar siempre
+            <code>articulo_id</code> cuando es una FK).
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80df-8310-f54aaf8cdf9b"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Un mismo concepto (ej. <code>descripcion</code>, <code>bool</code>)
+            debe escribirse siempre igual en todas las tablas del modelo, sin
+            variaciones de tilde o de sinónimo (<code>bool</code> vs
+            <code>boolean</code>).
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80ea-b6bf-f2f099d1b361"
+          class="bulleted-list"
+          dir="auto"
+        >
+          <li style="list-style-type: disc">
+            Antes de dar por cerrada una tabla nueva, revisar que no haya
+            redundancia de columnas con otra tabla ya existente (ej. datos de
+            contacto duplicados en <code>direccion</code> y
+            <code>datos_entrega</code>); si la duplicación es intencional
+            (desnormalización por performance), dejarlo documentado.
+          </li>
+        </ul>
+        <hr id="3c12663e-2414-803d-a5c2-f0c06e45a114" dir="auto" />
+        <h2 id="3c12663e-2414-8046-9839-c5fa1b731bcc" class="" dir="auto">
+          11. Checklist rápido para crear una tabla nueva
+        </h2>
+        <ul
+          id="3c12663e-2414-80ca-afe2-e5b2fab518b8"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Nombre de tabla en snake_case y singular</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80d8-9e76-f0fd01061919"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >PK llamada <code>id</code>, tipo de dato según volumen esperado
+              (tabla de la sección 4)</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80b9-abdd-e1fca0e646fd"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >FKs nombradas <code>{tabla}_id</code>, mismo tipo de dato que la
+              PK referenciada</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-8081-91f0-c5334118eca5"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Si es relación N:M → nombre <code>tabla1_tabla2</code> + FKs
+              <code>NOT NULL</code></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-80fc-b12f-ce41cf06d29e"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Columnas booleanas con prefijo <code>es_</code> y tipo
+              <code>bool</code></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-808d-bf30-e3f7ea450891"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              ><code>nombre</code> y <code>descripcion</code> siguiendo el
+              estándar de la sección 7</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-805c-8beb-f37e460440a7"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Columnas obligatorias marcadas <code>NN</code></span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-8052-bd1e-fb8441f937a2"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Si aplica, incluir el set de columnas de auditoría (sección
+              9)</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+        <ul
+          id="3c12663e-2414-8002-bc8d-d37130cec28b"
+          class="to-do-list"
+          dir="auto"
+        >
+          <li>
+            <input type="checkbox" class="checkbox checkbox-off" disabled="" />
+            <span class="to-do-children-unchecked"
+              >Sin tildes ni inconsistencias de escritura en nombres</span
+            >
+            <div class="indented"></div>
+          </li>
+        </ul>
+      </div>
+    </article>
+    <span class="sans" style="font-size: 14px; padding-top: 2em"></span>
+  </body>
+</html>
