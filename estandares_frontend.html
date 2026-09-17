@@ -1,1447 +1,802 @@
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Estándares de desarrollo Frontend</title>
-    <meta name="data-notion-page-icon" content="📔" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%94%3C%2Ftext%3E%3C%2Fsvg%3E"
-    />
-    <style>
-      /* cspell:disable-file */
-      /* webkit printing magic: print all background colors */
-      html {
-        -webkit-print-color-adjust: exact;
-      }
-      * {
-        box-sizing: border-box;
-        -webkit-print-color-adjust: exact;
-      }
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Estándares de desarrollo Frontend</title><meta name="data-notion-page-icon" content="📔"/><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%94%3C%2Ftext%3E%3C%2Fsvg%3E"/><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
 
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      @media only screen {
-        body {
-          margin: 2em auto;
-          max-width: 900px;
-          color: rgb(55, 53, 47);
-        }
-      }
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
 
-      body {
-        line-height: 1.5;
-        white-space: pre-wrap;
-      }
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
 
-      a,
-      a.visited {
-        color: inherit;
-        text-decoration: underline;
-      }
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
 
-      .pdf-relative-link-path {
-        font-size: 80%;
-        color: #444;
-      }
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
 
-      h1,
-      h2,
-      h3 {
-        letter-spacing: -0.01em;
-        line-height: 1.2;
-        font-weight: 600;
-        margin-bottom: 0;
-      }
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
 
-      /* Override strong tags inside headings to maintain consistent weight */
-      h1 strong,
-      h2 strong,
-      h3 strong {
-        font-weight: 600;
-      }
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
 
-      .page-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 0.75em;
-      }
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
 
-      h1 {
-        font-size: 1.875rem;
-        margin-top: 1.875rem;
-      }
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
 
-      h2 {
-        font-size: 1.5rem;
-        margin-top: 1.5rem;
-      }
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
 
-      h3 {
-        font-size: 1.25rem;
-        margin-top: 1.25rem;
-      }
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
 
-      .source {
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        padding: 1.5em;
-        word-break: break-all;
-      }
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
 
-      .callout {
-        border-radius: 10px;
-        padding: 1rem;
-      }
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
 
-      /* For default-background callouts, render the border outline. */
-      .callout.block-color-default_background {
-        border: 1px solid rgba(55, 53, 47, 0.09);
-      }
+/* For default-background callouts, render the border outline. */
+.callout.block-color-default_background {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
 
-      figure {
-        margin: 1.25em 0;
-        page-break-inside: avoid;
-      }
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
 
-      /*
+/*
  * Toggles and callouts hold arbitrary content, so they can easily be taller
  * than a page. They must stay breakable: avoiding breaks inside them makes
  * Chromium push the whole block onto the next page, which leaves the previous
  * page mostly empty before every long toggle.
  */
-      details,
-      aside {
-        margin: 1.25em 0;
-      }
+details,
+aside {
+	margin: 1.25em 0;
+}
 
-      /* Keep a toggle's title on the same page as the start of its content. */
-      summary {
-        page-break-after: avoid;
-        break-after: avoid;
-      }
+/* Keep a toggle's title on the same page as the start of its content. */
+summary {
+	page-break-after: avoid;
+	break-after: avoid;
+}
 
-      /*
+/*
  * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
  * <summary>. Without this reset, the heading's margin-top pushes it below the
  * ::marker (▼), so the triangle and the title appear on separate lines.
  */
-      summary h1,
-      summary h2,
-      summary h3,
-      summary h4 {
-        margin-top: 0;
-      }
+summary h1,
+summary h2,
+summary h3,
+summary h4 {
+	margin-top: 0;
+}
 
-      figcaption {
-        opacity: 0.5;
-        font-size: 85%;
-        margin-top: 0.5em;
-      }
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
 
-      mark {
-        background-color: transparent;
-      }
+mark {
+	background-color: transparent;
+}
 
-      .indented {
-        padding-left: 1.5em;
-      }
+.indented {
+	padding-left: 1.5em;
+}
 
-      hr {
-        background: transparent;
-        display: block;
-        width: 100%;
-        height: 1px;
-        visibility: visible;
-        border: none;
-        border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-      }
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
 
-      img {
-        max-width: 100%;
-      }
+img {
+	max-width: 100%;
+}
 
-      @media only print {
-        img {
-          max-height: 100vh;
-          object-fit: contain;
-        }
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
 
-        table.collection-content {
-          width: 100%;
-          table-layout: fixed;
-        }
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
 
-        table.collection-content th,
-        table.collection-content td {
-          overflow-wrap: anywhere;
-        }
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
 
-        table.collection-content td > .user,
-        table.collection-content td > time {
-          white-space: pre-wrap;
-        }
-      }
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
 
-      @page {
-        margin: 1in;
-      }
+@page {
+	margin: 1in;
+}
 
-      .collection-content-wrapper {
-        overflow-x: auto;
-      }
+.collection-content-wrapper {
+	overflow-x: auto;
+}
 
-      @media only print {
-        .collection-content-wrapper {
-          overflow-x: visible;
-        }
-      }
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
 
-      .collection-content {
-        font-size: 0.875rem;
-      }
+.collection-content {
+	font-size: 0.875rem;
+}
 
-      .collection-content td {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
 
-      .column-list {
-        display: flex;
-        gap: 46px;
-      }
+.column-list {
+	display: flex;
+	gap: 46px;
+}
 
-      .column {
-        min-width: 0;
-        overflow: hidden;
-      }
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
 
-      .column > *:first-child {
-        margin-top: 0;
-      }
+.column > *:first-child {
+	margin-top: 0;
+}
 
-      .table_of_contents-item {
-        display: block;
-        font-size: 0.875rem;
-        line-height: 1.3;
-        padding-inline: 0.125rem;
-        padding-block: 0.375rem;
-      }
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding-inline: 0.125rem;
+	padding-block: 0.375rem;
+}
 
-      .table_of_contents-indent-1 {
-        margin-left: 1.5rem;
-      }
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
 
-      .table_of_contents-indent-2 {
-        margin-left: 3rem;
-      }
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
 
-      .table_of_contents-indent-3 {
-        margin-left: 4.5rem;
-      }
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
 
-      .table_of_contents-link {
-        text-decoration: none;
-        opacity: 0.7;
-        border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-      }
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
 
-      table,
-      th,
-      td {
-        border: 1px solid rgba(55, 53, 47, 0.09);
-      }
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
 
-      table {
-        border-collapse: collapse;
-        border-left: none;
-        border-right: none;
-      }
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
 
-      th,
-      td {
-        font-weight: normal;
-        padding: 0.25em 0.5em;
-        line-height: 1.5;
-        min-height: 1.5em;
-        text-align: left;
-      }
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
 
-      th {
-        color: rgba(55, 53, 47, 0.6);
-      }
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
 
-      ol,
-      ul {
-        margin: 0;
-        margin-block-start: 0.6em;
-        margin-block-end: 0.6em;
-      }
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
 
-      li > ol:first-child,
-      li > ul:first-child {
-        margin-block-start: 0.6em;
-      }
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
 
-      ul > li {
-        list-style: disc;
-      }
+ul > li {
+	list-style: disc;
+}
 
-      ul.to-do-list {
-        padding-inline-start: 0;
-      }
+ul.to-do-list {
+	padding-inline-start: 0;
+}
 
-      ul.to-do-list > li {
-        list-style: none;
-      }
+ul.to-do-list > li {
+	list-style: none;
+}
 
-      .to-do-children-checked {
-        text-decoration: line-through;
-        opacity: 0.375;
-      }
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
 
-      ul.toggle > li {
-        list-style: none;
-      }
+ul.toggle > li {
+	list-style: none;
+}
 
-      ul {
-        padding-inline-start: 1.7em;
-      }
+ul {
+	padding-inline-start: 1.7em;
+}
 
-      ul > li {
-        padding-left: 0.1em;
-      }
+ul > li {
+	padding-left: 0.1em;
+}
 
-      ol {
-        padding-inline-start: 1.6em;
-      }
+ol {
+	padding-inline-start: 1.6em;
+}
 
-      ol.numbered-list.numbered-list-digits-2 {
-        padding-inline-start: 2em;
-      }
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
 
-      ol.numbered-list.numbered-list-digits-3plus {
-        padding-inline-start: 2.4em;
-      }
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
 
-      ol > li {
-        padding-left: 0.2em;
-      }
+ol > li {
+	padding-left: 0.2em;
+}
 
-      .mono ol {
-        padding-inline-start: 2em;
-      }
+.mono ol {
+	padding-inline-start: 2em;
+}
 
-      .mono ol > li {
-        text-indent: -0.4em;
-      }
+.mono ol > li {
+	text-indent: -0.4em;
+}
 
-      .toggle {
-        padding-inline-start: 0em;
-        list-style-type: none;
-      }
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
 
-      /* Indent toggle children */
-      .toggle > li > details {
-        padding-left: 1.7em;
-      }
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
 
-      .toggle > li > details > summary {
-        margin-left: -1.1em;
-      }
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
 
-      .selected-value {
-        display: inline-block;
-        padding: 0 0.5em;
-        background: rgba(206, 205, 202, 0.5);
-        border-radius: 3px;
-        margin-right: 0.5em;
-        margin-top: 0.3em;
-        margin-bottom: 0.3em;
-        white-space: nowrap;
-      }
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
 
-      .collection-title {
-        display: inline-block;
-        margin-right: 1em;
-      }
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
 
-      .page-description {
-        margin-bottom: 2em;
-      }
+.page-description {
+	margin-bottom: 2em;
+}
 
-      .simple-table {
-        margin-top: 1em;
-        font-size: 0.875rem;
-        empty-cells: show;
-      }
-      .simple-table td {
-        height: 29px;
-        min-width: 120px;
-      }
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
 
-      .simple-table th {
-        height: 29px;
-        min-width: 120px;
-      }
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
 
-      .simple-table-header-color {
-        background: rgb(247, 246, 243);
-        color: black;
-      }
-      .simple-table-header {
-        font-weight: 500;
-      }
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
 
-      time {
-        opacity: 0.5;
-      }
+time {
+	opacity: 0.5;
+}
 
-      .icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        max-width: 1.2em;
-        max-height: 1.2em;
-        text-decoration: none;
-        vertical-align: text-bottom;
-        margin-right: 0.5em;
-      }
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
 
-      /*
+/*
  * Render emoji icons using a ::before pseudo-element to keep the glyph
  * out of the DOM textContent traversal. This avoids double-rendering icons
  * in callouts and page titles.
  * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
  * flag as a duplicate tag after codegen.
  */
-      .icon[data-emoji]::before {
-        content: attr(data-emoji);
-      }
+.icon[data-emoji]::before {
+	content: attr(data-emoji);
+}
 
-      img.icon {
-        border-radius: 3px;
-      }
+img.icon {
+	border-radius: 3px;
+}
 
-      .callout img.notion-static-icon {
-        width: 1em;
-        height: 1em;
-      }
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
 
-      .callout p {
-        margin: 0;
-      }
+.callout p {
+	margin: 0;
+}
 
-      .callout h1,
-      .callout h2,
-      .callout h3 {
-        margin: 0 0 0.6rem;
-      }
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
 
-      .user-icon {
-        width: 1.5em;
-        height: 1.5em;
-        border-radius: 100%;
-        margin-right: 0.5rem;
-      }
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
 
-      .user-icon-inner {
-        font-size: 0.8em;
-      }
+.user-icon-inner {
+	font-size: 0.8em;
+}
 
-      .text-icon {
-        border: 1px solid #000;
-        text-align: center;
-      }
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
 
-      .page-cover-image {
-        display: block;
-        object-fit: cover;
-        width: 100%;
-        max-height: 30vh;
-      }
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
 
-      .page-header-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-      }
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
 
-      .page-header-icon-with-cover {
-        margin-top: -0.72em;
-        margin-left: 0.07em;
-      }
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
 
-      .page-header-icon img {
-        border-radius: 3px;
-      }
+.page-header-icon img {
+	border-radius: 3px;
+}
 
-      .link-to-page {
-        margin: 1em 0;
-        padding: 0;
-        border: none;
-        font-weight: 500;
-      }
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
 
-      p > .user {
-        opacity: 0.5;
-      }
+p > .user {
+	opacity: 0.5;
+}
 
-      td > .user,
-      td > time {
-        white-space: nowrap;
-      }
+td > .user,
+td > time {
+	white-space: nowrap;
+}
 
-      input[type="checkbox"] {
-        margin-right: 0.4em;
-        vertical-align: middle;
-      }
+input[type="checkbox"] {
+	margin-right: 0.4em;
+	vertical-align: middle;
+}
 
-      p {
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-      }
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
 
-      .image {
-        border: none;
-        margin: 1.5em 0;
-        padding: 0;
-        border-radius: 0;
-        text-align: center;
-      }
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
 
-      .code,
-      code {
-        background: rgba(135, 131, 120, 0.15);
-        border-radius: 3px;
-        padding: 0.2em 0.4em;
-        border-radius: 3px;
-        font-size: 85%;
-        tab-size: 2;
-      }
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
 
-      code {
-        color: #eb5757;
-      }
+code {
+	color: #eb5757;
+}
 
-      .code {
-        padding: 1.5em 1em;
-      }
+.code {
+	padding: 1.5em 1em;
+}
 
-      .code-wrap {
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
 
-      .code > code {
-        background: none;
-        padding: 0;
-        font-size: 100%;
-        color: inherit;
-      }
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
 
-      blockquote {
-        font-size: 1em;
-        margin: 1em 0;
-        padding-left: 1em;
-        border-left: 3px solid rgb(55, 53, 47);
-      }
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
 
-      blockquote.quote-large {
-        font-size: 1.25em;
-      }
+blockquote.quote-large {
+	font-size: 1.25em;
+}
 
-      .bookmark {
-        text-decoration: none;
-        max-height: 8em;
-        padding: 0;
-        display: flex;
-        width: 100%;
-        align-items: stretch;
-      }
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
 
-      .bookmark-title {
-        font-size: 0.85em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 1.75em;
-        white-space: nowrap;
-      }
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
 
-      .bookmark-text {
-        display: flex;
-        flex-direction: column;
-      }
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
 
-      .bookmark-info {
-        flex: 4 1 180px;
-        padding: 12px 14px 14px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
 
-      .bookmark-image {
-        width: 33%;
-        flex: 1 1 180px;
-        display: block;
-        position: relative;
-        object-fit: cover;
-        border-radius: 1px;
-      }
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
 
-      .bookmark-description {
-        color: rgba(55, 53, 47, 0.6);
-        font-size: 0.75em;
-        overflow: hidden;
-        max-height: 4.5em;
-        word-break: break-word;
-      }
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
 
-      .bookmark-href {
-        font-size: 0.75em;
-        margin-top: 0.25em;
-      }
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
 
-      .tab {
-        margin: 1.25em 0;
-        padding-inline: 1rem;
-        border: 1px solid rgba(55, 53, 47, 0.09);
-      }
+.tab {
+	margin: 1.25em 0;
+	padding-inline: 1rem;
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
 
-      .sans {
-        font-family:
-          ui-sans-serif,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI Variable Display",
-          "Segoe UI",
-          Helvetica,
-          "Apple Color Emoji",
-          "Noto Sans Arabic",
-          "Noto Sans Hebrew",
-          Arial,
-          sans-serif,
-          "Segoe UI Emoji",
-          "Segoe UI Symbol";
-      }
-      .code {
-        font-family:
-          "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono",
-          Courier, monospace;
-      }
-      .serif {
-        font-family: Lyon-Text, Georgia, ui-serif, serif;
-      }
-      .mono {
-        font-family: iawriter-mono, Nitti, Menlo, Courier, monospace;
-      }
-      .pdf .sans {
-        font-family:
-          Inter,
-          ui-sans-serif,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI Variable Display",
-          "Segoe UI",
-          Helvetica,
-          "Apple Color Emoji",
-          "Noto Sans Arabic",
-          "Noto Sans Hebrew",
-          Arial,
-          sans-serif,
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans CJK JP";
-      }
-      .pdf:lang(zh-CN) .sans {
-        font-family:
-          Inter,
-          ui-sans-serif,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI Variable Display",
-          "Segoe UI",
-          Helvetica,
-          "Apple Color Emoji",
-          "Noto Sans Arabic",
-          "Noto Sans Hebrew",
-          Arial,
-          sans-serif,
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans CJK SC";
-      }
-      .pdf:lang(zh-TW) .sans {
-        font-family:
-          Inter,
-          ui-sans-serif,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI Variable Display",
-          "Segoe UI",
-          Helvetica,
-          "Apple Color Emoji",
-          "Noto Sans Arabic",
-          "Noto Sans Hebrew",
-          Arial,
-          sans-serif,
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans CJK TC";
-      }
-      .pdf:lang(ko-KR) .sans {
-        font-family:
-          Inter,
-          ui-sans-serif,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI Variable Display",
-          "Segoe UI",
-          Helvetica,
-          "Apple Color Emoji",
-          "Noto Sans Arabic",
-          "Noto Sans Hebrew",
-          Arial,
-          sans-serif,
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans CJK KR";
-      }
-      .pdf .code {
-        font-family:
-          Source Code Pro,
-          "SFMono-Regular",
-          Menlo,
-          Consolas,
-          "PT Mono",
-          "Liberation Mono",
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK JP";
-      }
-      .pdf:lang(zh-CN) .code {
-        font-family:
-          Source Code Pro,
-          "SFMono-Regular",
-          Menlo,
-          Consolas,
-          "PT Mono",
-          "Liberation Mono",
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK SC";
-      }
-      .pdf:lang(zh-TW) .code {
-        font-family:
-          Source Code Pro,
-          "SFMono-Regular",
-          Menlo,
-          Consolas,
-          "PT Mono",
-          "Liberation Mono",
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK TC";
-      }
-      .pdf:lang(ko-KR) .code {
-        font-family:
-          Source Code Pro,
-          "SFMono-Regular",
-          Menlo,
-          Consolas,
-          "PT Mono",
-          "Liberation Mono",
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK KR";
-      }
-      .pdf .serif {
-        font-family:
-          PT Serif,
-          Lyon-Text,
-          Georgia,
-          ui-serif,
-          serif,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Serif CJK JP";
-      }
-      .pdf:lang(zh-CN) .serif {
-        font-family:
-          PT Serif,
-          Lyon-Text,
-          Georgia,
-          ui-serif,
-          serif,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Serif CJK SC";
-      }
-      .pdf:lang(zh-TW) .serif {
-        font-family:
-          PT Serif,
-          Lyon-Text,
-          Georgia,
-          ui-serif,
-          serif,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Serif CJK TC";
-      }
-      .pdf:lang(ko-KR) .serif {
-        font-family:
-          PT Serif,
-          Lyon-Text,
-          Georgia,
-          ui-serif,
-          serif,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Serif CJK KR";
-      }
-      .pdf .mono {
-        font-family:
-          PT Mono,
-          iawriter-mono,
-          Nitti,
-          Menlo,
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK JP";
-      }
-      .pdf:lang(zh-CN) .mono {
-        font-family:
-          PT Mono,
-          iawriter-mono,
-          Nitti,
-          Menlo,
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK SC";
-      }
-      .pdf:lang(zh-TW) .mono {
-        font-family:
-          PT Mono,
-          iawriter-mono,
-          Nitti,
-          Menlo,
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK TC";
-      }
-      .pdf:lang(ko-KR) .mono {
-        font-family:
-          PT Mono,
-          iawriter-mono,
-          Nitti,
-          Menlo,
-          Courier,
-          monospace,
-          "Twemoji",
-          "Noto Color Emoji",
-          "Noto Sans Mono CJK KR";
-      }
-      .highlight-default {
-        color: rgba(44, 44, 43, 1);
-      }
-      .highlight-gray {
-        color: rgba(125, 122, 117, 1);
-        fill: rgba(125, 122, 117, 1);
-      }
-      .highlight-brown {
-        color: rgba(159, 118, 90, 1);
-        fill: rgba(159, 118, 90, 1);
-      }
-      .highlight-orange {
-        color: rgba(210, 123, 45, 1);
-        fill: rgba(210, 123, 45, 1);
-      }
-      .highlight-yellow {
-        color: rgba(203, 148, 52, 1);
-        fill: rgba(203, 148, 52, 1);
-      }
-      .highlight-teal {
-        color: rgba(80, 148, 110, 1);
-        fill: rgba(80, 148, 110, 1);
-      }
-      .highlight-blue {
-        color: rgba(56, 125, 201, 1);
-        fill: rgba(56, 125, 201, 1);
-      }
-      .highlight-purple {
-        color: rgba(154, 107, 180, 1);
-        fill: rgba(154, 107, 180, 1);
-      }
-      .highlight-pink {
-        color: rgba(193, 76, 138, 1);
-        fill: rgba(193, 76, 138, 1);
-      }
-      .highlight-red {
-        color: rgba(207, 81, 72, 1);
-        fill: rgba(207, 81, 72, 1);
-      }
-      .highlight-default_background {
-        color: rgba(44, 44, 43, 1);
-      }
-      .highlight-gray_background {
-        background: rgba(42, 28, 0, 0.07);
-      }
-      .highlight-brown_background {
-        background: rgba(139, 46, 0, 0.086);
-      }
-      .highlight-orange_background {
-        background: rgba(224, 101, 1, 0.129);
-      }
-      .highlight-yellow_background {
-        background: rgba(211, 168, 0, 0.137);
-      }
-      .highlight-teal_background {
-        background: rgba(0, 100, 45, 0.09);
-      }
-      .highlight-blue_background {
-        background: rgba(0, 124, 215, 0.094);
-      }
-      .highlight-purple_background {
-        background: rgba(102, 0, 178, 0.078);
-      }
-      .highlight-pink_background {
-        background: rgba(197, 0, 93, 0.086);
-      }
-      .highlight-red_background {
-        background: rgba(223, 22, 0, 0.094);
-      }
-      .block-color-default {
-        color: inherit;
-        fill: inherit;
-      }
-      .block-color-gray {
-        color: rgba(125, 122, 117, 1);
-        fill: rgba(125, 122, 117, 1);
-      }
-      .block-color-brown {
-        color: rgba(159, 118, 90, 1);
-        fill: rgba(159, 118, 90, 1);
-      }
-      .block-color-orange {
-        color: rgba(210, 123, 45, 1);
-        fill: rgba(210, 123, 45, 1);
-      }
-      .block-color-yellow {
-        color: rgba(203, 148, 52, 1);
-        fill: rgba(203, 148, 52, 1);
-      }
-      .block-color-teal {
-        color: rgba(80, 148, 110, 1);
-        fill: rgba(80, 148, 110, 1);
-      }
-      .block-color-blue {
-        color: rgba(56, 125, 201, 1);
-        fill: rgba(56, 125, 201, 1);
-      }
-      .block-color-purple {
-        color: rgba(154, 107, 180, 1);
-        fill: rgba(154, 107, 180, 1);
-      }
-      .block-color-pink {
-        color: rgba(193, 76, 138, 1);
-        fill: rgba(193, 76, 138, 1);
-      }
-      .block-color-red {
-        color: rgba(207, 81, 72, 1);
-        fill: rgba(207, 81, 72, 1);
-      }
-      .block-color-default_background {
-        color: inherit;
-        fill: inherit;
-      }
-      .block-color-gray_background {
-        background: rgba(240, 239, 237, 1);
-      }
-      .block-color-brown_background {
-        background: rgba(245, 237, 233, 1);
-      }
-      .block-color-orange_background {
-        background: rgba(251, 235, 222, 1);
-      }
-      .block-color-yellow_background {
-        background: rgba(249, 243, 220, 1);
-      }
-      .block-color-teal_background {
-        background: rgba(232, 241, 236, 1);
-      }
-      .block-color-blue_background {
-        background: rgba(229, 242, 252, 1);
-      }
-      .block-color-purple_background {
-        background: rgba(243, 235, 249, 1);
-      }
-      .block-color-pink_background {
-        background: rgba(250, 233, 241, 1);
-      }
-      .block-color-red_background {
-        background: rgba(252, 233, 231, 1);
-      }
-      .select-value-color-default {
-        background-color: rgba(42, 28, 0, 0.07);
-      }
-      .select-value-color-gray {
-        background-color: rgba(28, 19, 1, 0.11);
-      }
-      .select-value-color-brown {
-        background-color: rgba(127, 51, 0, 0.156);
-      }
-      .select-value-color-orange {
-        background-color: rgba(196, 88, 0, 0.203);
-      }
-      .select-value-color-yellow {
-        background-color: rgba(209, 156, 0, 0.282);
-      }
-      .select-value-color-green {
-        background-color: rgba(0, 96, 38, 0.156);
-      }
-      .select-value-color-blue {
-        background-color: rgba(0, 118, 217, 0.203);
-      }
-      .select-value-color-purple {
-        background-color: rgba(92, 0, 163, 0.141);
-      }
-      .select-value-color-pink {
-        background-color: rgba(183, 0, 78, 0.152);
-      }
-      .select-value-color-red {
-        background-color: rgba(206, 24, 0, 0.164);
-      }
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
 
-      .checkbox {
-        display: inline-flex;
-        vertical-align: text-bottom;
-        width: 16;
-        height: 16;
-        background-size: 16px;
-        margin-left: 2px;
-        margin-right: 5px;
-      }
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
 
-      .checkbox-on {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-      }
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
 
-      .checkbox-off {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-      }
-    </style>
-    <style>
-      @import url("https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css");
-    </style>
-  </head>
-  <body>
-    <article
-      id="39f2663e-2414-80e0-9850-ebdfb33f0698"
-      class="page sans"
-      data-notion-page-icon="📔"
-    >
-      <header>
-        <div class="page-header-icon undefined">
-          <span class="icon" data-emoji="📔"></span>
-        </div>
-        <h1 class="page-title" dir="auto">Estándares de desarrollo Frontend</h1>
-        <p class="page-description" dir="auto"></p>
-      </header>
-      <div class="page-body">
-        <nav
-          id="3a32663e-2414-8097-ae20-d9ba06cf97b2"
-          class="block-color-gray table_of_contents"
-          data-notion-highlight="gray"
-          data-notion-toc=""
-          dir="ltr"
-        >
-          <div class="table_of_contents-item table_of_contents-indent-0">
-            <a
-              class="table_of_contents-link"
-              href="#3a02663e-2414-80d5-bb8a-ff7d4753e644"
-              >1 Principios generales</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-0">
-            <a
-              class="table_of_contents-link"
-              href="#3a52663e-2414-8013-956f-ff2dd38c5f6c"
-              >2 Estándares de Documentación de Código</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a52663e-2414-807b-9651-db4837d144c1"
-              >2.1 Clases</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a52663e-2414-8068-9b8a-cd740fe6ebc2"
-              >2.2 Funciones</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a52663e-2414-80c0-9f2e-c38fb71633f8"
-              >2.3 Variables y constantes</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-0">
-            <a
-              class="table_of_contents-link"
-              href="#3a02663e-2414-809f-99ba-f2386b1cd069"
-              >3 Tipado</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-0">
-            <a
-              class="table_of_contents-link"
-              href="#3a02663e-2414-8016-9d7b-d11b0f4ff3e5"
-              >4 Definición de Data Transfer Objects (DTO)</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a02663e-2414-8026-b12a-ff3381aa8ce2"
-              >4.1 Interfaz base</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-80fc-abf3-f7816e5932f6"
-              >4.2 Tipos de DTO por entidad</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-8010-aaa0-f3df1f1fcb5d"
-              >4.3 Ubicación de modelos</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-0">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-8029-8eeb-ee42841f6953"
-              >5 Componentes</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-8099-8772-e23db238beec"
-              >5.1 Convención de nombres</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-80e9-a983-c6b28364c436"
-              >5.2 Orden general de variables y funciones</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-8005-85c0-f6fab20f3b4c"
-              >5.3 Componentes de listado</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-2">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-80dd-95b2-ce19ca18bc0d"
-              >Herencia</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-2">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-8024-a28d-e32efd2981cb"
-              >Orden de variables y funciones</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-2">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-8076-beb5-de6008d1a629"
-              >getPaginated</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-802d-9dc8-ea0dd54c99c3"
-              >5.4 Componentes de formulario</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-2">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-80d1-9279-d32bf1546eb7"
-              >Herencia</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-2">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-80a7-ad1b-f8150baaf39c"
-              >Orden de variables y funciones</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-2">
-            <a
-              class="table_of_contents-link"
-              href="#3a42663e-2414-80a8-8bcd-cfd631bc20bc"
-              >onSubmit</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-0">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-80f2-8538-d08f33950b27"
-              >6 Servicios</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-80da-a53f-effcc612ec2f"
-              >6.1 Convención de nombres</a
-            >
-          </div>
-          <div class="table_of_contents-item table_of_contents-indent-1">
-            <a
-              class="table_of_contents-link"
-              href="#3a32663e-2414-80da-9718-fc79d510aafa"
-              >6.2 Herencia de servicio base</a
-            >
-          </div>
-        </nav>
-        <h1 id="3a02663e-2414-80d5-bb8a-ff7d4753e644" class="" dir="auto">
-          1 Principios generales
-        </h1>
-        <ul
-          id="3a02663e-2414-8012-b1dc-cedc4a6458e9"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Explícito antes que implícito.</strong> El nombre de una
-            variable, función o clase debe decir qué hace, sin necesidad de leer
-            su implementación.
-          </li>
-        </ul>
-        <ul
-          id="3a02663e-2414-8066-865c-f650fd9f3973"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Consistencia sobre preferencia personal.</strong> Si el
-            manual dice cómo se hace, se hace así, aunque exista otra forma
-            &quot;igual de válida&quot;.
-          </li>
-        </ul>
-        <ul
-          id="3a42663e-2414-80c1-b1ac-dea495496599"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Finalización con punto y coma:</strong> Todas las líneas de
-            código se tiene que finalizar con punto y coma (<code>;</code>).
-          </li>
-        </ul>
-        <ul
-          id="3a42663e-2414-8054-9917-fbab6f05cba0"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Nombre de clases, funciones y variables:</strong> Para el
-            nombramiento se siguen las siguientes reglas:
-            <ul
-              id="3a42663e-2414-8099-9ad7-e57a9e46d25c"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <strong>Clases:</strong> Utilizar UpperCamelCase. Se define
-                <code>Usuario</code>, <code>CategoriaPermiso</code>.
-              </li>
-            </ul>
-            <ul
-              id="3a42663e-2414-80eb-935e-f06ad36e2553"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <strong>Variables y funciones:</strong> Utilizar CamelCase. Por
-                ejemplo <code>id</code>, <code>userName</code>,
-                <code>getFechaCambio</code>.
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul
-          id="3a02663e-2414-80c9-82f6-f6550ece93d9"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Todo el código nuevo se tipa.</strong> No se permite
-            <code>any</code> salvo excepción justificada y comentada.
-          </li>
-        </ul>
-        <ul
-          id="3a02663e-2414-80cd-a425-e44fd3b12795"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Idioma:</strong> Los nombres se definen en dependencia de
-            qué se está creando:
-            <ul
-              id="3a02663e-2414-805c-9086-c78b2fb618b8"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Variables y funciones: <strong>Inglés,</strong> salvo nombres de
-                entidades/atributos que mantienen. (loadData, getSucursal,
-                showNombre).
-              </li>
-            </ul>
-            <ul
-              id="3a02663e-2414-80e0-bdaa-c0fccc53e52c"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Clases e interfaces: <strong>Español</strong>, respetando el
-                nombre de tabla/columna que define el backend. Se pueden
-                utilizar palabras en Ingles en determinados casos específicos.
-              </li>
-            </ul>
-            <ul
-              id="3a02663e-2414-80b0-ade8-edc973fae68b"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Comentarios y documentación: <strong>Español.</strong>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <h1 id="3a52663e-2414-8013-956f-ff2dd38c5f6c" class="" dir="auto">
-          2 Estándares de Documentación de Código
-        </h1>
-        <p id="3a52663e-2414-8099-b93a-ff4202f41452" class="" dir="auto">
-          El objetivo de la documentación de código no es explicar qué hace cada
-          línea, sino comunicar la <strong>intención y el propósito</strong>.
-        </p>
-        <p id="3a52663e-2414-8065-882a-c4b2e1863244" class="" dir="auto">
-          Para mantener una documentación útil y sostenible en el tiempo sin
-          generar mantenimiento innecesario, la regla rectora del proyecto es la
-          documentación basada en la reutilización<strong>. </strong>Es
-          <strong>estrictamente obligatorio</strong> documentar toda clase,
-          función, variable, interfaz o constante que esté diseñada para ser
-          <strong>compartida y utilizada en múltiples partes del sistema</strong
-          >.
-        </p>
-        <h2 id="3a52663e-2414-807b-9651-db4837d144c1" class="" dir="auto">
-          2.1 Clases
-        </h2>
-        <p id="3a52663e-2414-80d5-874f-ecdc8f1b9d0f" class="" dir="auto">
-          Se describe la responsabilidad general de la clase.
-        </p>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
-          integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-        ></script>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
-          integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-        />
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"
-          integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-        ></script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"
-          integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-        ></script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"
-          integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-        ></script>
-        <pre
-          id="3a52663e-2414-8044-b173-e023272be8a7"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">/**
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="39f2663e-2414-80e0-9850-ebdfb33f0698" class="page sans" data-notion-page-icon="📔"><header><div class="page-header-icon undefined"><span class="icon" data-emoji="📔"></span></div><h1 class="page-title" dir="auto">Estándares de desarrollo Frontend</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><nav id="3a32663e-2414-8097-ae20-d9ba06cf97b2" class="block-color-gray table_of_contents" data-notion-highlight="gray" data-notion-toc="" dir="ltr"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a02663e-2414-80d5-bb8a-ff7d4753e644">1 Principios generales</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a52663e-2414-8013-956f-ff2dd38c5f6c">2 Estándares de Documentación de Código</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a52663e-2414-807b-9651-db4837d144c1">2.1 Clases</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a52663e-2414-8068-9b8a-cd740fe6ebc2">2.2 Funciones</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a52663e-2414-80c0-9f2e-c38fb71633f8">2.3 Variables y constantes</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a02663e-2414-809f-99ba-f2386b1cd069">3 Tipado</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a02663e-2414-8016-9d7b-d11b0f4ff3e5">4 Definición de Data Transfer Objects (DTO)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a02663e-2414-8026-b12a-ff3381aa8ce2">4.1 Interfaz base</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a32663e-2414-80fc-abf3-f7816e5932f6">4.2 Tipos de DTO por entidad</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a32663e-2414-8010-aaa0-f3df1f1fcb5d">4.3 Ubicación de modelos</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a32663e-2414-8029-8eeb-ee42841f6953">5 Componentes</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a32663e-2414-8099-8772-e23db238beec">5.1 Convención de nombres</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a42663e-2414-80e9-a983-c6b28364c436">5.2 Orden general de variables y funciones</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a42663e-2414-8005-85c0-f6fab20f3b4c">5.3 Componentes de listado</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a42663e-2414-80dd-95b2-ce19ca18bc0d">Herencia</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a42663e-2414-8024-a28d-e32efd2981cb">Orden de variables y funciones</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a42663e-2414-8076-beb5-de6008d1a629">getPaginated</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a32663e-2414-802d-9dc8-ea0dd54c99c3">5.4 Componentes de formulario</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a42663e-2414-80d1-9279-d32bf1546eb7">Herencia</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a42663e-2414-80a7-ad1b-f8150baaf39c">Orden de variables y funciones</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3a42663e-2414-80a8-8bcd-cfd631bc20bc">onSubmit</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a32663e-2414-80f2-8538-d08f33950b27">6 Servicios</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a32663e-2414-80da-a53f-effcc612ec2f">6.1 Convención de nombres</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a32663e-2414-80da-9718-fc79d510aafa">6.2 Herencia de servicio base</a></div></nav><h1 id="3a02663e-2414-80d5-bb8a-ff7d4753e644" class="" dir="auto">1 Principios generales</h1><ul id="3a02663e-2414-8012-b1dc-cedc4a6458e9" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Explícito antes que implícito.</strong> El nombre de una variable, función o clase debe decir qué hace, sin necesidad de leer su implementación.</li></ul><ul id="3a02663e-2414-8066-865c-f650fd9f3973" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Consistencia sobre preferencia personal.</strong> Si el manual dice cómo se hace, se hace así, aunque exista otra forma &quot;igual de válida&quot;.</li></ul><ul id="3a42663e-2414-80c1-b1ac-dea495496599" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Finalización con punto y coma:</strong> Todas las líneas de código se tiene que finalizar con punto y coma (<code>;</code>).</li></ul><ul id="3a42663e-2414-8054-9917-fbab6f05cba0" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Nombre de clases, funciones y variables:</strong> Para el nombramiento se siguen las siguientes reglas:<ul id="3a42663e-2414-8099-9ad7-e57a9e46d25c" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><strong>Clases:</strong> Utilizar UpperCamelCase. Se define <code>Usuario</code>, <code>CategoriaPermiso</code>.</li></ul><ul id="3a42663e-2414-80eb-935e-f06ad36e2553" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><strong>Variables y funciones:</strong> Utilizar CamelCase. Por ejemplo <code>id</code>, <code>userName</code>, <code>getFechaCambio</code>.</li></ul></li></ul><ul id="3a02663e-2414-80c9-82f6-f6550ece93d9" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Todo el código nuevo se tipa.</strong> No se permite <code>any</code> salvo excepción justificada y comentada.</li></ul><ul id="3a02663e-2414-80cd-a425-e44fd3b12795" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Idioma:</strong> Los nombres se definen en dependencia de qué se está creando:<ul id="3a02663e-2414-805c-9086-c78b2fb618b8" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Variables y funciones: <strong>Inglés,</strong> salvo nombres de entidades/atributos que mantienen. (loadData, getSucursal, showNombre).</li></ul><ul id="3a02663e-2414-80e0-bdaa-c0fccc53e52c" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Clases e interfaces: <strong>Español</strong>, respetando el nombre de tabla/columna que define el backend. Se pueden utilizar palabras en Ingles en determinados casos específicos.</li></ul><ul id="3a02663e-2414-80b0-ade8-edc973fae68b" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Comentarios y documentación: <strong>Español.</strong></li></ul></li></ul><h1 id="3a52663e-2414-8013-956f-ff2dd38c5f6c" class="" dir="auto">2 Estándares de Documentación de Código</h1><p id="3a52663e-2414-8099-b93a-ff4202f41452" class="" dir="auto">El objetivo de la documentación de código no es explicar qué hace cada línea, sino comunicar la <strong>intención y el propósito</strong>.</p><p id="3a52663e-2414-8065-882a-c4b2e1863244" class="" dir="auto">Para mantener una documentación útil y sostenible en el tiempo sin generar mantenimiento innecesario, la regla rectora del proyecto es la documentación basada en la reutilización<strong>. </strong>Es <strong>estrictamente obligatorio</strong> documentar toda clase, función, variable, interfaz o constante que esté diseñada para ser <strong>compartida y utilizada en múltiples partes del sistema</strong>.</p><h2 id="3a52663e-2414-807b-9651-db4837d144c1" class="" dir="auto">2.1 Clases</h2><p id="3a52663e-2414-80d5-874f-ecdc8f1b9d0f" class="" dir="auto">Se describe la responsabilidad general de la clase.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js" integrity="sha512-m3JYEI6gx5fh9jF10FjGoMzVKcV2N6nchcDcqPCdI1L3R2WQV7br2XVNR8iTLb2daOMRl3zldbcfT40xU2ntVw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js" integrity="sha512-uOw7XYETzS/DPmmirpP5UCMihSDNMeyTS965J0/456OSPfxn9xEtHHjj5Q/5WefVdqyMfN/afmQnNpZd/tpkcA==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js" integrity="sha512-xjGCJ9YxyZBfYTCHsEjkOZMoOse1W3cKMXv1szXrxs68myuXt0YTj3/xKPar6iDMlXzTUSEqwUxprWcyp+plaw==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><pre id="3a52663e-2414-8044-b173-e023272be8a7" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">/**
 * Clase de ejemplo para escribir documentación.
 */
 class MiClase {
 	...
-}</code></pre>
-        <h2 id="3a52663e-2414-8068-9b8a-cd740fe6ebc2" class="" dir="auto">
-          2.2 Funciones
-        </h2>
-        <p id="3a52663e-2414-807c-9bd4-cf211b1fa826" class="" dir="auto">
-          Se brinda una breve descripción y se indican principalmente los
-          parámetros que recibe (<code>@param</code>) y lo que retorna
-          (<code>@returns</code>).
-        </p>
-        <pre
-          id="3a52663e-2414-8068-bf2e-fcd394823c03"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">/**
+}</code></pre><h2 id="3a52663e-2414-8068-9b8a-cd740fe6ebc2" class="" dir="auto">2.2 Funciones</h2><p id="3a52663e-2414-807c-9bd4-cf211b1fa826" class="" dir="auto">Se brinda una breve descripción y se indican principalmente los parámetros que recibe (<code>@param</code>) y lo que retorna (<code>@returns</code>).</p><pre id="3a52663e-2414-8068-bf2e-fcd394823c03" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">/**
 * Desripción de corta del proposito de la función.
 * @param usuarioId - Id del usuario creador de los comentarios.
 * @param size - Número de comentarios que se quieren obtener.
@@ -1449,235 +804,13 @@ class MiClase {
 */
 getComentariosUsuario(usuarioId: number, size: number=10): string[] {
 	return [];
-}</code></pre>
-        <h2 id="3a52663e-2414-80c0-9f2e-c38fb71633f8" class="" dir="auto">
-          2.3 Variables y constantes
-        </h2>
-        <p id="3a52663e-2414-80aa-9409-e795649c8291" class="" dir="auto">
-          Se define el propósito de la variable/constante.
-        </p>
-        <pre
-          id="3a52663e-2414-80c1-8f14-de9beb33dc73"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">/**
+}</code></pre><h2 id="3a52663e-2414-80c0-9f2e-c38fb71633f8" class="" dir="auto">2.3 Variables y constantes</h2><p id="3a52663e-2414-80aa-9409-e795649c8291" class="" dir="auto">Se define el propósito de la variable/constante.</p><pre id="3a52663e-2414-80c1-8f14-de9beb33dc73" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">/**
 * Limite de tiempo para cierre de registros.
 */
-limiteTiempo: number = 45;</code></pre>
-        <h1 id="3a02663e-2414-809f-99ba-f2386b1cd069" class="" dir="auto">
-          3 Tipado
-        </h1>
-        <ul
-          id="3a02663e-2414-803e-af5f-fe772a788272"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Obligatorio tipar:</strong>
-            <ul
-              id="3a02663e-2414-8021-aa14-dfc74189861a"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">Parámetros de funciones.</li>
-            </ul>
-            <ul
-              id="3a02663e-2414-805b-8cbe-ebef45e613ba"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Valores de retorno de funciones (no depender solo de inferencia
-                en funciones públicas/exportadas).
-              </li>
-            </ul>
-            <ul
-              id="3a02663e-2414-80dc-b401-e2503cda5d36"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Propiedades de clases e interfaces.
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul
-          id="3a02663e-2414-8034-b18f-f3dbec6c4619"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            <strong>Prohibido:</strong>
-            <ul
-              id="3a02663e-2414-8075-accd-fe773ef366b0"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Usar <code>any</code> como salida fácil.
-              </li>
-            </ul>
-            <ul
-              id="3a02663e-2414-8074-85f8-ebec66a8d7f1"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                Tipos implícitos en funciones exportadas (aunque TypeScript los
-                infiera, se declaran explícitamente para que el tipado sea
-                visible sin ir a la implementación).
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <h1 id="3a02663e-2414-8016-9d7b-d11b0f4ff3e5" class="" dir="auto">
-          4 Definición de Data Transfer Objects (DTO)
-        </h1>
-        <p id="3a32663e-2414-809c-bc43-ce659d7e84ae" class="" dir="auto">
-          Todo DTO que representa una entidad de base de datos debe de tener su
-          propio archivo para definir interfaces. El nombre del archivo tiene el
-          siguiente formato <code>&lt;nombre-entidad&gt;.model.ts</code> y se
-          establecen en la siguiente ruta:
-          <code>src/app/shared/models/&lt;modulo&gt;/</code>
-        </p>
-        <h2 id="3a02663e-2414-8026-b12a-ff3381aa8ce2" class="" dir="auto">
-          4.1 Interfaz base
-        </h2>
-        <p id="3a02663e-2414-805e-bf9c-c12dfa9b4ef5" class="" dir="auto">
-          Todo DTO que representa una entidad de base de datos define su propia
-          interfaz <code>Base</code> que agrupa los campos comunes y es
-          extendida por las otras interfaces.
-        </p>
-        <figure
-          id="3a32663e-2414-8067-8fff-c9f159e35fd4"
-          data-notion-code-syntax="tsx"
-        >
-          <pre
-            class="code code-wrap"
-            data-notion-code-syntax="tsx"
-          ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">interface Base {
+limiteTiempo: number = 45;</code></pre><h1 id="3a02663e-2414-809f-99ba-f2386b1cd069" class="" dir="auto">3 Tipado</h1><ul id="3a02663e-2414-803e-af5f-fe772a788272" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Obligatorio tipar:</strong><ul id="3a02663e-2414-8021-aa14-dfc74189861a" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Parámetros de funciones.</li></ul><ul id="3a02663e-2414-805b-8cbe-ebef45e613ba" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Valores de retorno de funciones (no depender solo de inferencia en funciones públicas/exportadas).</li></ul><ul id="3a02663e-2414-80dc-b401-e2503cda5d36" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Propiedades de clases e interfaces.</li></ul></li></ul><ul id="3a02663e-2414-8034-b18f-f3dbec6c4619" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Prohibido:</strong><ul id="3a02663e-2414-8075-accd-fe773ef366b0" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Usar <code>any</code> como salida fácil.</li></ul><ul id="3a02663e-2414-8074-85f8-ebec66a8d7f1" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Tipos implícitos en funciones exportadas (aunque TypeScript los infiera, se declaran explícitamente para que el tipado sea visible sin ir a la implementación).</li></ul></li></ul><h1 id="3a02663e-2414-8016-9d7b-d11b0f4ff3e5" class="" dir="auto">4 Definición de Data Transfer Objects (DTO)</h1><p id="3a32663e-2414-809c-bc43-ce659d7e84ae" class="" dir="auto">Todo DTO que representa una entidad de base de datos debe de tener su propio archivo para definir interfaces. El nombre del archivo tiene el siguiente formato <code>&lt;nombre-entidad&gt;.model.ts</code> y se establecen en la siguiente ruta: <code>src/app/shared/models/&lt;modulo&gt;/</code></p><h2 id="3a02663e-2414-8026-b12a-ff3381aa8ce2" class="" dir="auto">4.1 Interfaz base</h2><p id="3a02663e-2414-805e-bf9c-c12dfa9b4ef5" class="" dir="auto">Todo DTO que representa una entidad de base de datos define su propia interfaz <code>Base</code> que agrupa los campos comunes y es extendida por las otras interfaces.</p><figure id="3a32663e-2414-8067-8fff-c9f159e35fd4" data-notion-code-syntax="tsx"><pre class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">interface Base {
 	campoUno: string;
 	campoDos: number;
-}</code></pre>
-          <figcaption>
-            <strong>Nota:</strong> Esta interfaz no se exporta.
-          </figcaption>
-        </figure>
-        <h2 id="3a32663e-2414-80fc-abf3-f7816e5932f6" class="" dir="auto">
-          4.2 Tipos de DTO por entidad
-        </h2>
-        <p id="3a32663e-2414-80c7-a016-cd94a88df61f" class="" dir="auto">
-          Cada entidad tiene variantes, según el uso y extienden de la primera
-          interfaz <code>Base</code>.
-        </p>
-        <table
-          id="3a32663e-2414-8096-90fd-f59783028913"
-          class="simple-table"
-          dir="ltr"
-        >
-          <thead class="simple-table-header">
-            <tr id="3a32663e-2414-8076-bf1c-c9ba8df2749c" dir="ltr">
-              <th
-                id="gPL?"
-                class="simple-table-header-color simple-table-header"
-                style="width: 310.65972900390625px"
-              >
-                Uso
-              </th>
-              <th
-                id=":VDS"
-                class="simple-table-header-color simple-table-header"
-                style="width: 235.65972900390625px"
-              >
-                Nombre
-              </th>
-              <th
-                id="od@b"
-                class="simple-table-header-color simple-table-header"
-                style="width: 235.66666666666666px"
-              >
-                Extiende
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr id="3a62663e-2414-8083-a8e0-d52ce53f3ac0" dir="ltr">
-              <td id="gPL?" class="" style="width: 310.65972900390625px">
-                Campos propios de la entidad
-              </td>
-              <td id=":VDS" class="" style="width: 235.65972900390625px">
-                <code>&lt;Entidad&gt;Base</code>
-              </td>
-              <td id="od@b" class="" style="width: 235.66666666666666px"></td>
-            </tr>
-            <tr id="3a62663e-2414-80c0-b3fc-fb0bd02ee636" dir="ltr">
-              <td id="gPL?" class="" style="width: 310.65972900390625px">
-                Respuesta genérica para <code>POST</code>, <code>PUT</code>,
-                <code>PATCH</code>
-              </td>
-              <td id=":VDS" class="" style="width: 235.65972900390625px">
-                <code>&lt;Entidad&gt;DTO</code>
-              </td>
-              <td id="od@b" class="" style="width: 235.66666666666666px">
-                <code>&lt;Entidad&gt;Base</code> (agregar <code>id</code>)
-              </td>
-            </tr>
-            <tr id="3a32663e-2414-8008-9dd6-ef1a22ff60a0" dir="ltr">
-              <td id="gPL?" class="" style="width: 310.65972900390625px">
-                Detalle completo (detail)
-              </td>
-              <td id=":VDS" class="" style="width: 235.65972900390625px">
-                <code>&lt;Entidad&gt;SingleDTO</code>
-              </td>
-              <td id="od@b" class="" style="width: 235.66666666666666px">
-                <code>&lt;Entidad&gt;DTO</code>
-              </td>
-            </tr>
-            <tr id="3a32663e-2414-80a7-ace4-ec8242f74ad8" dir="ltr">
-              <td id="gPL?" class="" style="width: 310.65972900390625px">
-                Listado (tablas, selects)
-              </td>
-              <td id=":VDS" class="" style="width: 235.65972900390625px">
-                <code>&lt;Entidad&gt;ListDTO</code>
-              </td>
-              <td id="od@b" class="" style="width: 235.66666666666666px">
-                <code>&lt;Entidad&gt;DTO</code>
-              </td>
-            </tr>
-            <tr id="3a32663e-2414-8012-8fbb-dc8cb0396bf4" dir="ltr">
-              <td id="gPL?" class="" style="width: 310.65972900390625px">
-                Creación
-              </td>
-              <td id=":VDS" class="" style="width: 235.65972900390625px">
-                <code>&lt;Entidad&gt;CreateDTO</code>
-              </td>
-              <td id="od@b" class="" style="width: 235.66666666666666px">
-                <code>&lt;Entidad&gt;Base</code>
-              </td>
-            </tr>
-            <tr id="3a32663e-2414-8079-bb45-cdc4cc92ce86" dir="ltr">
-              <td id="gPL?" class="" style="width: 310.65972900390625px">
-                Edición (PUT: Si es necesario)
-              </td>
-              <td id=":VDS" class="" style="width: 235.65972900390625px">
-                <code>&lt;Entidad&gt;UpdateDTO</code>
-              </td>
-              <td id="od@b" class="" style="width: 235.66666666666666px">
-                <code>&lt;Entidad&gt;Base</code>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p id="3a32663e-2414-8066-84d6-d2d7c68d9637" class="" dir="auto">
-          Ejemplo con entidad <code>sucursal</code>: Nombre del archivo
-          <code>sucursal.model.ts</code>
-        </p>
-        <pre
-          id="3a32663e-2414-806c-8366-d808a0f023c2"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">interface SucursalBase {
+}</code></pre><figcaption><strong>Nota:</strong> Esta interfaz no se exporta.</figcaption></figure><h2 id="3a32663e-2414-80fc-abf3-f7816e5932f6" class="" dir="auto">4.2 Tipos de DTO por entidad</h2><p id="3a32663e-2414-80c7-a016-cd94a88df61f" class="" dir="auto">Cada entidad tiene variantes, según el uso y extienden de la primera interfaz <code>Base</code>.</p><table id="3a32663e-2414-8096-90fd-f59783028913" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="3a32663e-2414-8076-bf1c-c9ba8df2749c" dir="ltr"><th id="gPL?" class="simple-table-header-color simple-table-header" style="width:310.65972900390625px">Uso</th><th id=":VDS" class="simple-table-header-color simple-table-header" style="width:235.65972900390625px">Nombre</th><th id="od@b" class="simple-table-header-color simple-table-header" style="width:235.66666666666666px">Extiende</th></tr></thead><tbody><tr id="3a62663e-2414-8083-a8e0-d52ce53f3ac0" dir="ltr"><td id="gPL?" class="" style="width:310.65972900390625px">Campos propios de la entidad</td><td id=":VDS" class="" style="width:235.65972900390625px"><code>&lt;Entidad&gt;Base</code></td><td id="od@b" class="" style="width:235.66666666666666px"></td></tr><tr id="3a62663e-2414-80c0-b3fc-fb0bd02ee636" dir="ltr"><td id="gPL?" class="" style="width:310.65972900390625px">Respuesta genérica para <code>POST</code>, <code>PUT</code>, <code>PATCH</code></td><td id=":VDS" class="" style="width:235.65972900390625px"><code>&lt;Entidad&gt;DTO</code></td><td id="od@b" class="" style="width:235.66666666666666px"><code>&lt;Entidad&gt;Base</code> (agregar <code>id</code>)</td></tr><tr id="3a32663e-2414-8008-9dd6-ef1a22ff60a0" dir="ltr"><td id="gPL?" class="" style="width:310.65972900390625px">Detalle completo (detail)</td><td id=":VDS" class="" style="width:235.65972900390625px"><code>&lt;Entidad&gt;SingleDTO</code></td><td id="od@b" class="" style="width:235.66666666666666px"><code>&lt;Entidad&gt;DTO</code></td></tr><tr id="3a32663e-2414-80a7-ace4-ec8242f74ad8" dir="ltr"><td id="gPL?" class="" style="width:310.65972900390625px">Listado (tablas, selects)</td><td id=":VDS" class="" style="width:235.65972900390625px"><code>&lt;Entidad&gt;ListDTO</code></td><td id="od@b" class="" style="width:235.66666666666666px"><code>&lt;Entidad&gt;DTO</code></td></tr><tr id="3a32663e-2414-8012-8fbb-dc8cb0396bf4" dir="ltr"><td id="gPL?" class="" style="width:310.65972900390625px">Creación</td><td id=":VDS" class="" style="width:235.65972900390625px"><code>&lt;Entidad&gt;CreateDTO</code></td><td id="od@b" class="" style="width:235.66666666666666px"><code>&lt;Entidad&gt;Base</code></td></tr><tr id="3a32663e-2414-8079-bb45-cdc4cc92ce86" dir="ltr"><td id="gPL?" class="" style="width:310.65972900390625px">Edición (PUT: Si es necesario)</td><td id=":VDS" class="" style="width:235.65972900390625px"><code>&lt;Entidad&gt;UpdateDTO</code></td><td id="od@b" class="" style="width:235.66666666666666px"><code>&lt;Entidad&gt;Base</code></td></tr></tbody></table><p id="3a32663e-2414-8066-84d6-d2d7c68d9637" class="" dir="auto">Ejemplo con entidad <code>sucursal</code>: Nombre del archivo <code>sucursal.model.ts</code></p><pre id="3a32663e-2414-806c-8366-d808a0f023c2" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">interface SucursalBase {
 	nombre: string;
 	direccion: string;
 	telefono: string;
@@ -1706,265 +839,7 @@ export interface SucursalUpdateDTO extends SucursalBase  {
 	// a la creación
 	fechaVencimiento: string;
 	cambioEstado: boolean;
-}</code></pre>
-        <p id="3a62663e-2414-806e-a570-ee3440636f58" class="" dir="auto">
-          <strong>Reglas:</strong>
-        </p>
-        <ul
-          id="3a32663e-2414-8046-a437-fa70ec7f1a1c"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Siempre <code>&lt;Entidad&gt;ListDTO</code> intenta mantenerse lo
-            más básico posible.
-          </li>
-        </ul>
-        <ul
-          id="3a42663e-2414-80bf-9d95-fe57d0ee6b47"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Los modelos aquí descritos nunca deben de tener objetos/arrays como
-            para de sus propiedades. Cuando son necesarios se deben de crear
-            nuevas interfaces con esas llaves.
-          </li>
-        </ul>
-        <h2 id="3a32663e-2414-8010-aaa0-f3df1f1fcb5d" class="" dir="auto">
-          4.3 Ubicación de modelos
-        </h2>
-        <p id="3a32663e-2414-804c-beff-e72ccbee8943" class="" dir="auto">
-          Todos los DTOs de una entidad viven en un único archivo:
-          <code>&lt;entidad&gt;.model.ts</code> y no en archivos por variantes.
-        </p>
-        <p id="3a32663e-2414-8040-b00a-ce1df7200605" class="" dir="auto">
-          No se deben de crear DTOs ajenos a la entidad en el archivo. De ser
-          sumamente necesario se deberán de importar de archivos externos.
-        </p>
-        <h1 id="3a32663e-2414-8029-8eeb-ee42841f6953" class="" dir="auto">
-          5 Componentes
-        </h1>
-        <h2 id="3a32663e-2414-8099-8772-e23db238beec" class="" dir="auto">
-          5.1 Convención de nombres
-        </h2>
-        <ul
-          id="3a32663e-2414-803a-9502-d6dcca4dced6"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            El nombre de la entidad siempre va en singular, sin importar el tipo
-            de componente: <code>Sucursal</code>, nunca <code>Sucursales</code>
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-80a7-8353-dfc2db8591cc"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Sufijo según el tipo
-            <table
-              id="3a32663e-2414-809d-b637-e01693eae7a2"
-              class="simple-table"
-              dir="ltr"
-            >
-              <tbody>
-                <tr id="3a32663e-2414-807d-8d55-de4de4439e35" dir="ltr">
-                  <td id="ECaG" class="" style="width: 213.66666666666666px">
-                    Tipo
-                  </td>
-                  <td id="`L}S" class="" style="width: 213.66666666666666px">
-                    Clase
-                  </td>
-                  <td id="owsH" class="" style="width: 213.66666666666666px">
-                    Archivo
-                  </td>
-                </tr>
-                <tr id="3a32663e-2414-80aa-bcdd-ebe2da5cb4b6" dir="ltr">
-                  <td id="ECaG" class="" style="width: 213.66666666666666px">
-                    Listado
-                  </td>
-                  <td id="`L}S" class="" style="width: 213.66666666666666px">
-                    <code>&lt;Entidad&gt;List</code>
-                  </td>
-                  <td id="owsH" class="" style="width: 213.66666666666666px">
-                    <code>&lt;entidad&gt;-list.ts</code>
-                  </td>
-                </tr>
-                <tr id="3a32663e-2414-8088-8aa0-d30a574cc7ff" dir="ltr">
-                  <td id="ECaG" class="" style="width: 213.66666666666666px">
-                    Formulario
-                  </td>
-                  <td id="`L}S" class="" style="width: 213.66666666666666px">
-                    <code>&lt;Entidad&gt;Form</code>
-                  </td>
-                  <td id="owsH" class="" style="width: 213.66666666666666px">
-                    <code>&lt;entidad&gt;-form.ts</code>
-                  </td>
-                </tr>
-                <tr id="3a32663e-2414-80a6-8e94-c207045a519e" dir="ltr">
-                  <td id="ECaG" class="" style="width: 213.66666666666666px">
-                    Detalle
-                  </td>
-                  <td id="`L}S" class="" style="width: 213.66666666666666px">
-                    <code>&lt;Entidad&gt;Detail</code>
-                  </td>
-                  <td id="owsH" class="" style="width: 213.66666666666666px">
-                    <code>&lt;entidad&gt;-detail.ts</code>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-800f-8a0e-c816ebf3d87d"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Un mismo <code>Form</code> se utiliza tanto para crear como para
-            editar, no se crean componentes separados
-            <code>Create</code>/<code>Edit</code>.
-          </li>
-        </ul>
-        <h2 id="3a42663e-2414-80e9-a983-c6b28364c436" class="" dir="auto">
-          5.2 Orden general de variables y funciones
-        </h2>
-        <p id="3a42663e-2414-80ce-af82-fa9b454c8e55" class="" dir="auto">
-          Dentro de la clase de un componente de Angular, se utiliza el
-          siguiente orden para definición de variables y funciones de forma
-          genérica:
-        </p>
-        <ol
-          type="1"
-          id="3a42663e-2414-80e6-a04d-c96fc5d34aea"
-          class="numbered-list"
-          start="1"
-          dir="auto"
-        >
-          <li>
-            <strong>Inyecciones: </strong>servicios y variables con
-            <code>inject()</code>.
-            <ul
-              id="3a42663e-2414-80ce-9010-dabcc3e1ddac"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: disc">
-                El nombre de los servicios inyectados sigue el patron
-                <code
-                  >private &lt;entidad&gt;Svc = inject(&lt;Servicio&gt;);</code
-                >
-              </li>
-            </ul>
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-808d-9855-fd44a1ddab8a"
-          class="numbered-list"
-          start="2"
-          dir="auto"
-        >
-          <li>
-            <strong>ViewChilds:</strong> variables
-            <code>viewchild&lt;type&gt;()</code> y
-            <code>viewChildren&lt;type&gt;()</code>. Siempre que se pueda se
-            debe agregar la opción requerida si el html referenciado es
-            estático: <code>viewchild.required&lt;type&gt;()</code>.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-8098-b125-d423e1327201"
-          class="numbered-list"
-          start="3"
-          dir="auto"
-        >
-          <li>
-            <strong>Inputs:</strong> variables
-            <code>input&lt;type&gt;(default)</code>. Tomar en cuenta cuando el
-            valor no se define por defecto y la variable es requerida para
-            obligar a las implementaciones a definirlo:
-            <code>input.required&lt;type&gt;()</code>.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-8009-99b4-cb78cfeae4e7"
-          class="numbered-list"
-          start="4"
-          dir="auto"
-        >
-          <li>
-            <strong>Outputs:</strong> variables
-            <code>output&lt;type&gt;()</code>.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-802b-b09e-fa5e63dfdaf8"
-          class="numbered-list"
-          start="5"
-          dir="auto"
-        >
-          <li>
-            <strong>Iconos:</strong> lista de íconos utilizados en el HTML que
-            son importados de FontAwesome.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-80ba-b0f4-cc8906c4b660"
-          class="numbered-list"
-          start="6"
-          dir="auto"
-        >
-          <li>
-            <strong>Variables de configuración de HTML:</strong> Listas y
-            objetos de configuración de componentes referenciados y HTML en
-            general.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-8034-aff1-f957c880f837"
-          class="numbered-list"
-          start="7"
-          dir="auto"
-        >
-          <li>
-            <strong>Variables en general seguidas de listas:</strong> Siempre
-            primero declarar <code>title</code> seguido de variables y por
-            último todas las listas necesarias. Utilizar
-            <code>signal</code> siempre que la variable se utiliza en html y
-            sufre cambios a lo largo del ciclo de vida del componente.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-8065-8488-c8723ea3294b"
-          class="numbered-list"
-          start="8"
-          dir="auto"
-        >
-          <li>
-            <strong>Funciones de lifecycle de Angular:</strong> Iniciando por el
-            <code>constructor</code> si existe (solo crearlo cuando es
-            estrictamente necesario).
-          </li>
-        </ol>
-        <p id="3a42663e-2414-804e-bff8-f5df28035ada" class="" dir="auto">
-          <strong>Ejemplo</strong>
-        </p>
-        <pre
-          id="3a42663e-2414-80e7-b38c-c5a49d528532"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">@Component({
+}</code></pre><p id="3a62663e-2414-806e-a570-ee3440636f58" class="" dir="auto"><strong>Reglas:</strong></p><ul id="3a32663e-2414-8046-a437-fa70ec7f1a1c" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Siempre <code>&lt;Entidad&gt;ListDTO</code> intenta mantenerse lo más básico posible.</li></ul><ul id="3a42663e-2414-80bf-9d95-fe57d0ee6b47" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Los modelos aquí descritos nunca deben de tener objetos/arrays como para de sus propiedades. Cuando son necesarios se deben de crear nuevas interfaces con esas llaves.</li></ul><h2 id="3a32663e-2414-8010-aaa0-f3df1f1fcb5d" class="" dir="auto">4.3 Ubicación de modelos</h2><p id="3a32663e-2414-804c-beff-e72ccbee8943" class="" dir="auto">Todos los DTOs de una entidad viven en un único archivo: <code>&lt;entidad&gt;.model.ts</code> y no en archivos por variantes.</p><p id="3a32663e-2414-8040-b00a-ce1df7200605" class="" dir="auto">No se deben de crear DTOs ajenos a la entidad en el archivo. De ser sumamente necesario se deberán de importar de archivos externos.</p><h1 id="3a32663e-2414-8029-8eeb-ee42841f6953" class="" dir="auto">5 Componentes</h1><h2 id="3a32663e-2414-8099-8772-e23db238beec" class="" dir="auto">5.1 Convención de nombres</h2><ul id="3a32663e-2414-803a-9502-d6dcca4dced6" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El nombre de la entidad siempre va en singular, sin importar el tipo de componente: <code>Sucursal</code>, nunca <code>Sucursales</code></li></ul><ul id="3a32663e-2414-80a7-8353-dfc2db8591cc" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Sufijo según el tipo<table id="3a32663e-2414-809d-b637-e01693eae7a2" class="simple-table" dir="ltr"><tbody><tr id="3a32663e-2414-807d-8d55-de4de4439e35" dir="ltr"><td id="ECaG" class="" style="width:213.66666666666666px">Tipo</td><td id="`L}S" class="" style="width:213.66666666666666px">Clase</td><td id="owsH" class="" style="width:213.66666666666666px">Archivo</td></tr><tr id="3a32663e-2414-80aa-bcdd-ebe2da5cb4b6" dir="ltr"><td id="ECaG" class="" style="width:213.66666666666666px">Listado</td><td id="`L}S" class="" style="width:213.66666666666666px"><code>&lt;Entidad&gt;List</code></td><td id="owsH" class="" style="width:213.66666666666666px"><code>&lt;entidad&gt;-list.ts</code></td></tr><tr id="3a32663e-2414-8088-8aa0-d30a574cc7ff" dir="ltr"><td id="ECaG" class="" style="width:213.66666666666666px">Formulario</td><td id="`L}S" class="" style="width:213.66666666666666px"><code>&lt;Entidad&gt;Form</code></td><td id="owsH" class="" style="width:213.66666666666666px"><code>&lt;entidad&gt;-form.ts</code></td></tr><tr id="3a32663e-2414-80a6-8e94-c207045a519e" dir="ltr"><td id="ECaG" class="" style="width:213.66666666666666px">Detalle</td><td id="`L}S" class="" style="width:213.66666666666666px"><code>&lt;Entidad&gt;Detail</code></td><td id="owsH" class="" style="width:213.66666666666666px"><code>&lt;entidad&gt;-detail.ts</code></td></tr></tbody></table></li></ul><ul id="3a32663e-2414-800f-8a0e-c816ebf3d87d" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Un mismo <code>Form</code> se utiliza tanto para crear como para editar, no se crean componentes separados <code>Create</code>/<code>Edit</code>.</li></ul><h2 id="3a42663e-2414-80e9-a983-c6b28364c436" class="" dir="auto">5.2 Orden general de variables y funciones</h2><p id="3a42663e-2414-80ce-af82-fa9b454c8e55" class="" dir="auto">Dentro de la clase de un componente de Angular, se utiliza el siguiente orden para definición de variables y funciones de forma genérica:</p><ol type="1" id="3a42663e-2414-80e6-a04d-c96fc5d34aea" class="numbered-list" start="1" dir="auto"><li><strong>Inyecciones: </strong>servicios y variables con <code>inject()</code>.<ul id="3a42663e-2414-80ce-9010-dabcc3e1ddac" class="bulleted-list" dir="auto"><li style="list-style-type:disc">El nombre de los servicios inyectados sigue el patron <code>private &lt;entidad&gt;Svc = inject(&lt;Servicio&gt;);</code></li></ul></li></ol><ol type="1" id="3a42663e-2414-808d-9855-fd44a1ddab8a" class="numbered-list" start="2" dir="auto"><li><strong>ViewChilds:</strong> variables <code>viewchild&lt;type&gt;()</code> y <code>viewChildren&lt;type&gt;()</code>. Siempre que se pueda se debe agregar la opción requerida si el html referenciado es estático: <code>viewchild.required&lt;type&gt;()</code>.</li></ol><ol type="1" id="3a42663e-2414-8098-b125-d423e1327201" class="numbered-list" start="3" dir="auto"><li><strong>Inputs:</strong> variables <code>input&lt;type&gt;(default)</code>. Tomar en cuenta cuando el valor no se define por defecto y la variable es requerida para obligar a las implementaciones a definirlo: <code>input.required&lt;type&gt;()</code>.</li></ol><ol type="1" id="3a42663e-2414-8009-99b4-cb78cfeae4e7" class="numbered-list" start="4" dir="auto"><li><strong>Outputs:</strong> variables <code>output&lt;type&gt;()</code>.</li></ol><ol type="1" id="3a42663e-2414-802b-b09e-fa5e63dfdaf8" class="numbered-list" start="5" dir="auto"><li><strong>Iconos:</strong> lista de íconos utilizados en el HTML que son importados de FontAwesome.</li></ol><ol type="1" id="3a42663e-2414-80ba-b0f4-cc8906c4b660" class="numbered-list" start="6" dir="auto"><li><strong>Variables de configuración de HTML:</strong> Listas y objetos de configuración de componentes referenciados y HTML en general.</li></ol><ol type="1" id="3a42663e-2414-8034-aff1-f957c880f837" class="numbered-list" start="7" dir="auto"><li><strong>Variables en general seguidas de listas:</strong> Siempre primero declarar <code>title</code> seguido de variables y por último todas las listas necesarias. Utilizar <code>signal</code> siempre que la variable se utiliza en html y sufre cambios a lo largo del ciclo de vida del componente.</li></ol><ol type="1" id="3a42663e-2414-8065-8488-c8723ea3294b" class="numbered-list" start="8" dir="auto"><li><strong>Funciones de lifecycle de Angular:</strong> Iniciando por el <code>constructor</code> si existe (solo crearlo cuando es estrictamente necesario).</li></ol><p id="3a42663e-2414-804e-bff8-f5df28035ada" class="" dir="auto"><strong>Ejemplo</strong></p><pre id="3a42663e-2414-80e7-b38c-c5a49d528532" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">@Component({
   selector: &#x27;app-component&#x27;,
   templateUrl: &#x27;./component.html&#x27;,
   styles: ``,
@@ -2010,141 +885,7 @@ export class Component extends BaseList&lt;UsuarioListDTO&gt; implements OnInit 
       this.usuarioList.set(res);
     });
   }
-}</code></pre>
-        <h2 id="3a42663e-2414-8005-85c0-f6fab20f3b4c" class="" dir="auto">
-          5.3 Componentes de listado
-        </h2>
-        <h3 id="3a42663e-2414-80dd-95b2-ce19ca18bc0d" class="" dir="auto">
-          Herencia
-        </h3>
-        <p id="3a42663e-2414-80c8-861e-f71a28606143" class="" dir="auto">
-          Todo <code>&lt;Entidad&gt;List</code>extiende
-          <code>BaseList&lt;TListDTO&gt;</code>, que resuelve variables y
-          funciones comunes de listado:
-        </p>
-        <ul
-          id="3a42663e-2414-80ba-8c8a-ffb7bf96d139"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Inyección de dependencias comunes:<code>toastSvc</code>,
-            <code>router</code>, <code>route</code>, <code>destroyRef</code>
-          </li>
-        </ul>
-        <ul
-          id="3a42663e-2414-8019-96df-e1a51a1654ce"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Variables
-            <ul
-              id="3a42663e-2414-80a5-bfe3-def3c0662be0"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>title</code><strong>:</strong> Titulo de la página
-              </li>
-            </ul>
-            <ul
-              id="3a42663e-2414-80ae-8847-da04c1734260"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>paginated</code><strong>:</strong> Signal con los datos
-                paginados
-              </li>
-            </ul>
-            <ul
-              id="3a42663e-2414-8063-b3bb-d0370278dee8"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>isLoadingData</code><strong>:</strong> Signal para control
-                de estado de carga
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul
-          id="3a42663e-2414-80a6-a6a1-c0f1df48a759"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Funciones
-            <ul
-              id="3a42663e-2414-80e3-8346-fadc2be9c683"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>getPaginated()</code><strong>:</strong> Función abstracta
-                para obligar a definir en componente la llamada de información.
-              </li>
-            </ul>
-            <ul
-              id="3a42663e-2414-8071-a917-f42a852ef8e8"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>subscribeRouterEvents()</code><strong>:</strong> Función
-                para subscribirse a los eventos de rutas y controlar filtros de
-                paginado.
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <p id="3a42663e-2414-8094-ae53-e370ea386875" class="" dir="auto">
-          Cada componente concreto solo implementa
-          <code>getPaginated</code> para hacer la llamada a su servicio y dar
-          valor a su paginado.
-        </p>
-        <h3 id="3a42663e-2414-8024-a28d-e32efd2981cb" class="" dir="auto">
-          Orden de variables y funciones
-        </h3>
-        <p id="3a42663e-2414-804a-a2b7-f493165b573a" class="" dir="auto">
-          Los listados agregan variables y funciones comunes que se insertan
-          dentro del orden general:
-        </p>
-        <ol
-          type="1"
-          id="3a42663e-2414-80e0-88ae-e2511adc57dd"
-          class="numbered-list"
-          start="1"
-          dir="auto"
-        >
-          <li>
-            <code>getPaginated()</code><strong>:</strong> Primera función a
-            continuación de las funciones del lifecycle de Angular.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-803c-81b0-e802149d74e3"
-          class="numbered-list"
-          start="2"
-          dir="auto"
-        >
-          <li>
-            <code>optionsHandler()</code><strong>:</strong> A continuación de
-            <code>getPaginated</code> para manejar opciones de tabla. Solo se
-            define cuando es necesaria.
-          </li>
-        </ol>
-        <p id="3a42663e-2414-808f-abed-c971eda6f5cd" class="" dir="auto">
-          <strong>Ejemplo</strong>
-        </p>
-        <pre
-          id="3a42663e-2414-8015-8fd8-decc0e97aa9b"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">ngOnInit(): void { }
+}</code></pre><h2 id="3a42663e-2414-8005-85c0-f6fab20f3b4c" class="" dir="auto">5.3 Componentes de listado</h2><h3 id="3a42663e-2414-80dd-95b2-ce19ca18bc0d" class="" dir="auto">Herencia</h3><p id="3a42663e-2414-80c8-861e-f71a28606143" class="" dir="auto">Todo <code>&lt;Entidad&gt;List</code>extiende <code>BaseList&lt;TListDTO&gt;</code>, que resuelve variables y funciones comunes de listado:</p><ul id="3a42663e-2414-80ba-8c8a-ffb7bf96d139" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Inyección de dependencias comunes:<code>toastSvc</code>, <code>router</code>, <code>route</code>, <code>destroyRef</code></li></ul><ul id="3a42663e-2414-8019-96df-e1a51a1654ce" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Variables<ul id="3a42663e-2414-80a5-bfe3-def3c0662be0" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>title</code><strong>:</strong> Titulo de la página</li></ul><ul id="3a42663e-2414-80ae-8847-da04c1734260" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>paginated</code><strong>:</strong> Signal con los datos paginados</li></ul><ul id="3a42663e-2414-8063-b3bb-d0370278dee8" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>isLoadingData</code><strong>:</strong> Signal para control de estado de carga</li></ul></li></ul><ul id="3a42663e-2414-80a6-a6a1-c0f1df48a759" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Funciones<ul id="3a42663e-2414-80e3-8346-fadc2be9c683" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>getPaginated()</code><strong>:</strong> Función abstracta para obligar a definir en componente la llamada de información.</li></ul><ul id="3a42663e-2414-8071-a917-f42a852ef8e8" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>subscribeRouterEvents()</code><strong>:</strong> Función para subscribirse a los eventos de rutas y controlar filtros de paginado.</li></ul></li></ul><p id="3a42663e-2414-8094-ae53-e370ea386875" class="" dir="auto">Cada componente concreto solo implementa <code>getPaginated</code> para hacer la llamada a su servicio y dar valor a su paginado.</p><h3 id="3a42663e-2414-8024-a28d-e32efd2981cb" class="" dir="auto">Orden de variables y funciones</h3><p id="3a42663e-2414-804a-a2b7-f493165b573a" class="" dir="auto">Los listados agregan variables y funciones comunes que se insertan dentro del orden general:</p><ol type="1" id="3a42663e-2414-80e0-88ae-e2511adc57dd" class="numbered-list" start="1" dir="auto"><li><code>getPaginated()</code><strong>:</strong> Primera función a continuación de las funciones del lifecycle de Angular.</li></ol><ol type="1" id="3a42663e-2414-803c-81b0-e802149d74e3" class="numbered-list" start="2" dir="auto"><li><code>optionsHandler()</code><strong>:</strong> A continuación de <code>getPaginated</code> para manejar opciones de tabla. Solo se define cuando es necesaria.</li></ol><p id="3a42663e-2414-808f-abed-c971eda6f5cd" class="" dir="auto"><strong>Ejemplo</strong></p><pre id="3a42663e-2414-8015-8fd8-decc0e97aa9b" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">ngOnInit(): void { }
 
 getPaginated(): void {
 	... // obtención de datos para paginado
@@ -2152,168 +893,9 @@ getPaginated(): void {
 
 optionsHandler(): void {
 	... // manejo de eventos de tabla
-}</code></pre>
-        <h3 id="3a42663e-2414-8076-beb5-de6008d1a629" class="" dir="auto">
-          getPaginated
-        </h3>
-        <p id="3a42663e-2414-8047-a347-f043e453871a" class="" dir="auto">
-          Debería de iniciar siempre con el cambio de la variable
-          <code>isLoadingData</code> a <code>true</code> para mostrar la
-          animación de carga de la tabla.
-        </p>
-        <pre
-          id="3a42663e-2414-8056-8c04-fd3eb2ec440c"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">getPaginated(): void {
+}</code></pre><h3 id="3a42663e-2414-8076-beb5-de6008d1a629" class="" dir="auto">getPaginated</h3><p id="3a42663e-2414-8047-a347-f043e453871a" class="" dir="auto">Debería de iniciar siempre con el cambio de la variable <code>isLoadingData</code> a <code>true</code> para mostrar la animación de carga de la tabla.</p><pre id="3a42663e-2414-8056-8c04-fd3eb2ec440c" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">getPaginated(): void {
 	this.isLoadingData.set(true);
-}</code></pre>
-        <h2 id="3a32663e-2414-802d-9dc8-ea0dd54c99c3" class="" dir="auto">
-          5.4 Componentes de formulario
-        </h2>
-        <h3 id="3a42663e-2414-80d1-9279-d32bf1546eb7" class="" dir="auto">
-          Herencia
-        </h3>
-        <p id="3a32663e-2414-8035-9938-c6753919ee6c" class="" dir="auto">
-          Todo <code>&lt;Entidad&gt;Form</code> extiende <code>BaseForm</code>,
-          que resuelve:
-        </p>
-        <ul
-          id="3a32663e-2414-8095-b6f8-cb41af34d2a6"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Inyección de dependencias comunes: <code>toastSvc</code>.
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-80aa-aa98-d907a927d4ab"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Variables
-            <ul
-              id="3a32663e-2414-8055-b378-d556bc9d74d9"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>form</code><strong>:</strong> Formulario reactivo
-                (abstracto)
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-808d-b604-c8f819879d23"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Funciones
-            <ul
-              id="3a32663e-2414-80a5-b799-d8bd502d6827"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>onSubmit</code><strong>:</strong> Función abstracta para
-                obligar a definir en componente para llamar al finalizar el
-                formulario.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-80ef-83f6-f65d83ddf650"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>isValidSubmit</code>: Función para validar un formulario y
-                marcarlo automáticamente como “touched”. Esta función
-                deshabilita el formulario si es válido para protegerlo de
-                ediciones.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-80fb-a2bf-c99e00eda2b4"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>resetForm</code>: Función para resetear un formulario
-                completo.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-8023-91c3-ff7043d43d9c"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>printForm</code>: Función para imprimir todo el
-                formulario.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-8069-8907-c8bdf7808097"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>printFormValue</code>: Función para imprimir el valor del
-                formulario
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <p id="3a42663e-2414-801c-9b80-d515e11cf0b9" class="" dir="auto">
-          Cada componente concreto define su propio <code>form</code> con los
-          campos de la entidad y <code>onSubmit</code> con lógica particular de
-          guardado (llamadas al servicio), reutilizando el manejo de
-          modo/validaciones de la base.
-        </p>
-        <h3 id="3a42663e-2414-80a7-ad1b-f8150baaf39c" class="" dir="auto">
-          Orden de variables y funciones
-        </h3>
-        <p id="3a42663e-2414-804f-9f79-f53736da5363" class="" dir="auto">
-          Los formularios agregan algunas variables y funciones comunes que se
-          insertan dentro del orden general:
-        </p>
-        <ol
-          type="1"
-          id="3a42663e-2414-805b-a767-e71300743045"
-          class="numbered-list"
-          start="1"
-          dir="auto"
-        >
-          <li>
-            <code>form</code><strong>:</strong> A continuación de las variables
-            y listas generales y antes de las funciones del lifecycle de
-            Angular.
-          </li>
-        </ol>
-        <ol
-          type="1"
-          id="3a42663e-2414-80d0-b040-c5867f0a78cb"
-          class="numbered-list"
-          start="2"
-          dir="auto"
-        >
-          <li>
-            <code>onSubmit()</code>: Se define la función siempre a continuación
-            de las funciones del lifecycle de Angular. Siempre
-          </li>
-        </ol>
-        <p id="3a42663e-2414-80c8-9842-f1a333b92069" class="" dir="auto">
-          <strong>Ejemplo</strong>
-        </p>
-        <pre
-          id="3a42663e-2414-8019-a7f5-ecc54357571b"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">... // variables y listas
+}</code></pre><h2 id="3a32663e-2414-802d-9dc8-ea0dd54c99c3" class="" dir="auto">5.4 Componentes de formulario</h2><h3 id="3a42663e-2414-80d1-9279-d32bf1546eb7" class="" dir="auto">Herencia</h3><p id="3a32663e-2414-8035-9938-c6753919ee6c" class="" dir="auto">Todo <code>&lt;Entidad&gt;Form</code> extiende <code>BaseForm</code>, que resuelve:</p><ul id="3a32663e-2414-8095-b6f8-cb41af34d2a6" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Inyección de dependencias comunes: <code>toastSvc</code>.</li></ul><ul id="3a32663e-2414-80aa-aa98-d907a927d4ab" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Variables<ul id="3a32663e-2414-8055-b378-d556bc9d74d9" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>form</code><strong>:</strong> Formulario reactivo (abstracto)</li></ul></li></ul><ul id="3a32663e-2414-808d-b604-c8f819879d23" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Funciones<ul id="3a32663e-2414-80a5-b799-d8bd502d6827" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>onSubmit</code><strong>:</strong> Función abstracta para obligar a definir en componente para llamar al finalizar el formulario.</li></ul><ul id="3a32663e-2414-80ef-83f6-f65d83ddf650" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>isValidSubmit</code>: Función para validar un formulario y marcarlo automáticamente como “touched”. Esta función deshabilita el formulario si es válido para protegerlo de ediciones.</li></ul><ul id="3a32663e-2414-80fb-a2bf-c99e00eda2b4" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>resetForm</code>: Función para resetear un formulario completo.</li></ul><ul id="3a32663e-2414-8023-91c3-ff7043d43d9c" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>printForm</code>: Función para imprimir todo el formulario.</li></ul><ul id="3a32663e-2414-8069-8907-c8bdf7808097" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>printFormValue</code>: Función para imprimir el valor del formulario</li></ul></li></ul><p id="3a42663e-2414-801c-9b80-d515e11cf0b9" class="" dir="auto">Cada componente concreto define su propio <code>form</code> con los campos de la entidad y <code>onSubmit</code>  con lógica particular de guardado (llamadas al servicio), reutilizando el manejo de modo/validaciones de la base.</p><h3 id="3a42663e-2414-80a7-ad1b-f8150baaf39c" class="" dir="auto">Orden de variables y funciones</h3><p id="3a42663e-2414-804f-9f79-f53736da5363" class="" dir="auto">Los formularios agregan algunas variables y funciones comunes que se insertan dentro del orden general:</p><ol type="1" id="3a42663e-2414-805b-a767-e71300743045" class="numbered-list" start="1" dir="auto"><li><code>form</code><strong>:</strong> A continuación de las variables y listas generales y antes de las funciones del lifecycle de Angular.</li></ol><ol type="1" id="3a42663e-2414-80d0-b040-c5867f0a78cb" class="numbered-list" start="2" dir="auto"><li><code>onSubmit()</code>: Se define la función siempre a continuación de las funciones del lifecycle de Angular. Siempre</li></ol><p id="3a42663e-2414-80c8-9842-f1a333b92069" class="" dir="auto"><strong>Ejemplo</strong></p><pre id="3a42663e-2414-8019-a7f5-ecc54357571b" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">... // variables y listas
 
 form = new FormGroup({
 	nombre: new FormControl&lt;string&gt;(&#x27;&#x27;, 
@@ -2324,29 +906,7 @@ ngOnInit(): void {}
 onSubmit(): void {
 	if (!this.isValidSubmit()) return; // Validar siempre en primera linea
 	...
-}</code></pre>
-        <h3 id="3a42663e-2414-80a8-8bcd-cfd631bc20bc" class="" dir="auto">
-          onSubmit
-        </h3>
-        <p id="3a42663e-2414-8085-84e2-da82c7bd88b3" class="" dir="auto">
-          La función <code>onSubmit</code> siempre (a excepción de casos
-          específicos) inicia con la validación del formulario, haciendo un
-          llamado a <code>isValidSubmit</code> que devuelve <code>true</code> si
-          el formulario es valido y que se encarga de hacer el bloqueo de todos
-          los controles para proteger de ediciones durante la ejecución.
-        </p>
-        <p id="3a42663e-2414-8090-bf63-f7da68104ca0" class="" dir="auto">
-          Es importante que en el caso de falla del almacenamiento de los datos
-          se vuelva a habilitar el formulario.
-        </p>
-        <p id="3a42663e-2414-80c8-9dd8-db92600149df" class="" dir="auto">
-          <strong>Ejemplo</strong>
-        </p>
-        <pre
-          id="3a42663e-2414-80f9-a02e-ef453839ee35"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">onSubmit(): void {
+}</code></pre><h3 id="3a42663e-2414-80a8-8bcd-cfd631bc20bc" class="" dir="auto">onSubmit</h3><p id="3a42663e-2414-8085-84e2-da82c7bd88b3" class="" dir="auto">La función <code>onSubmit</code> siempre (a excepción de casos específicos) inicia con la validación del formulario, haciendo un llamado a <code>isValidSubmit</code> que devuelve <code>true</code> si el formulario es valido y que se encarga de hacer el bloqueo de todos los controles para proteger de ediciones durante la ejecución.</p><p id="3a42663e-2414-8090-bf63-f7da68104ca0" class="" dir="auto">Es importante que en el caso de falla del almacenamiento de los datos se vuelva a habilitar el formulario.</p><p id="3a42663e-2414-80c8-9dd8-db92600149df" class="" dir="auto"><strong>Ejemplo</strong></p><pre id="3a42663e-2414-80f9-a02e-ef453839ee35" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">onSubmit(): void {
 	if (!this.isValidSubmit()) return; // valida y bloquea si los datos son válidos
 	this.baseSvc.post(this.form.getRawValue()).subscribe({
 		next: (res) =&gt; {
@@ -2355,204 +915,10 @@ onSubmit(): void {
 			this.form.enable({ emitEvent: false }); // se habilita el formulario
 		}
 	}
-}</code></pre>
-        <h1 id="3a32663e-2414-80f2-8538-d08f33950b27" class="" dir="auto">
-          6 Servicios
-        </h1>
-        <h2 id="3a32663e-2414-80da-a53f-effcc612ec2f" class="" dir="auto">
-          6.1 Convención de nombres
-        </h2>
-        <ul
-          id="3a32663e-2414-8074-a104-f7a9770e9c21"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Clase: <code>&lt;Entidad&gt;Service</code> (ej.
-            <code>SucursalService</code>).
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-80ff-9fa0-cf9db0dbeadc"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Archivo: <code>&lt;entidad&gt;.service.ts</code> (ej.
-            <code>sucursal.service.ts</code>).
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-802b-bd48-eab3dcc8187a"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Un servicio por entidad. No se agrupan varias entidades en un mismo
-            servicio, aunque estén relacionadas (ej. <code>Sucursal</code> y
-            <code>SucursalHorario</code> van en servicios separados).
-          </li>
-        </ul>
-        <h2 id="3a32663e-2414-80da-9718-fc79d510aafa" class="" dir="auto">
-          6.2 Herencia de servicio base
-        </h2>
-        <p id="3a32663e-2414-8099-8bb2-db8c309622f1" class="" dir="auto">
-          Todo <code>&lt;Entidad&gt;Service</code> extiende
-          <code
-            >BaseService&lt;TDTO, TSingleDTO, TListDTO, TCreateDTO,
-            TUpdateDTO&gt;</code
-          >, que centraliza las operaciones CRUD estándar sobre el endpoint REST
-          de la entidad.
-        </p>
-        <p id="3a32663e-2414-8097-be7c-fa880fa699ba" class="" dir="auto">
-          La clase <code>BaseService</code> provee los siguientes recursos:
-        </p>
-        <ul
-          id="3a32663e-2414-80fc-928c-ea38ebd50f5d"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Dependencias: cliente <code>http</code> de Angular.
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-80a0-9e0f-fca57d0a3749"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Variables
-            <ul
-              id="3a32663e-2414-80e7-a8bd-d76ab0970ca4"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>baseUrl</code>: valor base de la url
-                (http://www.prueba.com/)
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-8058-a4ff-ddb6b42d3a8a"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>service</code>: Nombre del microservicio al que se dirige
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-80bb-919f-d2296372a342"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>endpoint</code>: Nombre del endpoint dentro del
-                microservicio
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul
-          id="3a32663e-2414-8028-b107-d7aab0de48b7"
-          class="bulleted-list"
-          dir="auto"
-        >
-          <li style="list-style-type: disc">
-            Funciones
-            <ul
-              id="3a32663e-2414-8028-bd9e-d5489df507d4"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>get</code>: Llamada de una entidad por <code>id</code>.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-80cd-a557-cd833bdce6c3"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>getList</code>: Llamada al endpoint para listado de
-                entidades.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-80b8-bd9d-db61c7fde6b6"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>getPaginate</code>: Llamada al endpoint paginado.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-80f2-94e4-ce23a082c101"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>post</code>: Para crear entidades.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-802c-863e-c5dab6480f18"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>put</code>: Para edición general de entidades.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-8070-809d-f34cf4d21fe1"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>patch</code>: Para edición por partes de entidades.
-              </li>
-            </ul>
-            <ul
-              id="3a32663e-2414-8059-aaac-c6e8c163b690"
-              class="bulleted-list"
-              dir="auto"
-            >
-              <li style="list-style-type: circle">
-                <code>delete</code>: Para llamada a eliminación de entidades
-                (soft-delete).
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <p id="3a32663e-2414-803f-a8d9-d4687ffdfa2c" class="" dir="auto">
-          Ejemplo de servicio implementado:
-        </p>
-        <pre
-          id="3a32663e-2414-8034-beef-e8afa5ce5e2e"
-          class="code code-wrap"
-          data-notion-code-syntax="tsx"
-        ><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">@Injectable({
+}</code></pre><h1 id="3a32663e-2414-80f2-8538-d08f33950b27" class="" dir="auto">6 Servicios</h1><h2 id="3a32663e-2414-80da-a53f-effcc612ec2f" class="" dir="auto">6.1 Convención de nombres</h2><ul id="3a32663e-2414-8074-a104-f7a9770e9c21" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Clase: <code>&lt;Entidad&gt;Service</code> (ej. <code>SucursalService</code>).</li></ul><ul id="3a32663e-2414-80ff-9fa0-cf9db0dbeadc" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Archivo: <code>&lt;entidad&gt;.service.ts</code> (ej. <code>sucursal.service.ts</code>).</li></ul><ul id="3a32663e-2414-802b-bd48-eab3dcc8187a" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Un servicio por entidad. No se agrupan varias entidades en un mismo servicio, aunque estén relacionadas (ej. <code>Sucursal</code> y <code>SucursalHorario</code> van en servicios separados).</li></ul><h2 id="3a32663e-2414-80da-9718-fc79d510aafa" class="" dir="auto">6.2 Herencia de servicio base</h2><p id="3a32663e-2414-8099-8bb2-db8c309622f1" class="" dir="auto">Todo <code>&lt;Entidad&gt;Service</code> extiende <code>BaseService&lt;TDTO, TSingleDTO, TListDTO, TCreateDTO, TUpdateDTO&gt;</code>, que centraliza las operaciones CRUD estándar sobre el endpoint REST de la entidad.</p><p id="3a32663e-2414-8097-be7c-fa880fa699ba" class="" dir="auto">La clase <code>BaseService</code> provee los siguientes recursos:</p><ul id="3a32663e-2414-80fc-928c-ea38ebd50f5d" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Dependencias: cliente <code>http</code> de Angular.</li></ul><ul id="3a32663e-2414-80a0-9e0f-fca57d0a3749" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Variables<ul id="3a32663e-2414-80e7-a8bd-d76ab0970ca4" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>baseUrl</code>: valor base de la url (http://www.prueba.com/)</li></ul><ul id="3a32663e-2414-8058-a4ff-ddb6b42d3a8a" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>service</code>: Nombre del microservicio al que se dirige</li></ul><ul id="3a32663e-2414-80bb-919f-d2296372a342" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>endpoint</code>: Nombre del endpoint dentro del microservicio</li></ul></li></ul><ul id="3a32663e-2414-8028-b107-d7aab0de48b7" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Funciones<ul id="3a32663e-2414-8028-bd9e-d5489df507d4" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>get</code>: Llamada de una entidad por <code>id</code>.</li></ul><ul id="3a32663e-2414-80cd-a557-cd833bdce6c3" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>getList</code>: Llamada al endpoint para listado de entidades.</li></ul><ul id="3a32663e-2414-80b8-bd9d-db61c7fde6b6" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>getPaginate</code>: Llamada al endpoint paginado.</li></ul><ul id="3a32663e-2414-80f2-94e4-ce23a082c101" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>post</code>: Para crear entidades.</li></ul><ul id="3a32663e-2414-802c-863e-c5dab6480f18" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>put</code>: Para edición general de entidades.</li></ul><ul id="3a32663e-2414-8070-809d-f34cf4d21fe1" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>patch</code>: Para edición por partes de entidades.</li></ul><ul id="3a32663e-2414-8059-aaac-c6e8c163b690" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><code>delete</code>: Para llamada a eliminación de entidades (soft-delete).</li></ul></li></ul><p id="3a32663e-2414-803f-a8d9-d4687ffdfa2c" class="" dir="auto">Ejemplo de servicio implementado:</p><pre id="3a32663e-2414-8034-beef-e8afa5ce5e2e" class="code code-wrap" data-notion-code-syntax="tsx"><code class="language-tsx" style="white-space:pre-wrap;word-break:break-all">@Injectable({
   providedIn: &#x27;root&#x27;,
 })
 export class AreaService extends BaseService&lt;AreaDTO, AreaSingleDTO, AreaListDTO, AreaCreateDTO, AreaUpdateDTO&gt; {
   protected service = servicesPaths.configuraciones;
   protected endpoint = &#x27;areas&#x27;;
-}</code></pre>
-        <p id="3a32663e-2414-8002-9b0b-fc7c14304904" class="" dir="auto">
-          <strong>Regla clave:</strong> si una entidad necesita una operación
-          fuera del CRUD estándar (ej. <code>activar</code>,
-          <code>exportarExcel</code>, <code>asignarUsuario</code>),
-          <strong
-            >se agrega como método adicional en el servicio concreto</strong
-          >, nunca modificando <code>BaseService</code> para casos particulares
-          de una sola entidad.<br /><br />
-        </p>
-      </div>
-    </article>
-    <span class="sans" style="font-size: 14px; padding-top: 2em"></span>
-  </body>
-</html>
+}</code></pre><p id="3a32663e-2414-8002-9b0b-fc7c14304904" class="" dir="auto"><strong>Regla clave:</strong> si una entidad necesita una operación fuera del CRUD estándar (ej. <code>activar</code>, <code>exportarExcel</code>, <code>asignarUsuario</code>), <strong>se agrega como método adicional en el servicio concreto</strong>, nunca modificando <code>BaseService</code> para casos particulares de una sola entidad.<br/><br/></p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
